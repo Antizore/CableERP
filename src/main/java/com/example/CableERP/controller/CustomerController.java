@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 
 @Controller
 @RequestMapping("/customers")
@@ -17,6 +18,12 @@ public class CustomerController {
 
     private final CustomerService customerService;
 
+    @GetMapping
+    public ResponseEntity<List<Customer>> getCustomers(){
+        return ResponseEntity
+                .ok()
+                .body(customerService.getListOfCustomers());
+    }
 
     @PostMapping
     public ResponseEntity<Customer> createCustomer(@RequestBody Customer customer){
