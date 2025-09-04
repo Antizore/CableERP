@@ -2,6 +2,7 @@ package com.example.CableERP.controller;
 
 
 import com.example.CableERP.entity.Product;
+import com.example.CableERP.service.ProductService;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,12 +16,15 @@ import java.util.List;
 @RequestMapping(name = "/products")
 public class ProductController {
 
+    private ProductService productService;
+
+
     @GetMapping
     public ResponseEntity<List<Product>> getAllProducts(){
 
-        // TODO
-
-        return (ResponseEntity<List<Product>>) List.of(null);
+        return ResponseEntity
+                    .ok()
+                    .body(productService.getAllProducts());
     }
 
     @PostMapping
