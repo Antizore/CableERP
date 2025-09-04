@@ -4,11 +4,13 @@ package com.example.CableERP.service;
 import com.example.CableERP.entity.Product;
 import com.example.CableERP.exception.NoNameException;
 import com.example.CableERP.repository.ProductRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class ProductService {
 
     private ProductRepository productRepository;

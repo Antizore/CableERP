@@ -4,15 +4,18 @@ package com.example.CableERP.service;
 import com.example.CableERP.entity.Product;
 import com.example.CableERP.exception.NoNameException;
 import com.example.CableERP.repository.ProductRepository;
-import org.junit.jupiter.api.Assertions;
+import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThrows;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
 
 @ExtendWith(MockitoExtension.class)
 public class ProductServiceUnitTest {
@@ -22,6 +25,33 @@ public class ProductServiceUnitTest {
 
     @InjectMocks
     private ProductService productService;
+
+    @Test
+    void getAllProductsShouldReturnListOfProduct(){
+
+        Product product1 = new Product(1L,"Product 1", "Description of product 1");
+        Product product2 = new Product(2L,"Product 2", "Description of product 2");
+        List<Product> productList = List.of(product1,product2);
+
+        when(productRepository.findAll()).thenReturn(productList);
+        List<Product> result = productService.getAllProducts();
+
+        assertNotNull(result);
+        assertEquals(productList,result);
+
+    }
+
+    @Test
+    void getAllProductsShouldReturnEmptyListIfNoProductsInDatabase(){
+
+        when(productRepository.findAll()).thenReturn(List.of());
+        List<Product> productList = productService.getAllProducts();
+        assertNotNull(productList);
+        assertTrue(productList.isEmpty());
+        verify(productRepository, times(1)).findAll();
+
+    }
+
 
 
     @Test
