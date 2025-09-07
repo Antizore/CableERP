@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -21,7 +22,7 @@ public class ProductController {
 
     @GetMapping
     public ResponseEntity<List<Product>> getAllProducts(){
-
+        // TODO: MAKE PAGEABLE
         return ResponseEntity
                     .ok()
                     .body(productService.getAllProducts());
@@ -29,9 +30,11 @@ public class ProductController {
 
     @PostMapping
     public ResponseEntity<Product> addProduct(@RequestBody Product product){
-
-        // TODO
-        return ResponseEntity.ok().build();
+        Product createdProduct = productService.addProduct(product);
+        URI location = URI.create("/products/"+product.getName());
+        return ResponseEntity
+                .created(location)
+                .body(createdProduct);
     }
 
 }

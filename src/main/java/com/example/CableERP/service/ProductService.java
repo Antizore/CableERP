@@ -21,9 +21,11 @@ public class ProductService {
     }
 
 
-    public void addProduct(Product product) {
+    public Product addProduct(Product product) {
         if(product.getName() == null || product.getName().isBlank()) throw new NoNameException("Cannot add product without name");
-        else productRepository.saveAndFlush(product);
+        else {
+            return productRepository.saveAndFlush(product);
+        }
     }
 
 
