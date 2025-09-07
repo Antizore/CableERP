@@ -12,8 +12,6 @@ import lombok.NoArgsConstructor;
 @Data
 public class BillOfMaterials {
 
-
-
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
