@@ -3,34 +3,83 @@ package com.example.CableERP.service;
 
 import com.example.CableERP.entity.Component;
 import com.example.CableERP.enums.Unit;
+import com.example.CableERP.exception.DuplicateException;
+import com.example.CableERP.exception.WrongValueException;
+import com.example.CableERP.repository.ComponentRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.Collections;
+import java.util.List;
+
+import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class ComponentServiceUnitTest {
 
     @Mock
-    private ComponentService componentService;
+    private ComponentRepository componentRepository;
 
     @InjectMocks
-    private Component component;
+    private ComponentService componentService;
 
-
-    @Test
-    public void shouldThrowWrongValueExceptionWhenValueIsNegative(){
-
-        //  TODO
-
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test
-    public void shouldThrowDuplicateErrorWhenComponentNameAlreadyExists(){
+    void shouldThrowWrongValueExceptionWhenValueIsNegative() {
+        Component component = new Component(null,"Test",null,-10.0);
 
-        // TODO
+        assertThrows(WrongValueException.class,
+                () -> componentService.addComponent(component));
     }
+
+    @Test
+    void shouldThrowDuplicateExceptionWhenComponentNameAlreadyExists() {
+        Component component = new Component(null,"Duplicate",null,10.0);
+
+        // Simulate repository throwing your Duplicate exception
+        when(componentRepository.saveAndFlush(any(Component.class)))
+                .thenThrow(new DuplicateException("Component already exists"));
+
+        assertThrows(DuplicateException.class,
+                () -> componentService.addComponent(component));
+    }
+
+    @Test
+    void shouldReturnEmptyListIfNoComponentsInDatabase() {
+        when(componentRepository.findAll()).thenReturn(Collections.emptyList());
+
+        List<Component> result = componentService.getComponents();
+
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+    }
+
+    @Test
+    void shouldReturnListOfComponentsIfComponentsArePresentInDatabase() {
+        Component c1 = new Component(null,"C1",null,5.0);
+        Component c2 = new Component(null,"C2",null,15.0);
+
+
+        when(componentRepository.findAll()).thenReturn(List.of(c1, c2));
+
+        List<Component> result = componentService.getComponents();
+
+        assertEquals(2, result.size());
+        assertEquals("C1", result.get(0).getName());
+        assertEquals("C2", result.get(1).getName());
+    }
+
 
 
 }
