@@ -1,7 +1,7 @@
 package com.example.CableERP.service;
 
 import com.example.CableERP.entity.Customer;
-import com.example.CableERP.exception.DuplicateEmailException;
+import com.example.CableERP.exception.DuplicateException;
 import com.example.CableERP.repository.CustomerRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -65,8 +65,8 @@ class CustomerServiceUnitTest {
         // Simulate existing customer
         when(customerRepository.findCustomerByEmail(newCustomer.getEmail())).thenReturn(existing);
 
-        DuplicateEmailException exception = assertThrows(
-                DuplicateEmailException.class,
+        DuplicateException exception = assertThrows(
+                DuplicateException.class,
                 () -> customerService.createCustomer(newCustomer)
         );
 
