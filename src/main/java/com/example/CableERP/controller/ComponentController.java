@@ -5,18 +5,20 @@ import com.example.CableERP.entity.Component;
 import com.example.CableERP.repository.ComponentRepository;
 import com.example.CableERP.service.ComponentService;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
 
-@RestController
+@Controller
 @RequestMapping("/components")
-@NoArgsConstructor
+@RequiredArgsConstructor
 public class ComponentController {
 
-    private ComponentService componentService;
+    private final ComponentService componentService;
 
 
     @PostMapping

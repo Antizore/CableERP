@@ -5,14 +5,16 @@ import com.example.CableERP.exception.NoNameException;
 import com.example.CableERP.exception.WrongValueException;
 import com.example.CableERP.repository.ComponentRepository;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class ComponentService {
 
-    ComponentRepository componentRepository;
+    private final ComponentRepository componentRepository;
 
 
     public Component addComponent(Component component) throws Exception{

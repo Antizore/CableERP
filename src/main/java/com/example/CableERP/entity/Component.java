@@ -16,8 +16,8 @@ import java.util.List;
 @Table(name = "component")
 public class Component {
 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
