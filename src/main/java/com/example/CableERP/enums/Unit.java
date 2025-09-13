@@ -1,11 +1,12 @@
 package com.example.CableERP.enums;
 
 public enum Unit {
-    Kg,
-    g,
-    mg,
-    t,
+    kilograms,
+    grams,
+    miligrams,
+    tonne,
     qty,
-    l,
-    ml
+    liters,
+    mililiter,
+    meter
 }

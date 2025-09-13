@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity
 @Data
+@Table(name = "bill_of_material")
 public class BillOfMaterials {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -13,6 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Data
+@Table(name = "component")
 public class Component {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)

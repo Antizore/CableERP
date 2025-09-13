@@ -13,7 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProductService {
 
-    private ProductRepository productRepository;
+    private final ProductRepository productRepository;
 
 
     public List<Product> getAllProducts(){
