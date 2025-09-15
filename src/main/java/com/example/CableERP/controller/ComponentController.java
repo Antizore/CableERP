@@ -2,10 +2,7 @@ package com.example.CableERP.controller;
 
 
 import com.example.CableERP.entity.Component;
-import com.example.CableERP.repository.ComponentRepository;
 import com.example.CableERP.service.ComponentService;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -15,10 +12,13 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/components")
-@RequiredArgsConstructor
 public class ComponentController {
 
     private final ComponentService componentService;
+
+    public ComponentController(ComponentService componentService) {
+        this.componentService = componentService;
+    }
 
 
     @PostMapping

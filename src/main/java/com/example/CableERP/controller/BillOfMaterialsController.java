@@ -3,7 +3,6 @@ package com.example.CableERP.controller;
 
 import com.example.CableERP.entity.BillOfMaterials;
 import com.example.CableERP.service.BillOfMaterialsService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,10 +10,14 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/products/{id}/bom")
-@RequiredArgsConstructor
 public class BillOfMaterialsController {
 
-    private BillOfMaterialsService billOfMaterialsService;
+    private final BillOfMaterialsService billOfMaterialsService;
+
+    public BillOfMaterialsController(BillOfMaterialsService billOfMaterialsService) {
+        this.billOfMaterialsService = billOfMaterialsService;
+    }
+
 
     //  TODO: PRZEROBIĆ, POTRZEBNE JEST DTO
     @GetMapping

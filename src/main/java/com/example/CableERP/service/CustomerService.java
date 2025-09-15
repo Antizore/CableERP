@@ -5,17 +5,19 @@ import com.example.CableERP.exception.DuplicateException;
 import com.example.CableERP.exception.NoEmailException;
 import com.example.CableERP.repository.CustomerRepository;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
 public class CustomerService {
 
     private final CustomerRepository customerRepository;
+
+    public CustomerService(CustomerRepository customerRepository) {
+        this.customerRepository = customerRepository;
+    }
 
     public List<Customer> getListOfCustomers(){
         return customerRepository.findAll();

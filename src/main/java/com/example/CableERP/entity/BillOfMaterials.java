@@ -1,17 +1,21 @@
 package com.example.CableERP.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 
-@NoArgsConstructor
-@AllArgsConstructor
+
 @Entity
-@Data
 @Table(name = "bill_of_material")
 public class BillOfMaterials {
+
+    protected BillOfMaterials(){}
+
+    public BillOfMaterials(Long id, Product product, Component component, Double qty) {
+        this.id = id;
+        this.product = product;
+        this.component = component;
+        this.qty = qty;
+    }
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -28,4 +32,31 @@ public class BillOfMaterials {
     private Double qty;
 
 
+    public Long getId() {
+        return id;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    public Component getComponent() {
+        return component;
+    }
+
+    public void setComponent(Component component) {
+        this.component = component;
+    }
+
+    public Double getQty() {
+        return qty;
+    }
+
+    public void setQty(Double qty) {
+        this.qty = qty;
+    }
 }

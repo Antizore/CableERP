@@ -9,6 +9,9 @@ import java.util.List;
 @Entity
 @Table(name = "product")
 public class Product {
+
+    protected Product(){}
+
     public Product(Long id, String name, String description, List<BillOfMaterials> billOfMaterialsList) {
         this.id = id;
         this.name = name;
@@ -31,9 +34,6 @@ public class Product {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
