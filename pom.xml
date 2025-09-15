@@ -79,6 +79,9 @@
 			<version>2.2.36</version>
 		</dependency>
 
+
+
+
 		<!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
@@ -93,6 +96,9 @@
 			<artifactId>mapstruct</artifactId>
 			<version>1.6.3</version>
 		</dependency>
+
+
+
 
 		<dependency>
 			<groupId>com.h2database</groupId>
