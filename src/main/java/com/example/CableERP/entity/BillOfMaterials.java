@@ -1,5 +1,6 @@
 package com.example.CableERP.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 
@@ -23,10 +24,12 @@ public class BillOfMaterials {
 
     @ManyToOne
     @JoinColumn(name = "product_id")
+    @JsonBackReference
     private Product product;
 
-    @ManyToOne(optional = false)
+    @ManyToOne
     @JoinColumn(name = "component_id")
+    @JsonBackReference
     private Component component;
 
     private Double qty;

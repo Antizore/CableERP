@@ -2,6 +2,7 @@ package com.example.CableERP.entity;
 
 
 import com.example.CableERP.enums.Unit;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +24,7 @@ public class Component {
     private Double costPerUnit;
 
     @OneToMany(mappedBy = "component")
+    @JsonManagedReference
     private List<BillOfMaterials> billOfMaterialsList = new ArrayList<>();
 
     protected Component(){}

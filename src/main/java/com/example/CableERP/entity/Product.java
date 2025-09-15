@@ -1,6 +1,7 @@
 package com.example.CableERP.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ public class Product {
     private String description;
 
     @OneToMany(mappedBy = "product")
+    @JsonManagedReference
     private List<BillOfMaterials> billOfMaterialsList = new ArrayList<>();
 
     public Long getId() {
@@ -51,7 +53,7 @@ public class Product {
         this.description = description;
     }
 
-    public List<BillOfMaterials> getBillOfMaterialsList() {
+ public List<BillOfMaterials> getBillOfMaterialsList() {
         return billOfMaterialsList;
     }
 
