@@ -10,7 +10,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
 import java.util.List;
@@ -36,7 +35,7 @@ public class ProductController {
     @PostMapping
     public ResponseEntity<Product> addProduct(@RequestBody Product product){
         Product createdProduct = productService.addProduct(product);
-        URI location = URI.create("/products/"+product.getName());
+        URI location = URI.create("/products/"+product.name());
         return ResponseEntity
                 .created(location)
                 .body(createdProduct);

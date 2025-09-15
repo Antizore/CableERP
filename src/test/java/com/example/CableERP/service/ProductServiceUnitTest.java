@@ -29,8 +29,8 @@ public class ProductServiceUnitTest {
     @Test
     void getAllProductsShouldReturnListOfProduct(){
 
-        Product product1 = new Product(1L,"Product 1", "Description of product 1");
-        Product product2 = new Product(2L,"Product 2", "Description of product 2");
+        Product product1 = new Product(1L,"Product 1", "Description of product 1",null);
+        Product product2 = new Product(2L,"Product 2", "Description of product 2",null);
         List<Product> productList = List.of(product1,product2);
 
         when(productRepository.findAll()).thenReturn(productList);
@@ -57,9 +57,9 @@ public class ProductServiceUnitTest {
     @Test
     void blankNameShouldThrowNoNameException(){
 
-        Product product = new Product(1L,"","Some description");
-        Product product1 = new Product(2L,"   ","Some description");
-        Product product2 = new Product(3L,null,"Some description");
+        Product product = new Product(1L,"","Some description",null);
+        Product product1 = new Product(2L,"   ","Some description",null);
+        Product product2 = new Product(3L,null,"Some description",null);
 
         NoNameException exception = assertThrows(NoNameException.class, () -> productService.addProduct(product));
         NoNameException exception1 = assertThrows(NoNameException.class, () -> productService.addProduct(product1));
