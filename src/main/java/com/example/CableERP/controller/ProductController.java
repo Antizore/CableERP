@@ -3,11 +3,12 @@ package com.example.CableERP.controller;
 
 import com.example.CableERP.entity.Product;
 import com.example.CableERP.service.ProductService;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.net.URI;
@@ -37,6 +38,7 @@ public class ProductController {
     //TODO naprawić że jak w jsonie dasz pole name to go nie przyjmuje
     @PostMapping
     public ResponseEntity<Product> addProduct(@RequestBody Product product){
+        System.out.println(product.toString());
             Product createdProduct = productService.addProduct(product);
             URI location = URI.create("/products/"+product.getName());
             return ResponseEntity
