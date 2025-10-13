@@ -33,14 +33,16 @@ public class ProductController {
     }
 
 
-    // TODO: OKAZAŁO SIĘ ŻE NIE ZWRACAM RESPONSE Z BŁĘDEM
+
+    //TODO naprawić że jak w jsonie dasz pole name to go nie przyjmuje
     @PostMapping
     public ResponseEntity<Product> addProduct(@RequestBody Product product){
-        Product createdProduct = productService.addProduct(product);
-        URI location = URI.create("/products/"+product.getName());
-        return ResponseEntity
-                .created(location)
-                .body(createdProduct);
+            Product createdProduct = productService.addProduct(product);
+            URI location = URI.create("/products/"+product.getName());
+            return ResponseEntity
+                    .created(location)
+                    .location(location)
+                    .body(createdProduct);
     }
 
 }

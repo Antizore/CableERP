@@ -58,9 +58,7 @@ public class ComponentServiceUnitTest {
     @Test
     void shouldReturnEmptyListIfNoComponentsInDatabase() {
         when(componentRepository.findAll()).thenReturn(Collections.emptyList());
-
         List<Component> result = componentService.getComponents();
-
         assertNotNull(result);
         assertTrue(result.isEmpty());
     }
