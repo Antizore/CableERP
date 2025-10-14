@@ -1,10 +1,7 @@
 package com.example.CableERP.entity;
 
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -24,6 +21,7 @@ public class Product {
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     @JsonManagedReference
+    @JsonIgnore
     private List<BillOfMaterials> billOfMaterialsList = new ArrayList<>();
 
 
@@ -31,7 +29,7 @@ public class Product {
     protected Product() {}
 
 
-    public Product(Long id, String name, String description, List<BillOfMaterials> billOfMaterialsList) {
+    public Product(Long id, String name, String description, List<BillOfMaterials> billOfMaterial) {
         this.id = id;
         this.name = name;
         this.description = description;

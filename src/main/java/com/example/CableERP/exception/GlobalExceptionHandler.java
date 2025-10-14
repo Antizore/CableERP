@@ -16,5 +16,19 @@ public class GlobalExceptionHandler {
     }
 
 
+    @ExceptionHandler(NoEmailException.class)
+    public ResponseEntity<String> handleNoEmailException(NoEmailException ex){
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(ex.getMessage());
+    }
+
+    @ExceptionHandler(DuplicateException.class)
+    public ResponseEntity<String> handleDuplicateException(DuplicateException ex){
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(ex.getMessage());
+    }
+
 
 }

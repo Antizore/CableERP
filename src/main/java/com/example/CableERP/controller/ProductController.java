@@ -35,7 +35,7 @@ public class ProductController {
 
 
 
-    //TODO naprawić że jak w jsonie dasz pole name to go nie przyjmuje
+
     @PostMapping
     public ResponseEntity<Product> addProduct(@RequestBody Product product){
         System.out.println(product.toString());

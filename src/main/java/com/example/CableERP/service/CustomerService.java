@@ -3,6 +3,7 @@ package com.example.CableERP.service;
 import com.example.CableERP.entity.Customer;
 import com.example.CableERP.exception.DuplicateException;
 import com.example.CableERP.exception.NoEmailException;
+import com.example.CableERP.exception.NoNameException;
 import com.example.CableERP.repository.CustomerRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -26,10 +27,16 @@ public class CustomerService {
     @Transactional
     public Customer createCustomer(Customer customer) {
         Optional<Customer> existingCustomer = Optional.ofNullable(customerRepository.findCustomerByEmail(customer.getEmail()));
-        if(existingCustomer.isEmpty() && !customer.getEmail().isEmpty())  return customerRepository.saveAndFlush(customer);
-        else if (customer.getEmail().isEmpty()) throw new NoEmailException("Cannot add Customer without email");
-        else throw new DuplicateException("Customer with email " + customer.getEmail() + " already exists.");
+
+        if (customer.getEmail() == null || customer.getEmail().isEmpty()) throw new NoEmailException("Cannot add Customer without email");
+        else if ( customer.getName() == null || customer.getName().isEmpty()) throw  new NoNameException("Cannot add customer without name");
+        else if (existingCustomer.isPresent()) throw new DuplicateException("Customer with email " + customer.getEmail() + " already exists.");
+        else return customerRepository.saveAndFlush(customer);
+
+        }
+
+
     }
 
 
-}
+
