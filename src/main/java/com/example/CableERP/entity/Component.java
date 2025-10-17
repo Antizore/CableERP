@@ -26,6 +26,7 @@ public class Component {
 
     @OneToMany(mappedBy = "component")
     @JsonManagedReference("component-bom")
+    @JsonIgnore
     private List<BillOfMaterials> billOfMaterialsList = new ArrayList<>();
 
     protected Component(){}
