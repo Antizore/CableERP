@@ -2,6 +2,7 @@ package com.example.CableERP.entity;
 
 
 import com.example.CableERP.enums.Unit;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.util.ArrayList;
@@ -24,18 +25,17 @@ public class Component {
     private Double costPerUnit;
 
     @OneToMany(mappedBy = "component")
-    @JsonManagedReference
+    @JsonManagedReference("component-bom")
     private List<BillOfMaterials> billOfMaterialsList = new ArrayList<>();
 
     protected Component(){}
 
 
-    public Component(Long id, String name, Unit unit, Double costPerUnit, List<BillOfMaterials> billOfMaterialsList) {
+    public Component(Long id, String name, Unit unit, Double costPerUnit) {
         this.id = id;
         this.name = name;
         this.unit = unit;
         this.costPerUnit = costPerUnit;
-        this.billOfMaterialsList = billOfMaterialsList;
     }
 
 
@@ -68,13 +68,6 @@ public class Component {
         this.costPerUnit = costPerUnit;
     }
 
-    public List<BillOfMaterials> getBillOfMaterialsList() {
-        return billOfMaterialsList;
-    }
-
-    public void setBillOfMaterialsList(List<BillOfMaterials> billOfMaterialsList) {
-        this.billOfMaterialsList = billOfMaterialsList;
-    }
 
 
 }

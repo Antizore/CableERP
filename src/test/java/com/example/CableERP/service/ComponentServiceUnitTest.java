@@ -37,7 +37,7 @@ public class ComponentServiceUnitTest {
 
     @Test
     void shouldThrowWrongValueExceptionWhenValueIsNegative() {
-        Component component = new Component(null,"Test",null,-10.0,null);
+        Component component = new Component(null,"Test",null,-10.0);
 
         assertThrows(WrongValueException.class,
                 () -> componentService.addComponent(component));
@@ -45,7 +45,7 @@ public class ComponentServiceUnitTest {
 
     @Test
     void shouldThrowDuplicateExceptionWhenComponentNameAlreadyExists() {
-        Component component = new Component(null,"Duplicate",Unit.grams,10.0,null);
+        Component component = new Component(null,"Duplicate",Unit.grams,10.0);
 
         // Simulate repository throwing your Duplicate exception
         when(componentRepository.saveAndFlush(any(Component.class)))
@@ -65,8 +65,8 @@ public class ComponentServiceUnitTest {
 
     @Test
     void shouldReturnListOfComponentsIfComponentsArePresentInDatabase() {
-        Component c1 = new Component(null,"C1",null,5.0,null);
-        Component c2 = new Component(null,"C2",null,15.0,null);
+        Component c1 = new Component(null,"C1",null,5.0);
+        Component c2 = new Component(null,"C2",null,15.0);
 
 
         when(componentRepository.findAll()).thenReturn(List.of(c1, c2));

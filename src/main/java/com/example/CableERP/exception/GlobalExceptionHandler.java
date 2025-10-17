@@ -30,5 +30,12 @@ public class GlobalExceptionHandler {
                 .body(ex.getMessage());
     }
 
+    @ExceptionHandler(WrongValueException.class)
+    public ResponseEntity<String> handleWrongValueException(WrongValueException ex){
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(ex.getMessage());
+    }
+
 
 }

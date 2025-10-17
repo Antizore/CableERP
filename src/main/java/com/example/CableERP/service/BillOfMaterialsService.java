@@ -2,6 +2,7 @@ package com.example.CableERP.service;
 
 
 import com.example.CableERP.entity.BillOfMaterials;
+import com.example.CableERP.entity.Product;
 import com.example.CableERP.repository.BillOfMaterialsRepository;
 import org.springframework.stereotype.Service;
 
@@ -21,8 +22,13 @@ public class BillOfMaterialsService {
         return billOfMaterialsRepository.findAllByProduct_Id(productId);
     }
 
-    public BillOfMaterials addBill(BillOfMaterials billOfMaterials){
-        return billOfMaterialsRepository.saveAndFlush(billOfMaterials);
+    public void addBill(List<BillOfMaterials> billOfMaterialsList){
+
+
+        for(var bill : billOfMaterialsList){
+            billOfMaterialsRepository.saveAndFlush(bill);
+        }
+
     }
 
 

@@ -29,6 +29,17 @@ public class BillOfMaterialsController {
 
 
 
+    @PostMapping
+    public ResponseEntity<List<BillOfMaterials>> postBill(@RequestBody List<BillOfMaterials> billOfMaterialsList, @PathVariable Long id){
+
+        billOfMaterialsService.addBill(billOfMaterialsList);
+
+        return ResponseEntity
+                .ok()
+                .build();
+    }
+
 
 
 }
+

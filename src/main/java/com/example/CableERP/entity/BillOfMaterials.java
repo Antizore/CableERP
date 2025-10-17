@@ -24,12 +24,12 @@ public class BillOfMaterials {
 
     @ManyToOne
     @JoinColumn(name = "product_id")
-    @JsonBackReference
+    @JsonBackReference("product-bom")
     private Product product;
 
     @ManyToOne
     @JoinColumn(name = "component_id")
-    @JsonBackReference
+    @JsonBackReference("component-bom")
     private Component component;
 
     private Double qty;
