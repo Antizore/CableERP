@@ -19,7 +19,7 @@ public class BillOfMaterialsController {
     }
 
 
-    //  TODO: PRZEROBIĆ, POTRZEBNE JEST DTO
+
     @GetMapping
     public ResponseEntity<List<BillOfMaterials>> getBill(@PathVariable Long id){
         return ResponseEntity

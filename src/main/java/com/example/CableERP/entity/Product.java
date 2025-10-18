@@ -28,11 +28,10 @@ public class Product {
     protected Product() {}
 
 
-    public Product(Long id, String name, String description, List<BillOfMaterials> billOfMaterial) {
+    public Product(Long id, String name, String description) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.billOfMaterialsList = billOfMaterialsList;
     }
 
 

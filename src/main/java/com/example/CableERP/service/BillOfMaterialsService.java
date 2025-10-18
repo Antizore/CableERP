@@ -7,6 +7,7 @@ import com.example.CableERP.entity.Product;
 import com.example.CableERP.repository.BillOfMaterialsRepository;
 import com.example.CableERP.repository.ComponentRepository;
 import com.example.CableERP.repository.ProductRepository;
+import jakarta.persistence.EntityManager;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,14 +33,31 @@ public class BillOfMaterialsService {
         return billOfMaterialsRepository.findAllByProduct_Id(productId);
     }
 
+    private EntityManager entityManager;
+
     public void addBill(List<BillOfMaterials> billOfMaterialsList){
 
 
-        for(var bill : billOfMaterialsList){
-            Optional<Product> product = productRepository.findById(bill.getProduct().getId());
-            Optional<Component> component = componentRepository.findById(bill.getComponent().getId());
+        for(BillOfMaterials bill : billOfMaterialsList){
 
-            BillOfMaterials billToSave = new BillOfMaterials(null, product.get(), component.get(), bill.getQty());
+            Long pid = bill.getProduct().getId();
+            Long cid = bill.getComponent().getId();
+            Product p = productRepository.findById(pid).orElse(null);
+            Component c = componentRepository.findById(cid).orElse(null);
+
+            Product product = entityManager.getReference(Product.class, bill.getProduct().getId());
+            Component component = entityManager.getReference(Component.class, bill.getComponent().getId());
+
+
+
+            System.out.println("incoming product id = " + pid + ", product from repo = " + p);
+            System.out.println("incoming component id = " + cid + ", component from repo = " + c);
+
+            System.out.println("entityManager.contains(product) = " + (p != null && entityManager.contains(p)));
+            System.out.println("entityManager.contains(component) = " + (c != null && entityManager.contains(c)));
+
+            bill.setProduct(product);
+            bill.setComponent(component);
 
             billOfMaterialsRepository.saveAndFlush(bill);
         }
