@@ -40,7 +40,7 @@ public class ProductController {
     public ResponseEntity<Product> addProduct(@RequestBody Product product){
         System.out.println(product.toString());
             Product createdProduct = productService.addProduct(product);
-            URI location = URI.create("/products/"+product.getName().replaceAll(" ","").trim());
+            URI location = URI.create("/products/"+product.getId());
             return ResponseEntity
                     .created(location)
                     .location(location)
