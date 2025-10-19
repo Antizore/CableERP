@@ -2,6 +2,7 @@ package com.example.CableERP.controller;
 
 
 import com.example.CableERP.DTOs.BillOfMaterialsDTO;
+import com.example.CableERP.DTOs.BomCreatingDTO;
 import com.example.CableERP.entity.BillOfMaterials;
 import com.example.CableERP.service.BillOfMaterialsService;
 import org.springframework.http.ResponseEntity;
@@ -31,9 +32,9 @@ public class BillOfMaterialsController {
 
 
     @PostMapping
-    public ResponseEntity<List<BillOfMaterials>> postBill(@RequestBody List<BillOfMaterials> billOfMaterialsList){
+    public ResponseEntity<List<BillOfMaterials>> postBill(@RequestBody List<BomCreatingDTO> billOfMaterialsList, @PathVariable Long id){
 
-        billOfMaterialsService.addBill(billOfMaterialsList);
+        billOfMaterialsService.addBill(billOfMaterialsList,id);
 
         return ResponseEntity
                 .ok()
