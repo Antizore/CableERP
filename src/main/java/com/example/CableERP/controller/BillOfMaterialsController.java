@@ -1,6 +1,7 @@
 package com.example.CableERP.controller;
 
 
+import com.example.CableERP.DTOs.BillOfMaterialsDTO;
 import com.example.CableERP.entity.BillOfMaterials;
 import com.example.CableERP.service.BillOfMaterialsService;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,7 @@ public class BillOfMaterialsController {
 
 
     @GetMapping
-    public ResponseEntity<List<BillOfMaterials>> getBill(@PathVariable Long id){
+    public ResponseEntity<List<BillOfMaterialsDTO>> getBill(@PathVariable Long id){
         return ResponseEntity
                 .ok()
                 .body(billOfMaterialsService.getBill(id));
