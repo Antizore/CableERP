@@ -20,7 +20,6 @@ public class Product {
     private String description;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-    @JsonManagedReference("product-bom")
     private List<BillOfMaterials> billOfMaterialsList = new ArrayList<>();
 
 

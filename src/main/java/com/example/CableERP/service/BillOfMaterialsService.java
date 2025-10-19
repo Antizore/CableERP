@@ -39,26 +39,6 @@ public class BillOfMaterialsService {
 
 
         for(BillOfMaterials bill : billOfMaterialsList){
-
-            Long pid = bill.getProduct().getId();
-            Long cid = bill.getComponent().getId();
-            Product p = productRepository.findById(pid).orElse(null);
-            Component c = componentRepository.findById(cid).orElse(null);
-
-            Product product = entityManager.getReference(Product.class, bill.getProduct().getId());
-            Component component = entityManager.getReference(Component.class, bill.getComponent().getId());
-
-
-
-            System.out.println("incoming product id = " + pid + ", product from repo = " + p);
-            System.out.println("incoming component id = " + cid + ", component from repo = " + c);
-
-            System.out.println("entityManager.contains(product) = " + (p != null && entityManager.contains(p)));
-            System.out.println("entityManager.contains(component) = " + (c != null && entityManager.contains(c)));
-
-            bill.setProduct(product);
-            bill.setComponent(component);
-
             billOfMaterialsRepository.saveAndFlush(bill);
         }
 

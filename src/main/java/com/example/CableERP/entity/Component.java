@@ -25,8 +25,6 @@ public class Component {
     private Double costPerUnit;
 
     @OneToMany(mappedBy = "component")
-    @JsonManagedReference("component-bom")
-    @JsonIgnore
     private List<BillOfMaterials> billOfMaterialsList = new ArrayList<>();
 
     protected Component(){}

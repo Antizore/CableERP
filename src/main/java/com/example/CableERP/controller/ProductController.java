@@ -1,20 +1,16 @@
 package com.example.CableERP.controller;
 
 
+import com.example.CableERP.DTOs.ProductDTO;
 import com.example.CableERP.entity.Product;
 import com.example.CableERP.service.ProductService;
-
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping("/products")
 public class ProductController {
 
@@ -26,7 +22,7 @@ public class ProductController {
 
 
     @GetMapping
-    public ResponseEntity<List<Product>> getAllProducts(){
+    public ResponseEntity<List<ProductDTO>> getAllProducts(){
         // TODO: MAKE PAGEABLE
         return ResponseEntity
                     .ok()
