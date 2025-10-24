@@ -27,6 +27,9 @@ public class Component {
     @OneToMany(mappedBy = "component")
     private List<BillOfMaterials> billOfMaterialsList = new ArrayList<>();
 
+    @OneToOne(mappedBy = "component")
+    private Inventory inventory;
+
     protected Component(){}
 
 
