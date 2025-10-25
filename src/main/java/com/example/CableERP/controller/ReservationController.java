@@ -37,7 +37,7 @@ public class ReservationController {
      */
 
     @PostMapping("/{id}/reserve")
-    public void reserveComponent(@RequestBody Reservation order, @PathVariable Long id){
+    public void reserveComponent(@RequestBody Reservation reservation, @PathVariable Long id){
 
     }
 
