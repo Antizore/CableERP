@@ -1,8 +1,12 @@
 package com.example.CableERP.controller;
 
+import com.example.CableERP.DTOs.ReservingComponentDTO;
 import com.example.CableERP.entity.Reservation;
 import com.example.CableERP.service.ReservationService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("orders")
@@ -16,6 +20,13 @@ public class ReservationController {
         this.reservationService = reservationService;
     }
 
+
+    @GetMapping("/reservations")
+    public ResponseEntity<List<Reservation>> getAllReservations(){
+        return ResponseEntity
+                .ok()
+                .body(reservationService.getAllReservations());
+    }
 
 
     // to będzie response entity
@@ -37,7 +48,7 @@ public class ReservationController {
      */
 
     @PostMapping("/{id}/reserve")
-    public void reserveComponent(@RequestBody Reservation reservation, @PathVariable Long id){
+    public void reserveComponent(@RequestBody ReservingComponentDTO reservation, @PathVariable Long id){
 
     }
 

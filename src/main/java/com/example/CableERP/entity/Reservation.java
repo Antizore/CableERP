@@ -9,6 +9,10 @@ import java.sql.Timestamp;
 @Table(name = "stock_reservation")
 public class Reservation {
 
+    public Reservation(Long id, Component component, double qty, Status status, Timestamp createdAt){}
+    protected Reservation(){}
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -17,13 +21,36 @@ public class Reservation {
     @JoinColumn(name="component_id",referencedColumnName = "id")
     private Component component;
 
+    @Column(name = "qty")
     private double qty;
 
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
     private Status status;
 
     @Column(name = "created_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Timestamp createdAt;
 
+
+    public Long getId() {
+        return id;
+    }
+
+    public Component getComponent() {
+        return component;
+    }
+
+    public double getQty() {
+        return qty;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public Timestamp getCreatedAt() {
+        return createdAt;
+    }
 }
 
 

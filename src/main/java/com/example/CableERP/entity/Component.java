@@ -31,7 +31,7 @@ public class Component {
     private Inventory inventory;
 
     @OneToMany(mappedBy = "component")
-    private Reservation reservation;
+    private List<Reservation> reservationList;
 
     protected Component(){}
 
