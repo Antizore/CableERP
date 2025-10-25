@@ -30,6 +30,9 @@ public class Component {
     @OneToOne(mappedBy = "component")
     private Inventory inventory;
 
+    @OneToMany(mappedBy = "component")
+    private Reservation reservation;
+
     protected Component(){}
 
 

@@ -1,14 +1,28 @@
 package com.example.CableERP.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import com.example.CableERP.enums.Status;
+import jakarta.persistence.*;
+
+import java.sql.Timestamp;
 
 @Entity
 @Table(name = "stock_reservation")
 public class Reservation {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ManyToOne
+    @JoinColumn(name="component_id",referencedColumnName = "id")
     private Component component;
+
+    private double qty;
+
+    private Status status;
+
+    @Column(name = "created_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    private Timestamp createdAt;
 
 }
 
