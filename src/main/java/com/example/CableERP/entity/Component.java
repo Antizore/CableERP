@@ -13,6 +13,14 @@ import java.util.List;
 @Table(name = "component")
 public class Component {
 
+    protected Component(){}
+    public Component(Long id, String name, Unit unit, Double costPerUnit) {
+        this.id = id;
+        this.name = name;
+        this.unit = unit;
+        this.costPerUnit = costPerUnit;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -33,15 +41,6 @@ public class Component {
     @OneToMany(mappedBy = "component")
     private List<Reservation> reservationList;
 
-    protected Component(){}
-
-
-    public Component(Long id, String name, Unit unit, Double costPerUnit) {
-        this.id = id;
-        this.name = name;
-        this.unit = unit;
-        this.costPerUnit = costPerUnit;
-    }
 
 
     public Long getId() {
@@ -73,6 +72,16 @@ public class Component {
         this.costPerUnit = costPerUnit;
     }
 
-
-
+    @Override
+    public String toString() {
+        return "Component{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", unit=" + unit +
+                ", costPerUnit=" + costPerUnit +
+                ", billOfMaterialsList=" + billOfMaterialsList +
+                ", inventory=" + inventory +
+                ", reservationList=" + reservationList +
+                '}';
+    }
 }

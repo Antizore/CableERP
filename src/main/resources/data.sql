@@ -33,9 +33,9 @@ INSERT INTO bill_of_material (product_id, component_id, qty) VALUES
 -- FAZA 2 — DANE MAGAZYNOWE
 -- ================================
 INSERT INTO inventory_item (component_id, qty_available, qty_reserved) VALUES
-(1, 200, 0),  -- Miedź
-(2, 300, 0),  -- PVC
-(3, 50, 0),   -- Wtyk USB-C
+(1, 200, 10),  -- Miedź
+(2, 300, 10),  -- PVC
+(3, 50, 5),   -- Wtyk USB-C
 (4, 30, 0),   -- Wtyk elektryczny
 (5, 60, 0);   -- Gniazdo
 

@@ -9,7 +9,12 @@ import java.sql.Timestamp;
 @Table(name = "stock_reservation")
 public class Reservation {
 
-    public Reservation(Long id, Component component, double qty, Status status, Timestamp createdAt){}
+    public Reservation(Long id, Component component, double qty, Status status, Timestamp createdAt){
+        this.component = component;
+        this.qty = qty;
+        this.status = status;
+        this.createdAt = createdAt;
+    }
     protected Reservation(){}
 
 
@@ -31,6 +36,21 @@ public class Reservation {
     @Column(name = "created_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Timestamp createdAt;
 
+    public void setCreatedAt(Timestamp createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public void setQty(double qty) {
+        this.qty = qty;
+    }
+
+    public void setComponent(Component component) {
+        this.component = component;
+    }
 
     public Long getId() {
         return id;

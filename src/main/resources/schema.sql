@@ -43,7 +43,7 @@ CREATE TABLE bill_of_material (
 -- ================================
 CREATE TABLE inventory_item (
     id BIGSERIAL PRIMARY KEY,
-    component_id BIGINT NOT NULL UNIQUE REFERENCES component(id) ON DELETE CASCADE,
+    component_id BIGINT NOT NULL REFERENCES component(id) ON DELETE CASCADE,
     qty_available NUMERIC(10,2) NOT NULL DEFAULT 0 CHECK (qty_available >= 0),
     qty_reserved NUMERIC(10,2) NOT NULL DEFAULT 0 CHECK (qty_reserved >= 0)
 );

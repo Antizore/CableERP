@@ -49,7 +49,7 @@ public class ReservationController {
 
     @PostMapping("/{id}/reserve")
     public void reserveComponent(@RequestBody ReservingComponentDTO reservation, @PathVariable Long id){
-
+        reservationService.froze(reservation);
     }
 
     // to będzie response entity
