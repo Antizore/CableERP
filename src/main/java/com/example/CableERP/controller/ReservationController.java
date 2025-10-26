@@ -48,14 +48,14 @@ public class ReservationController {
      */
 
     @PostMapping("/{id}/reserve")
-    public void reserveComponent(@RequestBody ReservingComponentDTO reservation, @PathVariable Long id){
+    public void reserveComponent(@RequestBody ReservingComponentDTO reservation){
         reservationService.froze(reservation);
     }
 
     // to będzie response entity
     @PostMapping("/{id}/release")
-    public void releaseComponent(@RequestBody Reservation reservation, @PathVariable Long id){
-
+    public void releaseComponent(@RequestBody ReservingComponentDTO reservation){
+        reservationService.release(reservation);
     }
 
 

@@ -43,11 +43,10 @@ public class ReservationService {
         }
         else {
             inventory.setQtyReserved(inventory.getQtyReserved() + reservingComponentDTO.qty());
+            inventory.setQtyAvailable(inventory.getQtyAvailable() - reservingComponentDTO.qty());
             Component component = componentRepository.findById(reservingComponentDTO.componentId()).orElse(null);
-
-
             Calendar rightNow = Calendar.getInstance();
-            Reservation reservation = new Reservation(1L,component, reservingComponentDTO.qty(), Status.FROZEN,new Timestamp(rightNow.getTimeInMillis()));
+            Reservation reservation = new Reservation(null,component, reservingComponentDTO.qty(), Status.FROZEN,new Timestamp(rightNow.getTimeInMillis()));
             inventoryRepository.saveAndFlush(inventory);
             reservationRepository.saveAndFlush(reservation);
 
@@ -56,9 +55,18 @@ public class ReservationService {
 
 
 
-    public void release(){
-
+    public void release(ReservingComponentDTO releasingComponentDTO){
+        Inventory inventory = inventoryRepository.findByComponentId(releasingComponentDTO.componentId());
+        if(inventory.getQtyReserved() < releasingComponentDTO.qty()){
+        }
+        else {
+            inventory.setQtyAvailable(inventory.getQtyAvailable() + releasingComponentDTO.qty());
+            inventory.setQtyReserved(inventory.getQtyReserved() - releasingComponentDTO.qty());
+            Component component = componentRepository.findById(releasingComponentDTO.componentId()).orElse(null);
+            Calendar rightNow = Calendar.getInstance();
+            Reservation releasing = new Reservation(null, component, releasingComponentDTO.qty(), Status.RELEASED,new Timestamp(rightNow.getTimeInMillis()));
+            inventoryRepository.saveAndFlush(inventory);
+            reservationRepository.saveAndFlush(releasing);
+        }
     }
-
-
 }
