@@ -29,7 +29,16 @@ public class InventoryService {
          jeśli nie → utwórz nowy rekord
      */
     public Inventory createInventory(Inventory inventory){
-        return inventoryRepository.saveAndFlush(inventory);
+        if(inventoryRepository.existsById(inventory.getId())){
+            Inventory inventoryToUpdate = inventoryRepository.findById(inventory.getId()).get();
+            inventoryToUpdate.setQtyAvailable(inventoryToUpdate.getQtyAvailable() + inventory.getQtyAvailable());
+            return inventoryRepository.saveAndFlush(inventoryToUpdate);
+        }
+        else {
+            return inventoryRepository.saveAndFlush(inventory);
+        }
+
+
     }
 
 
