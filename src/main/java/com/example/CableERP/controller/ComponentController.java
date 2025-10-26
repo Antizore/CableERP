@@ -24,7 +24,7 @@ public class ComponentController {
     @PostMapping
     public ResponseEntity<Component> addComponent(@RequestBody Component component) throws Exception {
         Component created = componentService.addComponent(component);
-        URI location = URI.create("/components/"+created.getName());
+        URI location = URI.create("/components/"+created.getId());
 
         return ResponseEntity
                 .created(location)

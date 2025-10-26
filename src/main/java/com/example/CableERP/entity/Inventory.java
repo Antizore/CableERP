@@ -21,10 +21,11 @@ public class Inventory {
     private Component component;
 
 
-    public Inventory(Long id, double qtyAvailable, double qtyReserved) {
+    public Inventory(Long id, double qtyAvailable, double qtyReserved, Component component) {
         this.id = id;
         this.qtyAvailable = qtyAvailable;
         this.qtyReserved = qtyReserved;
+        this.component = component;
     }
 
     protected Inventory(){}

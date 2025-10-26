@@ -22,20 +22,15 @@ public class InventoryService {
         return inventoryRepository.findAll();
     }
 
-    /*
-        TODO:
-         🧩 Logika:
-         jeśli inventory_item istnieje → zwiększ qty_available
-         jeśli nie → utwórz nowy rekord
-     */
+
     public Inventory createInventory(Inventory inventory){
-        if(inventoryRepository.existsById(inventory.getId())){
+        if(inventory.getId() == null){
+            return inventoryRepository.saveAndFlush(inventory);
+        }
+        else {
             Inventory inventoryToUpdate = inventoryRepository.findById(inventory.getId()).get();
             inventoryToUpdate.setQtyAvailable(inventoryToUpdate.getQtyAvailable() + inventory.getQtyAvailable());
             return inventoryRepository.saveAndFlush(inventoryToUpdate);
-        }
-        else {
-            return inventoryRepository.saveAndFlush(inventory);
         }
 
 
