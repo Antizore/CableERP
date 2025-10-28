@@ -1,8 +1,10 @@
 package com.example.CableERP.controller;
 
+import com.example.CableERP.DTOs.UpdateInventoryDTO;
 import com.example.CableERP.entity.Inventory;
 import com.example.CableERP.repository.InventoryRepository;
 import com.example.CableERP.service.InventoryService;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,6 +28,22 @@ public class InventoryController {
         return ResponseEntity.
                 ok()
                 .body(inventoryService.returnInventoryList());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity <Inventory> getSingleInventory(@PathVariable Long id){
+
+        return ResponseEntity.
+                ok()
+                .body(inventoryService.returnSingleInventory(id));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity <Inventory> updateSingleInventory(@PathVariable Long id, @RequestBody UpdateInventoryDTO updateInventoryDTO){
+        Inventory inventory = inventoryService.updateInventory(id,updateInventoryDTO);
+        return ResponseEntity
+                .ok()
+                .body(inventory);
     }
 
 

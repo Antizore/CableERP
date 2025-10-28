@@ -1,6 +1,8 @@
 package com.example.CableERP.service;
 
+import com.example.CableERP.DTOs.UpdateInventoryDTO;
 import com.example.CableERP.entity.Inventory;
+import com.example.CableERP.exception.WrongValueException;
 import com.example.CableERP.repository.InventoryRepository;
 import org.springframework.stereotype.Service;
 
@@ -22,12 +24,26 @@ public class InventoryService {
         return inventoryRepository.findAll();
     }
 
+    public Inventory returnSingleInventory(Long id){
+        return inventoryRepository.findById(id).orElse(null);
+    }
+
+
+    public Inventory updateInventory(Long id, UpdateInventoryDTO updateInventoryDTO){
+        Inventory currentInventory = inventoryRepository.findById(id).get();
+        if(updateInventoryDTO.qtyAvilable() < 0 || updateInventoryDTO.qtyReserved() < 0) throw new WrongValueException("qty value cannot be less than 0");
+        currentInventory.setQtyReserved(updateInventoryDTO.qtyReserved());
+        currentInventory.setQtyAvailable(updateInventoryDTO.qtyAvilable());
+        return inventoryRepository.saveAndFlush(currentInventory);
+    }
+
 
     public Inventory createInventory(Inventory inventory){
         if(inventory.getId() == null){
             return inventoryRepository.saveAndFlush(inventory);
         }
         else {
+            if(inventory.getQtyAvailable() < 0 || inventory.getQtyReserved() < 0) throw new WrongValueException("qty value cannot be less than 0");
             Inventory inventoryToUpdate = inventoryRepository.findById(inventory.getId()).get();
             inventoryToUpdate.setQtyAvailable(inventoryToUpdate.getQtyAvailable() + inventory.getQtyAvailable());
             return inventoryRepository.saveAndFlush(inventoryToUpdate);
