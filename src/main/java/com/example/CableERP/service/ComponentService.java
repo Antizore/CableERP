@@ -27,13 +27,10 @@ public class ComponentService {
         else if (component.getCostPerUnit() < 0) throw new WrongValueException("Cost of component cannot be less than 0");
         else
         {
-            // jeśli stworzy się nowy komponent to od razu zapiszemy go sobie w magazynie
-            // tu masz błąd, bo ten komponent to ID jeszcze nie dostaje ogólnie, trochę kolejność nie ten tego
-            // chyba będzie trza pośredni serwis uruchamiany przez kontroler komponenta przy post,
-            // który wywoła komponent i inventory po kolei sobie
-            Inventory inventory = new Inventory(null,0,0,component);
+            var save = componentRepository.saveAndFlush(component);
+            Inventory inventory = new Inventory(null,0,0,save);
             inventoryService.createInventory(inventory);
-            return componentRepository.saveAndFlush(component);
+            return save;
         }
     }
 
