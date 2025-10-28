@@ -52,5 +52,9 @@ public class InventoryService {
 
     }
 
+    public void deleteInventory(Long id){
+        inventoryRepository.deleteById(id);
+    }
+
 
 }
