@@ -56,3 +56,24 @@ CREATE TABLE stock_reservation (
     status VARCHAR(20) NOT NULL CHECK (status IN ('FROZEN', 'RELEASED')),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+
+-- ========================
+--  Faza 3 — Zamówienia klienta
+-- ========================
+
+CREATE TABLE customer_order (
+    id BIGSERIAL PRIMARY KEY,
+    customer_id BIGINT REFERENCES customer(id),
+    order_number VARCHAR(50) UNIQUE NOT NULL,
+    status VARCHAR(20) CHECK (status IN ('NEW','RESERVED','IN_PRODUCTION','COMPLETED','CANCELLED')) DEFAULT 'NEW',
+    created_at TIMESTAMP DEFAULT NOW(),
+    updated_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE customer_order_item (
+    id BIGSERIAL PRIMARY KEY,
+    order_id BIGINT REFERENCES customer_order(id) ON DELETE CASCADE,
+    product_id BIGINT REFERENCES product(id),
+    qty NUMERIC(10,2) NOT NULL
+);

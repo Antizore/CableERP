@@ -48,3 +48,15 @@ VALUES
 (1001, 2, 10, 'FROZEN'),
 (1001, 3, 5, 'FROZEN'),
 (1002, 5, 3, 'RELEASED'); -- rezerwacja zwolniona
+
+-- ========================
+--  Faza 3 — Zamówienia klienta
+-- ========================
+
+INSERT INTO customer_order (customer_id, order_number, status) VALUES
+(1, 'ORD-2025-0001', 'NEW'),
+(2, 'ORD-2025-0002', 'NEW');
+
+INSERT INTO customer_order_item (order_id, product_id, qty) VALUES
+(1, 1, 10),  -- 10 kabli zasilających
+(2, 2, 5);   -- 5 przedłużaczy 3m
