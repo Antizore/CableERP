@@ -2,9 +2,7 @@ package com.example.CableERP.controller;
 
 import com.example.CableERP.DTOs.UpdateInventoryDTO;
 import com.example.CableERP.entity.Inventory;
-import com.example.CableERP.repository.InventoryRepository;
 import com.example.CableERP.service.InventoryService;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

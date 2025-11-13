@@ -2,6 +2,8 @@ package com.example.CableERP.controller;
 
 
 import com.example.CableERP.entity.CustomerOrder;
+import com.example.CableERP.service.CustomerOrderService;
+import org.junit.jupiter.api.Order;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,7 +13,11 @@ import java.util.List;
 @RequestMapping("/orders")
 public class OrderController {
 
+    private final CustomerOrderService orderService;
 
+    public OrderController(CustomerOrderService orderService){
+        this.orderService = orderService;
+    }
 
 
     //TODO:
@@ -20,16 +26,22 @@ public class OrderController {
         return ResponseEntity.ok().body("");
     }
 
-    //TODO:
+
+
     @GetMapping
-    public ResponseEntity<String> getAllOrders(){
-        return ResponseEntity.ok().body("");
+    public ResponseEntity<List<CustomerOrder>> getAllOrders(){
+        return ResponseEntity
+                .ok()
+                .body(orderService.returnAllOrders());
     }
 
-    //TODO:
+
     @GetMapping("/{id}")
     public ResponseEntity<CustomerOrder> getSpecificOrder(@PathVariable Long id){
-        return ResponseEntity.ok().build();
+
+        return ResponseEntity
+                .ok()
+                .body(orderService.returnOrderById(id));
     }
 
 

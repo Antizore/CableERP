@@ -2,13 +2,15 @@ package com.example.CableERP.entity;
 
 import jakarta.persistence.*;
 
+import java.io.Serializable;
+import java.util.List;
 
 
 @Entity
 @Table(name = "customer")
-public class Customer{
+public class Customer {
 
-    protected Customer(){};
+    protected Customer(){}
 
     public Customer(Long id, String name, String phone, String email){
         this.id = id;
@@ -23,8 +25,9 @@ public class Customer{
     private Long id;
     private String name;
     private String phone;
-    @Column(name="email")
     private String email;
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    private List<CustomerOrder> customerOrder;
 
     public Long getId() {
         return id;

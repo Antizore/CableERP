@@ -9,13 +9,14 @@ import java.sql.Timestamp;
 @Table(name = "stock_reservation")
 public class Reservation {
 
+    protected Reservation(){}
+
     public Reservation(Long id, Component component, double qty, Status status, Timestamp createdAt){
         this.component = component;
         this.qty = qty;
         this.status = status;
         this.createdAt = createdAt;
     }
-    protected Reservation(){}
 
 
     @Id

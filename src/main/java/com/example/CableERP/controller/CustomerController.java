@@ -36,7 +36,4 @@ public class CustomerController {
                 .created(location)
                 .body(createdCustomer);
     }
-
-
-
 }

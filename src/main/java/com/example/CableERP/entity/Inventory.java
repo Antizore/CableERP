@@ -6,6 +6,18 @@ import jakarta.persistence.*;
 @Table(name = "inventory_item")
 public class Inventory {
 
+    protected Inventory(){}
+
+
+    public Inventory(Long id, double qtyAvailable, double qtyReserved, Component component) {
+        this.id = id;
+        this.qtyAvailable = qtyAvailable;
+        this.qtyReserved = qtyReserved;
+        this.component = component;
+    }
+
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,16 +36,6 @@ public class Inventory {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="component_id",referencedColumnName = "id")
     private Component component;
-
-
-    public Inventory(Long id, double qtyAvailable, double qtyReserved, Component component) {
-        this.id = id;
-        this.qtyAvailable = qtyAvailable;
-        this.qtyReserved = qtyReserved;
-        this.component = component;
-    }
-
-    protected Inventory(){}
 
 
     public Long getId() {
