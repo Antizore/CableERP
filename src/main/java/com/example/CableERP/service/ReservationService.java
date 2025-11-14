@@ -1,6 +1,7 @@
 package com.example.CableERP.service;
 
 
+import com.example.CableERP.DTOs.PatchReservationStatusDTO;
 import com.example.CableERP.DTOs.ReservingComponentDTO;
 import com.example.CableERP.entity.Component;
 import com.example.CableERP.entity.Inventory;
@@ -69,4 +70,12 @@ public class ReservationService {
             reservationRepository.saveAndFlush(releasing);
         }
     }
+
+    public void updateStatus(PatchReservationStatusDTO patchReservationStatusDTO){
+        Reservation reservation = reservationRepository.findById(patchReservationStatusDTO.id()).orElse(null);
+        reservation.setStatus(patchReservationStatusDTO.status());
+        reservationRepository.saveAndFlush(reservation);
+    }
+
+
 }

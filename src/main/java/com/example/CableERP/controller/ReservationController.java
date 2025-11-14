@@ -1,5 +1,6 @@
 package com.example.CableERP.controller;
 
+import com.example.CableERP.DTOs.PatchReservationStatusDTO;
 import com.example.CableERP.DTOs.ReservingComponentDTO;
 import com.example.CableERP.entity.Reservation;
 import com.example.CableERP.service.ReservationService;
@@ -56,6 +57,13 @@ public class ReservationController {
     @PostMapping("/{id}/release")
     public void releaseComponent(@RequestBody ReservingComponentDTO reservation){
         reservationService.release(reservation);
+    }
+
+
+    @PatchMapping("/{id}/status")
+    public void updateStatus(@PathVariable Long id, @RequestBody PatchReservationStatusDTO patchReservationStatusDTO)
+    {
+        reservationService.updateStatus(patchReservationStatusDTO);
     }
 
 
