@@ -49,7 +49,6 @@ public class BillOfMaterialsService {
         for(BomCreatingDTO bill : billOfMaterialsList){
 
             BillOfMaterials bill1 = new BillOfMaterials(
-                    null,
                     productRepository.findById(id).get(),
                     componentRepository.findById(id).get(),
                     bill.qty()

@@ -64,8 +64,8 @@ CREATE TABLE stock_reservation (
 
 CREATE TABLE customer_order (
     id BIGSERIAL PRIMARY KEY,
-    customer_id BIGINT REFERENCES customer(id),
-    order_number VARCHAR(50) UNIQUE NOT NULL,
+    customer_id BIGINT REFERENCES customer(id) ON DELETE CASCADE,
+    order_number VARCHAR(50) NOT NULL UNIQUE,
     status VARCHAR(20) CHECK (status IN ('NEW','RESERVED','IN_PRODUCTION','COMPLETED','CANCELLED')),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP

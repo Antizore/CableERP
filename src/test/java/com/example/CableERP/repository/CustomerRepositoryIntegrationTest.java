@@ -18,7 +18,7 @@ public class CustomerRepositoryIntegrationTest {
 
     @Test
     void testSaveAndFindCustomerByEmail(){
-        Customer customer = new Customer(null,"John","123-443-221","johndoe@gmail.com");
+        Customer customer = new Customer("John","123-443-221","johndoe@gmail.com");
         customerRepository.save(customer);
         assertThat(customerRepository.findCustomerByEmail("johndoe@gmail.com")).isNotNull();
     }

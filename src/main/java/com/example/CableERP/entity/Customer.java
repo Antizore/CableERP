@@ -3,6 +3,7 @@ package com.example.CableERP.entity;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -12,12 +13,10 @@ public class Customer {
 
     protected Customer(){}
 
-    public Customer(Long id, String name, String phone, String email){
-        this.id = id;
+    public Customer(String name, String phone, String email){
         this.name = name;
         this.phone = phone;
         this.email=email;
-
     }
 
     @Id
@@ -27,7 +26,7 @@ public class Customer {
     private String phone;
     private String email;
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
-    private List<CustomerOrder> customerOrder;
+    private List<CustomerOrder> customerOrder = new ArrayList<>();
 
     public Long getId() {
         return id;

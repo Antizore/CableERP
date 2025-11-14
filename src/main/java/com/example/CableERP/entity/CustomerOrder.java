@@ -2,12 +2,9 @@ package com.example.CableERP.entity;
 
 
 import com.example.CableERP.enums.Status;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 
-import java.sql.Time;
+
 import java.sql.Timestamp;
 
 @Entity
@@ -15,8 +12,7 @@ public class CustomerOrder {
 
     protected CustomerOrder(){}
 
-    public CustomerOrder(Long id, Customer customer, String orderNumber, Status status, Timestamp createdAt, Time updatedAt) {
-        this.id = id;
+    public CustomerOrder(Customer customer, String orderNumber, Status status, Timestamp createdAt, Timestamp updatedAt) {
         this.customer = customer;
         this.orderNumber = orderNumber;
         this.status = status;
@@ -24,15 +20,18 @@ public class CustomerOrder {
         this.updatedAt = updatedAt;
     }
 
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    @JoinColumn(name = "customer_id")
+    @JoinColumn(name = "customer_id", referencedColumnName = "id")
     private Customer customer;
     private String orderNumber;
+    @Enumerated(EnumType.STRING)
     private Status status;
     private Timestamp createdAt;
-    private Time updatedAt;
+    private Timestamp updatedAt;
 
     public Long getId() {
         return id;
@@ -70,11 +69,11 @@ public class CustomerOrder {
         this.createdAt = createdAt;
     }
 
-    public Time getUpdatedAt() {
+    public Timestamp getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Time updatedAt) {
+    public void setUpdatedAt(Timestamp updatedAt) {
         this.updatedAt = updatedAt;
     }
 }

@@ -29,8 +29,8 @@ public class ProductServiceUnitTest {
     @Test
     void getAllProductsShouldReturnListOfProduct(){
 
-        Product product1 = new Product(1L,"Product 1", "Description of product 1");
-        Product product2 = new Product(2L,"Product 2", "Description of product 2");
+        Product product1 = new Product("Product 1", "Description of product 1");
+        Product product2 = new Product("Product 2", "Description of product 2");
         List<Product> productList = List.of(product1,product2);
 
         //when(productRepository.findAll()).thenReturn(productList);

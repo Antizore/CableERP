@@ -3,7 +3,7 @@ package com.example.CableERP.controller;
 
 import com.example.CableERP.entity.CustomerOrder;
 import com.example.CableERP.service.CustomerOrderService;
-import org.junit.jupiter.api.Order;
+import com.example.CableERP.DTOs.CreateOrderDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,10 +20,11 @@ public class OrderController {
     }
 
 
-    //TODO:
     @PostMapping
-    public ResponseEntity<String> createNewOrder(){
+    public ResponseEntity<String> createNewOrder(@RequestBody CreateOrderDTO customerOrder){
+        orderService.saveOrderToDB(customerOrder);
         return ResponseEntity.ok().body("");
+
     }
 
 

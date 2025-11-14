@@ -28,7 +28,7 @@ public class ComponentService {
         else
         {
             var save = componentRepository.saveAndFlush(component);
-            Inventory inventory = new Inventory(null,0,0,save);
+            Inventory inventory = new Inventory(0,0,save);
             inventoryService.createInventory(inventory);
             return save;
         }

@@ -9,8 +9,7 @@ public class Inventory {
     protected Inventory(){}
 
 
-    public Inventory(Long id, double qtyAvailable, double qtyReserved, Component component) {
-        this.id = id;
+    public Inventory(double qtyAvailable, double qtyReserved, Component component) {
         this.qtyAvailable = qtyAvailable;
         this.qtyReserved = qtyReserved;
         this.component = component;

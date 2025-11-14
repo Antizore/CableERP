@@ -12,8 +12,7 @@ public class BillOfMaterials {
 
     protected BillOfMaterials(){}
 
-    public BillOfMaterials(Long id, Product product, Component component, Double qty) {
-        this.id = id;
+    public BillOfMaterials(Product product, Component component, Double qty) {
         this.product = product;
         this.component = component;
         this.qty = qty;

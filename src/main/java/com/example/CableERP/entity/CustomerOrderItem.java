@@ -9,8 +9,7 @@ public class CustomerOrderItem {
 
     protected CustomerOrderItem(){}
 
-    public CustomerOrderItem(Long id, String order, String product){
-        this.id = id;
+    public CustomerOrderItem(String order, String product){
         this.order = order;
         this.product = product;
     }

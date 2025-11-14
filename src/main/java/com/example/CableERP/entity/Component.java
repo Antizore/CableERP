@@ -14,8 +14,7 @@ import java.util.List;
 public class Component {
 
     protected Component(){}
-    public Component(Long id, String name, Unit unit, Double costPerUnit) {
-        this.id = id;
+    public Component(String name, Unit unit, Double costPerUnit) {
         this.name = name;
         this.unit = unit;
         this.costPerUnit = costPerUnit;

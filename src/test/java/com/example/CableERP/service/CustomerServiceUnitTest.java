@@ -30,8 +30,8 @@ class CustomerServiceUnitTest {
 
     @Test
     void getListOfCustomersShouldReturnCustomersFromRepository(){
-        Customer customer1 = new Customer(1L, "John", "123-443-221", "johndoe@gmail.com");
-        Customer customer2 = new Customer(1L, "John", "123-443-221", "johndoe@gmail.com");
+        Customer customer1 = new Customer("John", "123-443-221", "johndoe@gmail.com");
+        Customer customer2 = new Customer("John", "123-443-221", "johndoe@gmail.com");
         List<Customer> customerList = List.of(customer1,customer2);
 
         when(customerRepository.findAll()).thenReturn(customerList);
@@ -59,8 +59,8 @@ class CustomerServiceUnitTest {
 
     @Test
     void testCreateCustomerDuplicateEmail() {
-        Customer existing = new Customer(1L, "John", "123-443-221", "johndoe@gmail.com");
-        Customer newCustomer = new Customer(null, "John2", "123-444-221", "johndoe@gmail.com");
+        Customer existing = new Customer("John", "123-443-221", "johndoe@gmail.com");
+        Customer newCustomer = new Customer("John2", "123-444-221", "johndoe@gmail.com");
 
         // Simulate existing customer
         when(customerRepository.findCustomerByEmail(newCustomer.getEmail())).thenReturn(existing);

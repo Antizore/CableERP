@@ -22,7 +22,7 @@ public class CustomerServiceIntegrationTest {
 
     @Test
     void testCreateCustomerSuccess(){
-        Customer customer = new Customer(null, "John", "123-456-789","johndoe@gmail.com");
+        Customer customer = new Customer( "John", "123-456-789","johndoe@gmail.com");
         customerService.createCustomer(customer);
         assertThat(customerRepository.findCustomerByEmail(customer.getEmail())).isNotNull();
     }
