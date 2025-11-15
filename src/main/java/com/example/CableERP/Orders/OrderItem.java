@@ -1,15 +1,15 @@
-package com.example.CableERP.Customers;
+package com.example.CableERP.Orders;
 
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
 @Entity
-public class CustomerOrderItem {
+public class OrderItem {
 
-    protected CustomerOrderItem(){}
+    protected OrderItem(){}
 
-    public CustomerOrderItem(String order, String product){
+    public OrderItem(String order, String product){
         this.order = order;
         this.product = product;
     }

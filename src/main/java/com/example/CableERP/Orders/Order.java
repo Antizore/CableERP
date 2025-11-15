@@ -1,6 +1,7 @@
-package com.example.CableERP.Customers;
+package com.example.CableERP.Orders;
 
 
+import com.example.CableERP.Customers.Customer;
 import com.example.CableERP.enums.Status;
 import jakarta.persistence.*;
 
@@ -8,11 +9,11 @@ import jakarta.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
-public class CustomerOrder {
+public class Order {
 
-    protected CustomerOrder(){}
+    protected Order(){}
 
-    public CustomerOrder(Customer customer, String orderNumber, Status status, Timestamp createdAt, Timestamp updatedAt) {
+    public Order(Customer customer, String orderNumber, Status status, Timestamp createdAt, Timestamp updatedAt) {
         this.customer = customer;
         this.orderNumber = orderNumber;
         this.status = status;

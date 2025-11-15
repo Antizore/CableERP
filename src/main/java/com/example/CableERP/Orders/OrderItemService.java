@@ -1,4 +1,4 @@
 package com.example.CableERP.Orders;
 
-public class CustomerOrderItemService {
+public class OrderItemService {
 }

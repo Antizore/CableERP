@@ -1,5 +1,6 @@
 package com.example.CableERP.Customers;
 
+import com.example.CableERP.Orders.Order;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -25,7 +26,7 @@ public class Customer {
     private String phone;
     private String email;
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
-    private List<CustomerOrder> customerOrder = new ArrayList<>();
+    private List<Order> order = new ArrayList<>();
 
     public Long getId() {
         return id;

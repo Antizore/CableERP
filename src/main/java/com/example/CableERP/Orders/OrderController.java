@@ -1,7 +1,6 @@
 package com.example.CableERP.Orders;
 
 
-import com.example.CableERP.Customers.CustomerOrder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,9 +10,9 @@ import java.util.List;
 @RequestMapping("/orders")
 public class OrderController {
 
-    private final CustomerOrderService orderService;
+    private final OrderService orderService;
 
-    public OrderController(CustomerOrderService orderService){
+    public OrderController(OrderService orderService){
         this.orderService = orderService;
     }
 
@@ -28,7 +27,7 @@ public class OrderController {
 
 
     @GetMapping
-    public ResponseEntity<List<CustomerOrder>> getAllOrders(){
+    public ResponseEntity<List<Order>> getAllOrders(){
         return ResponseEntity
                 .ok()
                 .body(orderService.returnAllOrders());
@@ -36,7 +35,7 @@ public class OrderController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<CustomerOrder> getSpecificOrder(@PathVariable Long id){
+    public ResponseEntity<Order> getSpecificOrder(@PathVariable Long id){
 
         return ResponseEntity
                 .ok()
