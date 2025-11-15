@@ -1,8 +1,9 @@
 package com.example.CableERP.service;
 
-import com.example.CableERP.entity.Customer;
+import com.example.CableERP.Customers.Customer;
+import com.example.CableERP.Customers.CustomerService;
 import com.example.CableERP.exception.DuplicateException;
-import com.example.CableERP.repository.CustomerRepository;
+import com.example.CableERP.Customers.CustomerRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

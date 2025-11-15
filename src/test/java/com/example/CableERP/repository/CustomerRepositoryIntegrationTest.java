@@ -1,6 +1,7 @@
 package com.example.CableERP.repository;
 
-import com.example.CableERP.entity.Customer;
+import com.example.CableERP.Customers.Customer;
+import com.example.CableERP.Customers.CustomerRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -11,7 +12,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 public class CustomerRepositoryIntegrationTest {
 
     @Autowired
-    private  CustomerRepository customerRepository;
+    private CustomerRepository customerRepository;
 
 
 

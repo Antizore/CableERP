@@ -1,8 +1,9 @@
 package com.example.CableERP.service;
 
 
-import com.example.CableERP.entity.Customer;
-import com.example.CableERP.repository.CustomerRepository;
+import com.example.CableERP.Customers.Customer;
+import com.example.CableERP.Customers.CustomerRepository;
+import com.example.CableERP.Customers.CustomerService;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,10 +1,10 @@
 package com.example.CableERP.service;
 
 
-import com.example.CableERP.entity.Product;
+import com.example.CableERP.Products.Product;
+import com.example.CableERP.Products.ProductService;
 import com.example.CableERP.exception.NoNameException;
-import com.example.CableERP.repository.ProductRepository;
-import org.junit.Assert;
+import com.example.CableERP.Products.ProductRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
