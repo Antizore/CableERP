@@ -1,7 +1,7 @@
 package com.example.CableERP.controller;
 
 
-import com.example.CableERP.Customers.CustomerController;
+import com.example.CableERP.Customer.CustomerController;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

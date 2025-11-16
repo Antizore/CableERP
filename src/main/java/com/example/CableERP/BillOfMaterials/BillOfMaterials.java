@@ -1,7 +1,7 @@
 package com.example.CableERP.BillOfMaterials;
 
-import com.example.CableERP.Components.Component;
-import com.example.CableERP.Products.Product;
+import com.example.CableERP.Component.Component;
+import com.example.CableERP.Product.Product;
 import jakarta.persistence.*;
 
 

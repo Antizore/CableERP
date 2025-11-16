@@ -77,3 +77,19 @@ CREATE TABLE customer_order_item (
     product_id BIGINT REFERENCES product(id),
     qty NUMERIC(10,2) NOT NULL
 );
+
+
+-- ========================
+--  Faza 3 — Work Order
+-- ========================
+
+
+CREATE TABLE work_order (
+    id BIGSERIAL PRIMARY KEY,
+    product_id BIGINT REFERENCES product(id),
+    qty NUMERIC(10,2) NOT NULL,
+    status VARCHAR(20) CHECK (status IN ('PLANNED', 'IN_PROGRESS','FINISHED')),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    finished_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

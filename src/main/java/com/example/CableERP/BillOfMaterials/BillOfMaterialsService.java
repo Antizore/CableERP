@@ -1,9 +1,9 @@
 package com.example.CableERP.BillOfMaterials;
 
 
-import com.example.CableERP.Components.ComponentDTO;
-import com.example.CableERP.Components.ComponentRepository;
-import com.example.CableERP.Products.ProductRepository;
+import com.example.CableERP.Component.ComponentDTO;
+import com.example.CableERP.Component.ComponentRepository;
+import com.example.CableERP.Product.ProductRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

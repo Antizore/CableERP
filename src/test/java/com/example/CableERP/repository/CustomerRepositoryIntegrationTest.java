@@ -1,7 +1,7 @@
 package com.example.CableERP.repository;
 
-import com.example.CableERP.Customers.Customer;
-import com.example.CableERP.Customers.CustomerRepository;
+import com.example.CableERP.Customer.Customer;
+import com.example.CableERP.Customer.CustomerRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;

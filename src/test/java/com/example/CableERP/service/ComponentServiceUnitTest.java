@@ -1,12 +1,12 @@
 package com.example.CableERP.service;
 
 
-import com.example.CableERP.Components.Component;
-import com.example.CableERP.Components.ComponentService;
+import com.example.CableERP.Component.Component;
+import com.example.CableERP.Component.ComponentService;
 import com.example.CableERP.Common.Unit;
 import com.example.CableERP.exception.DuplicateException;
 import com.example.CableERP.exception.WrongValueException;
-import com.example.CableERP.Components.ComponentRepository;
+import com.example.CableERP.Component.ComponentRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

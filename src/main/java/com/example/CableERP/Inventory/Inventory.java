@@ -1,6 +1,6 @@
 package com.example.CableERP.Inventory;
 
-import com.example.CableERP.Components.Component;
+import com.example.CableERP.Component.Component;
 import jakarta.persistence.*;
 
 @Entity
