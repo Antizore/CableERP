@@ -1,6 +1,6 @@
-package com.example.CableERP.enums;
+package com.example.CableERP.Orders;
 
-public enum Status {
+public enum OrderStatus {
     FROZEN,
     RELEASED,
     NEW,

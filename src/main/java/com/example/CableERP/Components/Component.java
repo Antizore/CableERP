@@ -4,7 +4,7 @@ package com.example.CableERP.Components;
 import com.example.CableERP.BillOfMaterials.BillOfMaterials;
 import com.example.CableERP.Inventory.Inventory;
 import com.example.CableERP.Reservations.Reservation;
-import com.example.CableERP.enums.Unit;
+import com.example.CableERP.Common.Unit;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;

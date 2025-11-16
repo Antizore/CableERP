@@ -1,4 +1,4 @@
-package com.example.CableERP.enums;
+package com.example.CableERP.Users;
 
 public enum Roles {
     ADMIN,

@@ -1,7 +1,6 @@
 package com.example.CableERP.Orders;
 
 
-import com.example.CableERP.enums.Status;
 import com.example.CableERP.Customers.CustomerRepository;
 import org.springframework.stereotype.Service;
 
@@ -35,7 +34,7 @@ public class OrderService {
         Order order = new Order(
                 customerRepository.findById(customerOrderDTO.customerId()).orElse(null),
                 customerOrderDTO.orderNumber(),
-                Status.NEW,
+                OrderStatus.NEW,
                 new Timestamp(rightNow.getTimeInMillis()),
                 new Timestamp(rightNow.getTimeInMillis())
         );

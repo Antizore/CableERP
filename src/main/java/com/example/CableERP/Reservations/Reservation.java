@@ -1,7 +1,6 @@
 package com.example.CableERP.Reservations;
 
 import com.example.CableERP.Components.Component;
-import com.example.CableERP.enums.Status;
 import jakarta.persistence.*;
 
 import java.sql.Timestamp;
@@ -12,7 +11,7 @@ public class Reservation {
 
     protected Reservation(){}
 
-    public Reservation(Long id, Component component, double qty, Status status, Timestamp createdAt){
+    public Reservation(Long id, Component component, double qty, ReservationStatus status, Timestamp createdAt){
         this.component = component;
         this.qty = qty;
         this.status = status;
@@ -33,7 +32,7 @@ public class Reservation {
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private ReservationStatus status;
 
     @Column(name = "created_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Timestamp createdAt;
@@ -42,7 +41,7 @@ public class Reservation {
         this.createdAt = createdAt;
     }
 
-    public void setStatus(Status status) {
+    public void setReservationStatus(ReservationStatus status) {
         this.status = status;
     }
 
@@ -66,7 +65,7 @@ public class Reservation {
         return qty;
     }
 
-    public Status getStatus() {
+    public ReservationStatus getReservationStatus() {
         return status;
     }
 

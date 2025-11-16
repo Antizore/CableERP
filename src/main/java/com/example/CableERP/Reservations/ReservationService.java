@@ -3,7 +3,6 @@ package com.example.CableERP.Reservations;
 
 import com.example.CableERP.Components.Component;
 import com.example.CableERP.Inventory.Inventory;
-import com.example.CableERP.enums.Status;
 import com.example.CableERP.Components.ComponentRepository;
 import com.example.CableERP.Inventory.InventoryRepository;
 import org.springframework.stereotype.Service;
@@ -43,7 +42,7 @@ public class ReservationService {
             inventory.setQtyAvailable(inventory.getQtyAvailable() - reservingComponentDTO.qty());
             Component component = componentRepository.findById(reservingComponentDTO.componentId()).orElse(null);
             Calendar rightNow = Calendar.getInstance();
-            Reservation reservation = new Reservation(null,component, reservingComponentDTO.qty(), Status.FROZEN,new Timestamp(rightNow.getTimeInMillis()));
+            Reservation reservation = new Reservation(null,component, reservingComponentDTO.qty(), ReservationStatus.FROZEN,new Timestamp(rightNow.getTimeInMillis()));
             inventoryRepository.saveAndFlush(inventory);
             reservationRepository.saveAndFlush(reservation);
 
@@ -61,7 +60,7 @@ public class ReservationService {
             inventory.setQtyReserved(inventory.getQtyReserved() - releasingComponentDTO.qty());
             Component component = componentRepository.findById(releasingComponentDTO.componentId()).orElse(null);
             Calendar rightNow = Calendar.getInstance();
-            Reservation releasing = new Reservation(null, component, releasingComponentDTO.qty(), Status.RELEASED,new Timestamp(rightNow.getTimeInMillis()));
+            Reservation releasing = new Reservation(null, component, releasingComponentDTO.qty(), ReservationStatus.RELEASED,new Timestamp(rightNow.getTimeInMillis()));
             inventoryRepository.saveAndFlush(inventory);
             reservationRepository.saveAndFlush(releasing);
         }
@@ -69,7 +68,7 @@ public class ReservationService {
 
     public void updateStatus(PatchReservationStatusDTO patchReservationStatusDTO, Long id){
         Reservation reservation = reservationRepository.findById(id).orElse(null);
-        reservation.setStatus(patchReservationStatusDTO.status());
+        reservation.setReservationStatus(patchReservationStatusDTO.status());
         reservationRepository.saveAndFlush(reservation);
     }
 

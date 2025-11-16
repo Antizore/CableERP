@@ -2,7 +2,6 @@ package com.example.CableERP.Orders;
 
 
 import com.example.CableERP.Customers.Customer;
-import com.example.CableERP.enums.Status;
 import jakarta.persistence.*;
 
 
@@ -13,7 +12,7 @@ public class Order {
 
     protected Order(){}
 
-    public Order(Customer customer, String orderNumber, Status status, Timestamp createdAt, Timestamp updatedAt) {
+    public Order(Customer customer, String orderNumber, OrderStatus status, Timestamp createdAt, Timestamp updatedAt) {
         this.customer = customer;
         this.orderNumber = orderNumber;
         this.status = status;
@@ -30,7 +29,7 @@ public class Order {
     private Customer customer;
     private String orderNumber;
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private OrderStatus status;
     private Timestamp createdAt;
     private Timestamp updatedAt;
 
@@ -54,11 +53,11 @@ public class Order {
         this.orderNumber = orderNumber;
     }
 
-    public Status getStatus() {
+    public OrderStatus getOrderStatus() {
         return status;
     }
 
-    public void setStatus(Status status) {
+    public void setOrderStatus(OrderStatus status) {
         this.status = status;
     }
 

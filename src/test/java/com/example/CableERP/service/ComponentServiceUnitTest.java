@@ -3,7 +3,7 @@ package com.example.CableERP.service;
 
 import com.example.CableERP.Components.Component;
 import com.example.CableERP.Components.ComponentService;
-import com.example.CableERP.enums.Unit;
+import com.example.CableERP.Common.Unit;
 import com.example.CableERP.exception.DuplicateException;
 import com.example.CableERP.exception.WrongValueException;
 import com.example.CableERP.Components.ComponentRepository;

@@ -1,4 +1,4 @@
-package com.example.CableERP.enums;
+package com.example.CableERP.Common;
 
 public enum Unit {
     kilograms,
