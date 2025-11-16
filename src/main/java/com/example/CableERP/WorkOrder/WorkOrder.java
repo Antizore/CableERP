@@ -10,15 +10,15 @@ public class WorkOrder {
 
     protected WorkOrder(){}
 
-    public WorkOrder(Product product, Double qty, WorkOrderStatus status, Timestamp createdAt, Timestamp startedAt, Timestamp finishedAt) {
+    public WorkOrder(Product product, Double qty, WorkOrderStatus status, Timestamp createdAt) {
         this.product = product;
         this.qty = qty;
         this.status = status;
         this.createdAt = createdAt;
-        this.startedAt = startedAt;
-        this.finishedAt = finishedAt;
     }
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
     @JoinColumn(name = "product_id")

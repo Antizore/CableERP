@@ -1,8 +1,8 @@
 package com.example.CableERP.Customer;
 
-import com.example.CableERP.exception.DuplicateException;
-import com.example.CableERP.exception.NoEmailException;
-import com.example.CableERP.exception.NoNameException;
+import com.example.CableERP.Common.Exception.DuplicateException;
+import com.example.CableERP.Common.Exception.NoEmailException;
+import com.example.CableERP.Common.Exception.NoNameException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 

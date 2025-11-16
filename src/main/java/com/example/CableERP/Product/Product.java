@@ -32,7 +32,7 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<BillOfMaterials> billOfMaterialsList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "productWork", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<WorkOrder> workOrderList = new ArrayList<>();
 
 

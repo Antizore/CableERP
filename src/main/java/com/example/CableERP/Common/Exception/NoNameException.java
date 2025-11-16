@@ -1,4 +1,4 @@
-package com.example.CableERP.exception;
+package com.example.CableERP.Common.Exception;
 
 public class NoNameException extends RuntimeException {
     public NoNameException(String message) {

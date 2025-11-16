@@ -3,7 +3,7 @@ package com.example.CableERP.Product;
 
 import com.example.CableERP.BillOfMaterials.BillOfMaterialsDTO;
 import com.example.CableERP.Component.ComponentDTO;
-import com.example.CableERP.exception.NoNameException;
+import com.example.CableERP.Common.Exception.NoNameException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

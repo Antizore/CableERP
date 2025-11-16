@@ -1,6 +1,6 @@
 package com.example.CableERP.Inventory;
 
-import com.example.CableERP.exception.WrongValueException;
+import com.example.CableERP.Common.Exception.WrongValueException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

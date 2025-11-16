@@ -1,4 +1,4 @@
-package com.example.CableERP.exception;
+package com.example.CableERP.Common.Exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

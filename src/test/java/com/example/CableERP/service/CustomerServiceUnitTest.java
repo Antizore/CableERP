@@ -2,7 +2,7 @@ package com.example.CableERP.service;
 
 import com.example.CableERP.Customer.Customer;
 import com.example.CableERP.Customer.CustomerService;
-import com.example.CableERP.exception.DuplicateException;
+import com.example.CableERP.Common.Exception.DuplicateException;
 import com.example.CableERP.Customer.CustomerRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

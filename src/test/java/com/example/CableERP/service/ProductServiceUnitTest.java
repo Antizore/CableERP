@@ -3,7 +3,7 @@ package com.example.CableERP.service;
 
 import com.example.CableERP.Product.Product;
 import com.example.CableERP.Product.ProductService;
-import com.example.CableERP.exception.NoNameException;
+import com.example.CableERP.Common.Exception.NoNameException;
 import com.example.CableERP.Product.ProductRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

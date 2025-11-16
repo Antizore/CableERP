@@ -1,8 +1,8 @@
 package com.example.CableERP.Component;
 
 import com.example.CableERP.Inventory.Inventory;
-import com.example.CableERP.exception.NoNameException;
-import com.example.CableERP.exception.WrongValueException;
+import com.example.CableERP.Common.Exception.NoNameException;
+import com.example.CableERP.Common.Exception.WrongValueException;
 import com.example.CableERP.Inventory.InventoryService;
 import org.springframework.stereotype.Service;
 
