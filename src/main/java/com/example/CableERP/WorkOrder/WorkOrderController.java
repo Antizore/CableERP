@@ -4,6 +4,8 @@ package com.example.CableERP.WorkOrder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/work-orders")
 public class WorkOrderController {
@@ -12,6 +14,14 @@ public class WorkOrderController {
 
     public WorkOrderController(WorkOrderService workOrderService){
         this.workOrderService = workOrderService;
+    }
+
+
+    @GetMapping
+    public ResponseEntity<List<WorkOrder>> getAllWorkOrders(){
+        return ResponseEntity
+                .ok()
+                .body(workOrderService.getAllWorkOrders());
     }
 
 
@@ -29,6 +39,7 @@ public class WorkOrderController {
         workOrderService.startWorkOrder(id);
         return ResponseEntity.ok().body("ok");
     }
+
 
 
 

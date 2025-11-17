@@ -3,6 +3,7 @@ package com.example.CableERP.Product;
 
 import com.example.CableERP.BillOfMaterials.BillOfMaterials;
 import com.example.CableERP.WorkOrder.WorkOrder;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -32,7 +33,8 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<BillOfMaterials> billOfMaterialsList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+
+    @OneToMany(mappedBy = "workOrderProduct", cascade = CascadeType.ALL)
     private List<WorkOrder> workOrderList = new ArrayList<>();
 
 

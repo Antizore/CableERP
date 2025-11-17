@@ -1,17 +1,19 @@
 package com.example.CableERP.WorkOrder;
 
 import com.example.CableERP.Product.Product;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.sql.Timestamp;
 
 @Entity
+@Table(name = "work_order")
 public class WorkOrder {
 
     protected WorkOrder(){}
 
-    public WorkOrder(Product product, Double qty, WorkOrderStatus status, Timestamp createdAt) {
-        this.product = product;
+    public WorkOrder(Product workOrderProduct, Double qty, WorkOrderStatus status, Timestamp createdAt) {
+        this.workOrderProduct = workOrderProduct;
         this.qty = qty;
         this.status = status;
         this.createdAt = createdAt;
@@ -20,9 +22,10 @@ public class WorkOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "product_id")
-    private Product product;
+    private Product workOrderProduct;
     private Double qty;
     @Enumerated(EnumType.STRING)
     private WorkOrderStatus status;
@@ -36,11 +39,11 @@ public class WorkOrder {
     }
 
     public Product getProduct() {
-        return product;
+        return workOrderProduct;
     }
 
     public void setProduct(Product product) {
-        this.product = product;
+        this.workOrderProduct = product;
     }
 
     public Double getQty() {

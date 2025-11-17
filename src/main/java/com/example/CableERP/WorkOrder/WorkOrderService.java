@@ -32,6 +32,10 @@ public class WorkOrderService {
     }
 
 
+    public List<WorkOrder> getAllWorkOrders(){
+        return workOrderRepository.findAll();
+    }
+
 
     public CreateWorkOrderResponseDTO createWorkOrder(CreateWorkOrderRequestDTO createWorkOrderDTO){
         if(createWorkOrderDTO.qty() <= 0) throw  new WrongValueException("Qty cannot be less or equal 0");

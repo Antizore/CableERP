@@ -60,3 +60,11 @@ INSERT INTO customer_order (customer_id, order_number, status) VALUES
 INSERT INTO customer_order_item (order_id, product_id, qty) VALUES
 (1, 1, 10),  -- 10 kabli zasilających
 (2, 2, 5);   -- 5 przedłużaczy 3m
+
+-- ========================
+--  Faza 4 — Work Order
+-- ========================
+
+INSERT INTO work_order (product_id, qty, status, created_at, started_at, finished_at) VALUES
+(1, 10, 'PLANNED', '2025-01-05 08:15:00', NULL, NULL),
+(2,  45.00, 'PLANNED', '2025-01-06 09:30:00', NULL, NULL);
