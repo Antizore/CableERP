@@ -1,23 +1,34 @@
 package com.example.CableERP.WorkOrder;
 
-import com.example.CableERP.Common.Exception.MissingEntityException;
+import com.example.CableERP.BillOfMaterials.BillOfMaterials;
+import com.example.CableERP.BillOfMaterials.BillOfMaterialsDTO;
+import com.example.CableERP.BillOfMaterials.BillOfMaterialsRepository;
 import com.example.CableERP.Common.Exception.WrongValueException;
+import com.example.CableERP.Component.Component;
+import com.example.CableERP.Inventory.Inventory;
+import com.example.CableERP.Inventory.InventoryRepository;
 import com.example.CableERP.Product.Product;
 import com.example.CableERP.Product.ProductRepository;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 @Service
 public class WorkOrderService {
 
     private final WorkOrderRepository workOrderRepository;
     private final ProductRepository productRepository;
+    private final BillOfMaterialsRepository billOfMaterialsRepository;
+    private final InventoryRepository inventoryRepository;
 
-    public WorkOrderService(WorkOrderRepository workOrderRepository, ProductRepository productRepository){
+    public WorkOrderService(WorkOrderRepository workOrderRepository, ProductRepository productRepository, BillOfMaterialsRepository billOfMaterialsRepository, InventoryRepository inventoryRepository){
         this.workOrderRepository = workOrderRepository;
         this.productRepository = productRepository;
+        this.billOfMaterialsRepository = billOfMaterialsRepository;
+        this.inventoryRepository = inventoryRepository;
     }
 
 
@@ -31,9 +42,31 @@ public class WorkOrderService {
         return new CreateWorkOrderResponseDTO(workOrder.getId(),product.getId(),workOrder.getQty(), workOrder.getStatus());
     }
 
-    public void startWorkOrder(){
+    public void startWorkOrder(Long id){
+        WorkOrder workOrder = workOrderRepository.findById(id).orElseThrow();
+        //TODO zrobić customowy exception w module WorkOrder
+        if (workOrder.getStatus() != WorkOrderStatus.PLANNED) throw new WrongValueException("tu inny exception");
 
+         List<BillOfMaterials> ListOfBills = billOfMaterialsRepository.findAllByProduct_Id(workOrder.getProduct().getId());
+         List<Inventory> inventoryList = new ArrayList<>();
+
+         for(BillOfMaterials bill: ListOfBills){
+             Inventory componentInInventory = inventoryRepository.findByComponentId(bill.getComponent().getId());
+             double qtyNeeded = bill.getQty() * workOrder.getQty();
+             double qtyAvailable = componentInInventory.getQtyAvailable();
+             if(qtyAvailable >= qtyNeeded){
+                 componentInInventory.setQtyAvailable(qtyAvailable - qtyNeeded);
+                 inventoryList.add(componentInInventory);
+             }
+             else throw new WrongValueException("tu inny exception");
+         }
+         inventoryRepository.saveAllAndFlush(inventoryList);
+         workOrder.setStatus(WorkOrderStatus.IN_PROGRESS);
+         Calendar calendar =  Calendar.getInstance();
+         workOrder.setStartedAt(new Timestamp(calendar.getTimeInMillis()));
     }
+
+
 
     public void finishWorkOrder(){
 

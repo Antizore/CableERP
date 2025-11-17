@@ -1,12 +1,8 @@
 package com.example.CableERP.WorkOrder;
 
-import com.example.CableERP.WorkOrder.CreateWorkOrderResponseDTO;
+
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/work-orders")
@@ -24,6 +20,14 @@ public class WorkOrderController {
         return ResponseEntity
                 .ok()
                 .body(workOrderService.createWorkOrder(createWorkOrderDTO));
+    }
+
+
+
+    @PostMapping("/{id}/start")
+    public ResponseEntity<String> startWorkOrder(@PathVariable Long id){
+        workOrderService.startWorkOrder(id);
+        return ResponseEntity.ok().body("ok");
     }
 
 
