@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -32,8 +33,18 @@ public class WorkOrderService {
     }
 
 
-    public List<WorkOrder> getAllWorkOrders(){
-        return workOrderRepository.findAll();
+    public List<ReturnAllWorkOrdersDTO> getAllWorkOrders(){
+        return workOrderRepository.findAll().stream().map(
+                workOrder -> new ReturnAllWorkOrdersDTO(
+                        workOrder.getId(),
+                        workOrder.getProduct().getName(),
+                        workOrder.getQty(),
+                        workOrder.getStatus(),
+                        workOrder.getCreatedAt(),
+                        workOrder.getStartedAt(),
+                        workOrder.getFinishedAt()
+                )
+        ).sorted((Comparator.comparing(ReturnAllWorkOrdersDTO::createdAt))).toList();
     }
 
 

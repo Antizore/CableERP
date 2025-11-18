@@ -17,8 +17,9 @@ public class WorkOrderController {
     }
 
 
+
     @GetMapping
-    public ResponseEntity<List<WorkOrder>> getAllWorkOrders(){
+    public ResponseEntity<List<ReturnAllWorkOrdersDTO>> getAllWorkOrders(){
         return ResponseEntity
                 .ok()
                 .body(workOrderService.getAllWorkOrders());
