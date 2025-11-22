@@ -26,6 +26,7 @@ public class WorkOrderController {
     }
 
 
+
     @PostMapping
     public ResponseEntity<CreateWorkOrderResponseDTO> createWorkOrder(@RequestBody CreateWorkOrderRequestDTO createWorkOrderDTO){
         return ResponseEntity
@@ -35,9 +36,18 @@ public class WorkOrderController {
 
 
 
+    //TODO: senowny response
     @PostMapping("/{id}/start")
     public ResponseEntity<String> startWorkOrder(@PathVariable Long id){
         workOrderService.startWorkOrder(id);
+        return ResponseEntity.ok().body("ok");
+    }
+
+
+    //TODO: senowny response
+    @PostMapping("/{id}/finish")
+    public ResponseEntity<String> endWorkOrder(@PathVariable Long id){
+        workOrderService.finishWorkOrder(id);
         return ResponseEntity.ok().body("ok");
     }
 

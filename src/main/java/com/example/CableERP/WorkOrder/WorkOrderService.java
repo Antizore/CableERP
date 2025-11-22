@@ -83,8 +83,18 @@ public class WorkOrderService {
 
 
 
-    public void finishWorkOrder(){
+    public void finishWorkOrder(Long id){
+        WorkOrder workOrder = workOrderRepository.findById(id).orElseThrow();
+        if(workOrder.getStatus() == WorkOrderStatus.IN_PROGRESS ){
+            Calendar calendar = Calendar.getInstance();
+            workOrder.setStatus(WorkOrderStatus.FINISHED);
+            workOrder.setFinishedAt(new Timestamp(calendar.getTimeInMillis()));
 
+
+            workOrderRepository.saveAndFlush(workOrder);
+
+        }
+        else throw new WrongValueException("tu inny exception");
     }
 
     public void calculateRequiredComponents(){
