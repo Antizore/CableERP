@@ -3,13 +3,12 @@ package com.example.CableERP.Product;
 
 import com.example.CableERP.BillOfMaterials.BillOfMaterials;
 import com.example.CableERP.WorkOrder.WorkOrder;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
+@jakarta.persistence.Entity
 @Table(name = "product")
 public class Product {
 

@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 
 import java.sql.Timestamp;
 
-@Entity
+@jakarta.persistence.Entity
 @Table(name = "work_order")
 public class WorkOrder {
 

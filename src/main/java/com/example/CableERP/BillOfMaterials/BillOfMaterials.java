@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 
 
 
-@Entity
+@jakarta.persistence.Entity
 @Table(name = "bill_of_material")
 public class BillOfMaterials {
 

@@ -1,10 +1,8 @@
 package com.example.CableERP.WorkOrder;
 
 import com.example.CableERP.BillOfMaterials.BillOfMaterials;
-import com.example.CableERP.BillOfMaterials.BillOfMaterialsDTO;
 import com.example.CableERP.BillOfMaterials.BillOfMaterialsRepository;
 import com.example.CableERP.Common.Exception.WrongValueException;
-import com.example.CableERP.Component.Component;
 import com.example.CableERP.Inventory.Inventory;
 import com.example.CableERP.Inventory.InventoryRepository;
 import com.example.CableERP.Product.Product;
