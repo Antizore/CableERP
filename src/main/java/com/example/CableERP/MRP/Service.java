@@ -26,7 +26,7 @@ public class Service {
 
     public void mrpRun(){
         List<WorkOrder> listOfPlannedWorkOrders = workOrderRepository.findByStatus(WorkOrderStatus.PLANNED);
-        System.out.println(calculateGrossRequirements(listOfPlannedWorkOrders).toString());
+
 
 
 
@@ -35,13 +35,13 @@ public class Service {
 
 
     //TODO liczymy zapotrzebowanie na wszystkie komponenty
-    private HashMap<Component,Double> calculateGrossRequirements(List<WorkOrder> listOfPlannedWorkOrders){
-        HashMap<Component, Double> componentsNeeded = new HashMap<>();
+    private HashMap<String,Double> calculateGrossRequirements(List<WorkOrder> listOfPlannedWorkOrders){
+        HashMap<String, Double> componentsNeeded = new HashMap<>();
         for(WorkOrder workOrder : listOfPlannedWorkOrders){
             List<BillOfMaterials> billOfMaterialsList = workOrder.getProduct().getBillOfMaterialsList();
             for (BillOfMaterials bill : billOfMaterialsList){
-                componentsNeeded.computeIfAbsent(bill.getComponent(), value -> bill.getQty() * workOrder.getQty());
-                componentsNeeded.computeIfPresent(bill.getComponent(), (key,oldVal) -> (oldVal += bill.getQty() * workOrder.getQty()) );
+                componentsNeeded.computeIfAbsent(bill.getComponent().getName(), value -> bill.getQty() * workOrder.getQty());
+                componentsNeeded.computeIfPresent(bill.getComponent().getName(), (key,oldVal) -> (oldVal += bill.getQty() * workOrder.getQty()) );
             }
         }
         return componentsNeeded;
