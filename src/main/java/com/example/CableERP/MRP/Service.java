@@ -1,10 +1,18 @@
 package com.example.CableERP.MRP;
 
 
+import com.example.CableERP.WorkOrder.WorkOrderRepository;
+import com.example.CableERP.WorkOrder.WorkOrderService;
+
 @org.springframework.stereotype.Service
 public class Service {
 
-    public Service(){}
+
+    private final WorkOrderRepository workOrderRepository;
+
+    public Service(WorkOrderRepository workOrderRepository){
+        this.workOrderRepository = workOrderRepository;
+    }
 
 
     public void mrpRun(){
@@ -13,16 +21,24 @@ public class Service {
 
 
     //TODO
-    private void calculateGrossRequirements(){}
+    private void calculateGrossRequirements(){
+
+    }
 
     //TODO
-    private void calculateNetRequirements(){}
+    private void calculateNetRequirements(){
+
+    }
 
     //TODO
-    private void planWorkOrders(){}
+    private void planWorkOrders(){
+
+    }
 
     //TODO
-    private void planPurchaseOrders(){}
+    private void planPurchaseOrders(){
+
+    }
 
 
 }
