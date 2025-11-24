@@ -13,5 +13,7 @@ public interface BillOfMaterialsRepository extends JpaRepository<BillOfMaterials
 
 
     List<BillOfMaterials> findAllByProduct_Id(@Param("product_id") Long productId);
+    List<BillOfMaterials> findAllByProduct_Name(String name);
+
 
 }

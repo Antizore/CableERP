@@ -6,11 +6,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/mrp/run")
-public class Controller {
+public class MRPController {
 
     private final Service service;
 
-    public Controller(Service service){
+    public MRPController(Service service){
         this.service = service;
     }
 
