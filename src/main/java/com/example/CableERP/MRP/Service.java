@@ -13,6 +13,8 @@ import com.example.CableERP.WorkOrder.WorkOrderStatus;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 @org.springframework.stereotype.Service
 public class Service {
@@ -31,11 +33,17 @@ public class Service {
 
 
 
-    public void mrpRun(){
+    public HashMap<String, HashMap<Component,Double>> mrpRun(){
         List<WorkOrder> listOfPlannedWorkOrders = workOrderRepository.findByStatus(WorkOrderStatus.PLANNED);
-        HashMap<Component, Double> componentsRequired = calculateGrossRequirements(listOfPlannedWorkOrders);
+        HashMap<Component, Double> GrossComponentsRequired = calculateGrossRequirements(listOfPlannedWorkOrders);
+        List<HashMap<Component,Double>> netComponentsRequirements = calculateNetRequirements(GrossComponentsRequired);
 
+        HashMap<String, HashMap<Component,Double>> stringObjectsHashMap =  new HashMap<>();
 
+        stringObjectsHashMap.put("missingComponentsToBuy", netComponentsRequirements.get(0));
+        stringObjectsHashMap.put("missingComponentsToProduce" ,netComponentsRequirements.get(1));
+
+        return stringObjectsHashMap;
 
     }
 
@@ -71,7 +79,6 @@ public class Service {
                                 missingComponentsToProduce.computeIfPresent(k, (k1,v1) -> (v1 += v));
                                 missingComponentsToProduce.computeIfAbsent(k, v1 -> v);
                             }
-
                         }
                     }
                 }

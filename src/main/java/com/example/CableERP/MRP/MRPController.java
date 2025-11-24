@@ -1,5 +1,6 @@
 package com.example.CableERP.MRP;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,8 +17,14 @@ public class MRPController {
 
 
     @PostMapping
-    public void mrpRun(){
-        service.mrpRun();
+    public ResponseEntity mrpRun(){
+
+        MRPResponseDTO responseDTO = new MRPResponseDTO(service.mrpRun());
+        return ResponseEntity
+                .ok()
+                .body(responseDTO);
+
+
     }
 
 
