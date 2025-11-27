@@ -17,7 +17,7 @@ public class MRPController {
 
 
     @PostMapping
-    public ResponseEntity mrpRun(){
+    public ResponseEntity<MRPResponseDTO> mrpRun(){
 
         MRPResponseDTO responseDTO = new MRPResponseDTO(service.mrpRun());
         return ResponseEntity

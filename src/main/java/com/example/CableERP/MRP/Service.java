@@ -4,17 +4,16 @@ package com.example.CableERP.MRP;
 import com.example.CableERP.BillOfMaterials.BillOfMaterials;
 import com.example.CableERP.BillOfMaterials.BillOfMaterialsRepository;
 import com.example.CableERP.Component.Component;
-import com.example.CableERP.Component.ComponentRepository;
+import com.example.CableERP.Component.ComponentMRPDTO;
 import com.example.CableERP.Inventory.InventoryRepository;
 import com.example.CableERP.WorkOrder.WorkOrder;
 import com.example.CableERP.WorkOrder.WorkOrderRepository;
-import com.example.CableERP.WorkOrder.WorkOrderService;
 import com.example.CableERP.WorkOrder.WorkOrderStatus;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+
 
 @org.springframework.stereotype.Service
 public class Service {
@@ -33,47 +32,79 @@ public class Service {
 
 
 
-    public HashMap<String, HashMap<Component,Double>> mrpRun(){
+    public List<ComponentMRPDTO> mrpRun(){
         List<WorkOrder> listOfPlannedWorkOrders = workOrderRepository.findByStatus(WorkOrderStatus.PLANNED);
-        HashMap<Component, Double> GrossComponentsRequired = calculateGrossRequirements(listOfPlannedWorkOrders);
-        List<HashMap<Component,Double>> netComponentsRequirements = calculateNetRequirements(GrossComponentsRequired);
+        List<ComponentMRPDTO> grossComponentsRequired = calculateGrossRequirements(listOfPlannedWorkOrders);
+        //List<HashMap<ComponentMRPDTO,Double>> netComponentsRequirements = calculateNetRequirements(GrossComponentsRequired);
 
-        HashMap<String, HashMap<Component,Double>> stringObjectsHashMap =  new HashMap<>();
+        /*
+        HashMap<String,HashMap<ComponentMRPDTO,Double>> summary = new HashMap<>();
 
-        stringObjectsHashMap.put("missingComponentsToBuy", netComponentsRequirements.get(0));
-        stringObjectsHashMap.put("missingComponentsToProduce" ,netComponentsRequirements.get(1));
+        summary.put("Missing components to produce: ",netComponentsRequirements.get(0));
+        summary.put("Missing components to buy: ", netComponentsRequirements.get(1));
+         */
 
-        return stringObjectsHashMap;
+
+
+        return grossComponentsRequired;
 
     }
 
 
-    private HashMap<Component,Double> calculateGrossRequirements(List<WorkOrder> listOfPlannedWorkOrders){
-        HashMap<Component, Double> componentsNeeded = new HashMap<>();
+    private List<ComponentMRPDTO> calculateGrossRequirements(List<WorkOrder> listOfPlannedWorkOrders){
+        //HashMap<ComponentMRPDTO, Double> componentsNeeded = new HashMap<>();
+        List<ComponentMRPDTO> componentsNeeded = new ArrayList<>();
+
         for(WorkOrder workOrder : listOfPlannedWorkOrders){
             List<BillOfMaterials> billOfMaterialsList = workOrder.getProduct().getBillOfMaterialsList();
             for (BillOfMaterials bill : billOfMaterialsList){
-                componentsNeeded.computeIfAbsent(bill.getComponent(), value -> bill.getQty() * workOrder.getQty());
-                componentsNeeded.computeIfPresent(bill.getComponent(), (key,oldVal) -> (oldVal += bill.getQty() * workOrder.getQty()) );
+
+                ComponentMRPDTO componentMRPDTO = new ComponentMRPDTO(bill.getComponent().getId(), bill.getComponent().getName(), bill.getQty());
+                ComponentMRPDTO componentMRPDTO1 = componentsNeeded.stream().filter(a -> a == componentMRPDTO).findFirst().orElse(null);
+                if(componentMRPDTO1 == null){
+                    componentsNeeded.add(componentMRPDTO);
+                }
+                else {
+                    componentMRPDTO1.setQty(componentMRPDTO1.getQty() + bill.getQty());
+                }
+
+
+
+
+
+                /*
+                componentsNeeded.computeIfAbsent(
+                        new ComponentMRPDTO(bill.getComponent().getId(), bill.getComponent().getName()),
+                        value -> bill.getQty() * workOrder.getQty());
+                componentsNeeded.computeIfPresent(new ComponentMRPDTO(bill.getComponent().getId(), bill.getComponent().getName()),
+                        (key,oldVal) -> (oldVal += bill.getQty() * workOrder.getQty()) );
+
+                 */
             }
         }
         return componentsNeeded;
     }
+/*
+    private List<HashMap<ComponentMRPDTO,Double>> calculateNetRequirements(HashMap<ComponentMRPDTO, Double> componentsRequired){
 
-    private List<HashMap<Component,Double>> calculateNetRequirements(HashMap<Component, Double> componentsRequired){
-        HashMap<Component, Double> missingComponentsToProduce = new HashMap<>();
-        HashMap<Component, Double> missingComponentsToBuy = new HashMap<>();
-        List<HashMap<Component,Double>> result = List.of(missingComponentsToBuy,missingComponentsToProduce);
+        //List<ComponentMRPDTO> missingComponentsToProduce = new ArrayList<>();
+        HashMap<ComponentMRPDTO, Double> missingComponentsToProduce = new HashMap<>();
+        //HashMap<ComponentMRPDTO, Double> missingComponentsToBuy = new HashMap<>();
+        List<ComponentMRPDTO> missingComponentsToBuy = new ArrayList<>();
+        //List<HashMap<ComponentMRPDTO,Double>> result = List.of(missingComponentsToBuy,missingComponentsToProduce);
+
+
         componentsRequired.forEach(
                 (k,v) ->
                 {
                     {
-                        if(v < inventoryRepository.findByComponentId(k.getId()).getQtyAvailable() + inventoryRepository.findByComponentId(k.getId()).getQtyReserved())
+                        if(v < inventoryRepository.findByComponentId(k.id()).getQtyAvailable() + inventoryRepository.findByComponentId(k.id()).getQtyReserved())
                         {
-                            if(billOfMaterialsRepository.findAllByProduct_Name(k.getName()) == null || billOfMaterialsRepository.findAllByProduct_Name(k.getName()).isEmpty())
+                            if(billOfMaterialsRepository.findAllByProduct_Name(k.name()) == null || billOfMaterialsRepository.findAllByProduct_Name(k.name()).isEmpty())
                             {
-                                missingComponentsToBuy.computeIfPresent(k, (k1,v1) -> (v1 += v));
-                                missingComponentsToBuy.computeIfAbsent(k, v1 -> v);
+
+                                //missingComponentsToBuy.computeIfPresent(k, (k1,v1) -> (v1 += v));
+                                //missingComponentsToBuy.computeIfAbsent(k, v1 -> v);
                             }
                             else{
                                 missingComponentsToProduce.computeIfPresent(k, (k1,v1) -> (v1 += v));
@@ -87,4 +118,6 @@ public class Service {
     }
 
 
+
+ */
 }
