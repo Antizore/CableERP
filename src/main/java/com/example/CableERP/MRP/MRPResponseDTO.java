@@ -1,10 +1,14 @@
 package com.example.CableERP.MRP;
 
-import com.example.CableERP.Component.Component;
-import com.example.CableERP.Component.ComponentMRPDTO;
 
-import java.util.HashMap;
+import com.example.CableERP.Component.ComponentMRPDTO;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+
 import java.util.List;
 
 
-public record MRPResponseDTO(List<ComponentMRPDTO> componentMRPDTOS) { }
+public record MRPResponseDTO(
+        @JsonProperty("Components")
+        List<List<ComponentMRPDTO>> componentMRPDTOS
+) { }
