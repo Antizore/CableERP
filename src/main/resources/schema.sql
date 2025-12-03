@@ -114,3 +114,20 @@ CREATE TABLE vendor (
     lead_time_days NUMERIC(10,2),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+
+CREATE TABLE purchase_order (
+    id BIGSERIAL PRIMARY KEY,
+    vendor_id INT NOT NULL REFERENCES vendor(id),
+    status VARCHAR(20) NOT NULL CHECK (status IN ('draft', 'sent', 'received', 'cancelled')),
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    sent_at TIMESTAMP NULL,
+    received_at TIMESTAMP NULL
+);
+
+CREATE TABLE purchase_order_item (
+    id SERIAL PRIMARY KEY,
+    purchase_order_id INT NOT NULL REFERENCES purchase_order(id) ON DELETE CASCADE,
+    component_id INT NOT NULL REFERENCES component(id),
+    qty NUMERIC(12,2) NOT NULL CHECK (qty > 0)
+);

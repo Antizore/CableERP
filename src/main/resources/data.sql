@@ -79,3 +79,17 @@ INSERT INTO vendor (name, phone, email, lead_time_days) VALUES
   ('Tech Components', '+48 22 765 43 21', 'info@tech-components.eu', 7.00),
   ('Green Solutions', '+48 600 700 800', 'orders@greensolutions.pl', 10.00),
   ('Wide Logistics', '+48 799 888 999', 'contact@widelogistics.com', 2.75);
+
+
+INSERT INTO purchase_order (vendor_id, status, created_at, sent_at, received_at) VALUES
+    (1, 'draft', '2025-01-05 10:00:00', NULL, NULL),
+    (2, 'sent', '2025-01-07 09:30:00', '2025-01-08 14:00:00', NULL),
+    (3, 'received', '2025-01-03 15:00:00', '2025-01-04 08:00:00', '2025-01-10 12:00:00');
+
+INSERT INTO purchase_order_item (purchase_order_id, component_id, qty) VALUES
+    (1, 1, 500),
+    (1, 2, 200),
+    (2, 3, 50),
+    (2, 4, 120),
+    (3, 1, 1000),
+    (3, 3, 70);
