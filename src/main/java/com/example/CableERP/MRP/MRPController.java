@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/mrp/run")
@@ -20,16 +21,12 @@ public class MRPController {
 
 
     @PostMapping
-    public ResponseEntity<List<List<ComponentMRPDTO>>> mrpRun(){
+    public ResponseEntity<MrpRunResponse> mrpRun(){
 
-        List<List<ComponentMRPDTO>> responseDTO = service.mrpRun().stream().toList();
-
-
+        System.out.println(service.mrpRun());
         return ResponseEntity
                 .ok()
-                .body(responseDTO);
-
-
+                .body(service.mrpRun());
     }
 
 

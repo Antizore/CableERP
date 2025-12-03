@@ -9,6 +9,7 @@ import com.example.CableERP.WorkOrder.WorkOrder;
 import com.example.CableERP.WorkOrder.WorkOrderRepository;
 import com.example.CableERP.WorkOrder.WorkOrderStatus;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 @org.springframework.stereotype.Service
@@ -23,20 +24,16 @@ public class Service {
         this.billOfMaterialsRepository = billOfMaterialsRepository;
     }
 
-    public List<List<ComponentMRPDTO>> mrpRun(){
+    public MrpRunResponse mrpRun(){
         List<WorkOrder> listOfPlannedWorkOrders = workOrderRepository.findByStatus(WorkOrderStatus.PLANNED);
         List<ComponentMRPDTO> grossComponentsRequired = calculateGrossRequirements(listOfPlannedWorkOrders);
-        List<List<ComponentMRPDTO>> netComponentsRequirements = calculateNetRequirements(grossComponentsRequired);
-
-        List<List<ComponentMRPDTO>> result = new ArrayList<>();
-        result.add(grossComponentsRequired);
-        result.add(netComponentsRequirements.get(0));
-        result.add(netComponentsRequirements.get(1));
+        List<RequirementsDTO> componentsToProduce = calculateNetRequirements(grossComponentsRequired).get(1);
+        List<RequirementsDTO> componentsToBuy = calculateNetRequirements(grossComponentsRequired).get(0);
 
 
-
-
-        return result;
+        return new MrpRunResponse(grossComponentsRequired.stream().map(
+                 componentMRPDTO ->  new RequirementsDTO(componentMRPDTO.getId(),componentMRPDTO.getQty())
+        ).collect(Collectors.toList()),componentsToBuy,componentsToProduce);
 
     }
 
@@ -59,14 +56,15 @@ public class Service {
         return componentsNeeded;
     }
 
-    private List<List<ComponentMRPDTO>> calculateNetRequirements(List<ComponentMRPDTO> componentsRequired){
+    private List<List<RequirementsDTO>> calculateNetRequirements(List<ComponentMRPDTO> componentsRequired){
 
-        List<ComponentMRPDTO> missingNetComponents = new ArrayList<>();
-        List<ComponentMRPDTO> missingComponentsToBuy = new ArrayList<>();
-        List<ComponentMRPDTO> missingComponentsToProduce = new ArrayList<>();
-        List<List<ComponentMRPDTO>> result = new ArrayList<>();
+        List<RequirementsDTO> missingComponentsToBuy = new ArrayList<>();
+        List<RequirementsDTO> missingComponentsToProduce = new ArrayList<>();
+        List<List<RequirementsDTO>> result = new ArrayList<>();
         result.add(missingComponentsToBuy);
         result.add(missingComponentsToProduce);
+
+
 
         componentsRequired.forEach(
                 (k) ->
@@ -76,12 +74,10 @@ public class Service {
                         {
                             if(billOfMaterialsRepository.findAllByProduct_Name(k.getName()) == null || billOfMaterialsRepository.findAllByProduct_Name(k.getName()).isEmpty())
                             {
-                                missingComponentsToBuy.add(k);
-                                missingNetComponents.add(k);
+                                missingComponentsToBuy.add(new RequirementsDTO(k.getId(),k.getQty()));
                             }
                             else{
-                                missingComponentsToProduce.add(k);
-                                missingNetComponents.add(k);
+                                missingComponentsToProduce.add(new RequirementsDTO(k.getId(),k.getQty()));
                             }
                         }
                     }
