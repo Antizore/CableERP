@@ -100,3 +100,17 @@ CREATE TABLE work_order (
     started_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     finished_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+
+-- ========================
+--  Faza 6 — Vendorzy
+-- ========================
+
+CREATE TABLE vendor (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    phone VARCHAR(50),
+    email VARCHAR(255) UNIQUE,
+    lead_time_days NUMERIC(10,2),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

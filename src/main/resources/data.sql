@@ -68,3 +68,14 @@ INSERT INTO customer_order_item (order_id, product_id, qty) VALUES
 INSERT INTO work_order (product_id, qty, status, created_at, started_at, finished_at) VALUES
 (1, 10, 'PLANNED', '2025-01-05 08:15:00', NULL, NULL),
 (2,  45.00, 'FINISHED', '2025-01-04 09:30:00', NULL, NULL);
+
+
+-- ===
+
+
+INSERT INTO vendor (name, phone, email, lead_time_days) VALUES
+  ('Alpha Supplies Sp. z o.o.', '+48 22 123 45 67', 'kontakt@alpha-supplies.pl', 5.50),
+  ('Best Materials Ltd.', '+48 501 234 567', 'sales@bestmaterials.com', 3.25),
+  ('Tech Components', '+48 22 765 43 21', 'info@tech-components.eu', 7.00),
+  ('Green Solutions', '+48 600 700 800', 'orders@greensolutions.pl', 10.00),
+  ('Wide Logistics', '+48 799 888 999', 'contact@widelogistics.com', 2.75);

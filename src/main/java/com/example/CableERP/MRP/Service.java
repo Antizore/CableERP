@@ -43,6 +43,7 @@ public class Service {
         for(WorkOrder workOrder : listOfPlannedWorkOrders){
             List<BillOfMaterials> billOfMaterialsList = workOrder.getProduct().getBillOfMaterialsList();
             for (BillOfMaterials bill : billOfMaterialsList){
+                //TODO: ŁADNIEJ
                 ComponentMRPDTO componentMRPDTO = new ComponentMRPDTO(bill.getComponent().getId(), bill.getComponent().getName(), bill.getQty());
                 ComponentMRPDTO componentMRPDTO1 = componentsNeeded.stream().filter(a -> a == componentMRPDTO).findFirst().orElse(null);
                 if(componentMRPDTO1 == null){
@@ -56,6 +57,7 @@ public class Service {
         return componentsNeeded;
     }
 
+    //TODO: NA PEWNO TAK CHCESZ?
     private List<List<RequirementsDTO>> calculateNetRequirements(List<ComponentMRPDTO> componentsRequired){
 
         List<RequirementsDTO> missingComponentsToBuy = new ArrayList<>();
@@ -72,6 +74,7 @@ public class Service {
                     {
                         if(k.getQty() < inventoryRepository.findByComponentId(k.getId()).getQtyAvailable() + inventoryRepository.findByComponentId(k.getId()).getQtyReserved())
                         {
+                            //TODO: ŁADNIEJ
                             if(billOfMaterialsRepository.findAllByProduct_Name(k.getName()) == null || billOfMaterialsRepository.findAllByProduct_Name(k.getName()).isEmpty())
                             {
                                 missingComponentsToBuy.add(new RequirementsDTO(k.getId(),k.getQty()));
