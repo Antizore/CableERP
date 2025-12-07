@@ -1,6 +1,7 @@
 package com.example.CableERP.Component;
 
 
+import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,4 +35,29 @@ public class ComponentController {
                 .ok()
                 .body(componentService.getComponents());
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Component> getComponent(@RequestParam Long id){
+        return ResponseEntity
+                .ok()
+                .body(componentService.getComponent(id));
+    }
+
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteComponent(@RequestParam Long id){
+        return ResponseEntity
+                .ok()
+                .body(componentService.deleteComponent(id));
+    }
+
+
+    @PatchMapping
+    public ResponseEntity<Component> editComponent(@RequestParam Long id, @RequestBody Component component){
+        return ResponseEntity
+                .ok()
+                .body(componentService.patchComponent(id, component));
+    }
+
+
 }

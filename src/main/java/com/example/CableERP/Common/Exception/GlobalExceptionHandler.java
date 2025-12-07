@@ -38,4 +38,12 @@ public class GlobalExceptionHandler {
     }
 
 
+    @ExceptionHandler(CannotDeleteComponentActiveInBOM.class)
+    public ResponseEntity<String> handleCannotDeleteComponentActiveInBOM(CannotDeleteComponentActiveInBOM ex){
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(ex.getMessage());
+    }
+
+
 }
