@@ -27,6 +27,22 @@ public class ProductController {
     }
 
 
+    @GetMapping("/{id}")
+    public ResponseEntity<ProductDTO> getProduct(@RequestParam Long id){
+        return ResponseEntity
+                .ok()
+                .body(productService.getProduct(id));
+    }
+
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<ProductDTO> updateProduct(@RequestParam Long id, @RequestBody Product product){
+        return ResponseEntity
+                .ok()
+                .body(productService.updateProduct(id, product));
+    }
+
+
 
 
     @PostMapping
