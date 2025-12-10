@@ -10,8 +10,7 @@ import com.example.CableERP.Product.ProductRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -51,23 +50,33 @@ public class BillOfMaterialsService {
     }
 
 
-    /*
-    TODO: NIE MOGĄ BYĆ DWA TAKIE SAME KOMPONENTY DODANE DLA TEGO SAMEGO PRODUKTU, CZYLI NP NIE MOŻE BYĆ TAK, ŻE DWA
-     RAZY ZOSTANIE DODANY WTYK USB-C
-     */
+
     public void addBill(List<BomCreatingDTO> billOfMaterialsList, Long id){
+        Product product = productRepository.findById(id).orElseThrow();
+        HashMap<Long,BillOfMaterials> bomToSend = new HashMap<>();
 
         for(BomCreatingDTO bill : billOfMaterialsList){
+            Component component = componentRepository.findById(id).orElseThrow();
 
-            BillOfMaterials bill1 = new BillOfMaterials(
-                    productRepository.findById(id).get(),
-                    componentRepository.findById(id).get(),
-                    bill.qty()
+            BillOfMaterials billToPut = new BillOfMaterials(
+                    product,
+                    component,
+                    bill.qty());
+
+            bomToSend.put(component.getId(),billToPut);
+
+            bomToSend.computeIfAbsent(
+                    component.getId(), (v) -> billToPut);
+
+            bomToSend.computeIfPresent(
+                    component.getId(), (k,v) -> new BillOfMaterials(
+                            product,
+                            component,
+                            bill.qty() + v.getQty()
+                    )
             );
-
-            billOfMaterialsRepository.saveAndFlush(bill1);
         }
-
+        billOfMaterialsRepository.saveAllAndFlush(bomToSend.values().stream().toList());
     }
 
 
