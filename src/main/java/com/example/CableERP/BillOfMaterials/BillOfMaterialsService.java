@@ -1,6 +1,7 @@
 package com.example.CableERP.BillOfMaterials;
 
 
+import com.example.CableERP.Common.Exception.DuplicateException;
 import com.example.CableERP.Component.Component;
 import com.example.CableERP.Component.ComponentDTO;
 import com.example.CableERP.Component.ComponentRepository;
@@ -53,8 +54,11 @@ public class BillOfMaterialsService {
 
     public void addBill(List<BomCreatingDTO> billOfMaterialsList, Long id){
         Product product = productRepository.findById(id).orElseThrow();
-        HashMap<Long,BillOfMaterials> bomToSend = new HashMap<>();
 
+        if(!product.getBillOfMaterialsList().isEmpty()) throw new DuplicateException("Bill of materials " +
+                "exist to current product, please update or delete current BOM if you want to add new");
+
+        HashMap<Long,BillOfMaterials> bomToSend = new HashMap<>();
         for(BomCreatingDTO bill : billOfMaterialsList){
             Component component = componentRepository.findById(id).orElseThrow();
 
