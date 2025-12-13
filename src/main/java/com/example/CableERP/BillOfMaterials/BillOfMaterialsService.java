@@ -56,7 +56,7 @@ public class BillOfMaterialsService {
         Product product = productRepository.findById(id).orElseThrow();
 
         if(!product.getBillOfMaterialsList().isEmpty()) throw new DuplicateException("Bill of materials " +
-                "exist to current product, please update or delete current BOM if you want to add new");
+                "exist for this product, please update or delete current BOM if you want to add new");
 
         HashMap<Long,BillOfMaterials> bomToSend = new HashMap<>();
         for(BomCreatingDTO bill : billOfMaterialsList){
@@ -81,6 +81,47 @@ public class BillOfMaterialsService {
             );
         }
         billOfMaterialsRepository.saveAllAndFlush(bomToSend.values().stream().toList());
+    }
+
+
+    // mój tok rozumowania w sumie
+    public void updateBill(List<BomCreatingDTO> bomCreatingDTOList, Long id){
+        Product product = productRepository.findById(id).orElseThrow();
+        List<BillOfMaterials> productBOM = product.getBillOfMaterialsList();
+
+        Map<Long, BillOfMaterials> map1 = new HashMap<>();
+        for(BomCreatingDTO item : bomCreatingDTOList){
+            Component component = componentRepository.findById(id).orElseThrow();
+            map1.put(item.componentId(),
+                    new BillOfMaterials(
+                            product,
+                            component,
+                            item.qty()
+                    )
+            );
+        }
+
+
+        Map<Long, BillOfMaterials> map2 = product.getBillOfMaterialsList().stream().collect(Collectors.toMap(
+            bom -> bom.getComponent().getId(), Function.identity()
+        ));
+
+
+
+
+
+
+
+
+        //musisz rozpakować obie listy, porównać elementy i dodać nowe jeśli trzeba, usunąć niepotrzebne
+        // ogólnie jeśli qty jakiegoś komponentu zostanie ustawiony na 0 to wtedy go usuwamy z bomu
+
+
+
+
+
+
+
     }
 
 

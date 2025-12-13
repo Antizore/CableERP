@@ -39,7 +39,17 @@ public class BillOfMaterialsController {
                 .build();
     }
 
-    //TODO: PatchMapping
+    //TODO: PatchMapping 1.4 Aktualizacja BOM
+    @PatchMapping
+    public ResponseEntity<List<BillOfMaterials>> updateBill(@RequestBody List<BomCreatingDTO> billOfMaterialsList, @PathVariable Long id){
+
+        return ResponseEntity
+                .ok()
+                .build();
+
+    }
+
+
 
 
 
