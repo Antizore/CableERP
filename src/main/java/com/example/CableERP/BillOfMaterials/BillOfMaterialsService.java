@@ -110,11 +110,11 @@ public class BillOfMaterialsService {
     public void updateBill(List<BomCreatingDTO> bomCreatingDTOList, Long id){
         Product product = productRepository.findById(id).orElseThrow();
         List<BillOfMaterials> productBOM = product.getBillOfMaterialsList();
+        List<BillOfMaterials> map1 = new ArrayList<>();
 
-        Map<Long, BillOfMaterials> map1 = new HashMap<>();
         for(BomCreatingDTO item : bomCreatingDTOList){
-            Component component = componentRepository.findById(id).orElseThrow();
-            map1.put(item.componentId(),
+            Component component = componentRepository.findById(item.componentId()).orElseThrow();
+            map1.add(
                     new BillOfMaterials(
                             product,
                             component,
@@ -123,21 +123,18 @@ public class BillOfMaterialsService {
             );
         }
 
-        Map<Long, BillOfMaterials> map2 = product.getBillOfMaterialsList().stream().collect(Collectors.toMap(
-            bom -> bom.getComponent().getId(), Function.identity()
-        ));
+        List<Long> bomIds = productBOM.stream().mapToLong(BillOfMaterials::getId).boxed().toList();
+        billOfMaterialsRepository.deleteAllByIdInBatch(bomIds);
+        billOfMaterialsRepository.saveAllAndFlush(map1);
+    }
 
-
-
-
-
-
-
-
-
-
-
+    public void deleteBill(Long id) {
+        Product product = productRepository.findById(id).orElseThrow();
+        List<BillOfMaterials> productBOM = product.getBillOfMaterialsList();
+        List<Long> bomIds = productBOM.stream().mapToLong(BillOfMaterials::getId).boxed().toList();
+        billOfMaterialsRepository.deleteAllByIdInBatch(bomIds);
     }
 
 
 }
+

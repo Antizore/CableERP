@@ -39,14 +39,21 @@ public class BillOfMaterialsController {
                 .build();
     }
 
-    //TODO: PatchMapping 1.4 Aktualizacja BOM
+
     @PatchMapping
     public ResponseEntity<List<BillOfMaterials>> updateBill(@RequestBody List<BomCreatingDTO> billOfMaterialsList, @PathVariable Long id){
-
+        billOfMaterialsService.updateBill(billOfMaterialsList, id);
         return ResponseEntity
                 .ok()
                 .build();
+    }
 
+    @DeleteMapping
+    public ResponseEntity deleteBill(@PathVariable Long id){
+        billOfMaterialsService.deleteBill(id);
+        return ResponseEntity
+                .ok()
+                .build();
     }
 
 
