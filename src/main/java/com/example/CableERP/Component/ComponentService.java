@@ -3,6 +3,7 @@ package com.example.CableERP.Component;
 import com.example.CableERP.BillOfMaterials.BillOfMaterialsDTO;
 import com.example.CableERP.BillOfMaterials.BillOfMaterialsService;
 import com.example.CableERP.Common.Exception.CannotDeleteComponentActiveInBOM;
+import com.example.CableERP.Inventory.CreateInventoryDTO;
 import com.example.CableERP.Inventory.Inventory;
 import com.example.CableERP.Common.Exception.NoNameException;
 import com.example.CableERP.Common.Exception.WrongValueException;
@@ -32,7 +33,7 @@ public class ComponentService {
         else
         {
             var save = componentRepository.saveAndFlush(component);
-            Inventory inventory = new Inventory(0,0,save);
+            CreateInventoryDTO inventory = new CreateInventoryDTO(save.getId(),0,0);
             inventoryService.createInventory(inventory);
             return save;
         }
