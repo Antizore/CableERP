@@ -45,21 +45,30 @@ public class ReservationController {
      */
 
     @PostMapping("/{id}/reserve")
-    public void reserveComponent(@RequestBody ReservingComponentDTO reservation){
+    public ResponseEntity reserveComponent(@RequestBody ReservingComponentDTO reservation){
         reservationService.froze(reservation);
+        return ResponseEntity
+                .ok()
+                .build();
     }
 
-    // to będzie response entity
+
     @PostMapping("/{id}/release")
-    public void releaseComponent(@RequestBody ReservingComponentDTO reservation){
+    public ResponseEntity releaseComponent(@RequestBody ReservingComponentDTO reservation){
         reservationService.release(reservation);
+        return ResponseEntity
+                .ok()
+                .build();
     }
 
 
     @PatchMapping("/{id}/status")
-    public void updateStatus(@PathVariable Long id, @RequestBody PatchReservationStatusDTO patchReservationStatusDTO)
+    public ResponseEntity updateStatus(@PathVariable Long id, @RequestBody PatchReservationStatusDTO patchReservationStatusDTO)
     {
         reservationService.updateStatus(patchReservationStatusDTO, id);
+        return ResponseEntity
+                .ok()
+                .build();
     }
 
 

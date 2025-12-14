@@ -1,5 +1,6 @@
 package com.example.CableERP.Inventory;
 
+import com.example.CableERP.Common.Exception.DuplicateException;
 import com.example.CableERP.Common.Exception.MissingEntityException;
 import com.example.CableERP.Common.Exception.WrongValueException;
 import com.example.CableERP.Component.ComponentRepository;
@@ -47,7 +48,7 @@ public class InventoryService {
         }
         else {
             Inventory inventory1 = inventoryRepository.findByComponentId(inventory.componentId());
-            if( inventory1 != null) return updateInventory(inventory1.getId(), new UpdateInventoryDTO(inventory.qtyAvilable(), inventory.qtyReserved()));
+            if( inventory1 != null)  throw new DuplicateException("Inventory for this component exists.");
 
             else {
                 if(inventory.qtyAvilable() < 0 || inventory.qtyReserved() < 0) throw new WrongValueException("qty value cannot be less than 0");
