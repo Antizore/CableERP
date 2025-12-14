@@ -1,6 +1,8 @@
 package com.example.CableERP.Inventory;
 
+import com.example.CableERP.Common.Exception.MissingEntityException;
 import com.example.CableERP.Common.Exception.WrongValueException;
+import com.example.CableERP.Component.ComponentRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,9 +13,11 @@ public class InventoryService {
 
 
     private final InventoryRepository inventoryRepository;
+    private final ComponentRepository componentRepository;
 
-    public InventoryService(InventoryRepository inventoryRepository) {
+    public InventoryService(InventoryRepository inventoryRepository, ComponentRepository componentRepository) {
         this.inventoryRepository = inventoryRepository;
+        this.componentRepository = componentRepository;
     }
 
 
@@ -27,7 +31,7 @@ public class InventoryService {
 
 
     public Inventory updateInventory(Long id, UpdateInventoryDTO updateInventoryDTO){
-        Inventory currentInventory = inventoryRepository.findById(id).get();
+        Inventory currentInventory = inventoryRepository.findById(id).orElseThrow();
         if(updateInventoryDTO.qtyAvilable() < 0 || updateInventoryDTO.qtyReserved() < 0) throw new WrongValueException("qty value cannot be less than 0");
         currentInventory.setQtyReserved(updateInventoryDTO.qtyReserved());
         currentInventory.setQtyAvailable(updateInventoryDTO.qtyAvilable());
@@ -35,17 +39,23 @@ public class InventoryService {
     }
 
 
-    public Inventory createInventory(Inventory inventory){
-        if(inventory.getId() == null){
-            return inventoryRepository.saveAndFlush(inventory);
+    // fixed some errors, but now it seems not elegant, should be overwritten
+    public Inventory createInventory(CreateInventoryDTO inventory){
+
+        if(inventory.componentId() == null){
+            throw new WrongValueException("Component Id cannot be null");
         }
         else {
-            if(inventory.getQtyAvailable() < 0 || inventory.getQtyReserved() < 0) throw new WrongValueException("qty value cannot be less than 0");
-            Inventory inventoryToUpdate = inventoryRepository.findById(inventory.getId()).get();
-            inventoryToUpdate.setQtyAvailable(inventoryToUpdate.getQtyAvailable() + inventory.getQtyAvailable());
-            return inventoryRepository.saveAndFlush(inventoryToUpdate);
-        }
+            Inventory inventory1 = inventoryRepository.findByComponentId(inventory.componentId());
+            if( inventory1 != null) return updateInventory(inventory1.getId(), new UpdateInventoryDTO(inventory.qtyAvilable(), inventory.qtyReserved()));
 
+            else {
+                if(inventory.qtyAvilable() < 0 || inventory.qtyReserved() < 0) throw new WrongValueException("qty value cannot be less than 0");
+                return inventoryRepository.saveAndFlush(
+                        new Inventory(inventory.qtyAvilable(), inventory.qtyReserved(), componentRepository.findById(inventory.componentId()).orElseThrow())
+                );
+                 }
+            }
 
     }
 

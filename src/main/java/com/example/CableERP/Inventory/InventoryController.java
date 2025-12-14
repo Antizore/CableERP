@@ -33,7 +33,7 @@ public class InventoryController {
                 .body(inventoryService.returnSingleInventory(id));
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity <Inventory> updateSingleInventory(@PathVariable Long id, @RequestBody UpdateInventoryDTO updateInventoryDTO){
         Inventory inventory = inventoryService.updateInventory(id,updateInventoryDTO);
         return ResponseEntity
@@ -43,7 +43,7 @@ public class InventoryController {
 
 
     @PostMapping
-    public ResponseEntity<Inventory> addInventory(@RequestBody Inventory inventoryBody){
+    public ResponseEntity<Inventory> addInventory(@RequestBody CreateInventoryDTO inventoryBody){
         Inventory inventory = inventoryService.createInventory(inventoryBody);
         URI location = URI.create("/inventory/"+inventory.getId());
         return ResponseEntity.
