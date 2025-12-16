@@ -106,7 +106,6 @@ public class BillOfMaterialsService {
     w teorii mógłbym wymagać tylko zmiany, ale nie spodziewam się w erpach że produkt składa się z miliona komponentów
     a tak jest mi wygodniej :)
      */
-
     public void updateBill(List<BomCreatingDTO> bomCreatingDTOList, Long id){
         Product product = productRepository.findById(id).orElseThrow();
         List<BillOfMaterials> productBOM = product.getBillOfMaterialsList();

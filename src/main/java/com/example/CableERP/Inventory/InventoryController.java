@@ -1,5 +1,6 @@
 package com.example.CableERP.Inventory;
 
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,20 +18,25 @@ public class InventoryController {
     }
 
 
-    @GetMapping
-    public ResponseEntity <List<Inventory>> getInventory(){
-
-        return ResponseEntity.
-                ok()
-                .body(inventoryService.returnInventoryList());
+    @GetMapping()
+    public ResponseEntity<?> getInventory(@RequestParam(required = false) Long componentId){
+        if(componentId == null) {
+            return ResponseEntity.
+                    ok()
+                    .body(inventoryService.returnInventoryList());
+        }
+        else {
+            return ResponseEntity.
+                    ok()
+                    .body(inventoryService.returnSingleInventoryByComponentId(componentId));
+        }
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(path = "/{id}")
     public ResponseEntity <Inventory> getSingleInventory(@PathVariable Long id){
-
-        return ResponseEntity.
-                ok()
-                .body(inventoryService.returnSingleInventory(id));
+            return ResponseEntity.
+                    ok()
+                    .body(inventoryService.returnSingleInventory(id));
     }
 
     @PatchMapping("/{id}")

@@ -29,10 +29,6 @@ public class ReservationService {
     }
 
 
-
-
-    // TODO: trzeba połączyć to z inventory
-
     public void froze(ReservingComponentDTO reservingComponentDTO){
         Inventory inventory = inventoryRepository.findByComponentId(reservingComponentDTO.componentId());
         if(inventory.getQtyAvailable() < inventory.getQtyReserved() + reservingComponentDTO.qty()){

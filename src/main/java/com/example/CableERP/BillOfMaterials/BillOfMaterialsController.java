@@ -40,6 +40,7 @@ public class BillOfMaterialsController {
     }
 
 
+    // TODO: sprawdź czy nie lepiej PUT
     @PatchMapping
     public ResponseEntity<List<BillOfMaterials>> updateBill(@RequestBody List<BomCreatingDTO> billOfMaterialsList, @PathVariable Long id){
         billOfMaterialsService.updateBill(billOfMaterialsList, id);

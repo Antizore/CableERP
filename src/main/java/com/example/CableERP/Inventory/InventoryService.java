@@ -27,8 +27,10 @@ public class InventoryService {
     }
 
     public Inventory returnSingleInventory(Long id){
-        return inventoryRepository.findById(id).orElse(null);
+        return inventoryRepository.findById(id).orElseThrow();
     }
+
+    public Inventory returnSingleInventoryByComponentId (Long id){return inventoryRepository.findByComponentId(id);}
 
 
     public Inventory updateInventory(Long id, UpdateInventoryDTO updateInventoryDTO){
