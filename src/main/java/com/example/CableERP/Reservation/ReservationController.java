@@ -45,7 +45,7 @@ public class ReservationController {
      */
 
     @PostMapping("/{id}/reserve")
-    public ResponseEntity reserveComponent(@RequestBody ReservingComponentDTO reservation){
+    public ResponseEntity<?> reserveComponent(@RequestBody ReservingComponentDTO reservation){
         reservationService.froze(reservation);
         return ResponseEntity
                 .ok()
@@ -54,7 +54,7 @@ public class ReservationController {
 
 
     @PostMapping("/{id}/release")
-    public ResponseEntity releaseComponent(@RequestBody ReservingComponentDTO reservation){
+    public ResponseEntity<?> releaseComponent(@RequestBody ReservingComponentDTO reservation){
         reservationService.release(reservation);
         return ResponseEntity
                 .ok()
@@ -63,7 +63,7 @@ public class ReservationController {
 
 
     @PatchMapping("/{id}/status")
-    public ResponseEntity updateStatus(@PathVariable Long id, @RequestBody PatchReservationStatusDTO patchReservationStatusDTO)
+    public ResponseEntity<?> updateStatus(@PathVariable Long id, @RequestBody PatchReservationStatusDTO patchReservationStatusDTO)
     {
         reservationService.updateStatus(patchReservationStatusDTO, id);
         return ResponseEntity

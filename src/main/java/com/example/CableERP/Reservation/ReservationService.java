@@ -1,6 +1,7 @@
 package com.example.CableERP.Reservation;
 
 
+import com.example.CableERP.Common.Exception.WrongValueException;
 import com.example.CableERP.Component.Component;
 import com.example.CableERP.Inventory.Inventory;
 import com.example.CableERP.Component.ComponentRepository;
@@ -31,14 +32,28 @@ public class ReservationService {
 
     public void froze(ReservingComponentDTO reservingComponentDTO){
         Inventory inventory = inventoryRepository.findByComponentId(reservingComponentDTO.componentId());
+
         if(inventory.getQtyAvailable() < inventory.getQtyReserved() + reservingComponentDTO.qty()){
+            throw new WrongValueException("Cannot reserve over available qty");
         }
+
+        else if (reservingComponentDTO.qty() == 0) {
+            throw new WrongValueException("Why?");
+        }
+
         else {
             inventory.setQtyReserved(inventory.getQtyReserved() + reservingComponentDTO.qty());
             inventory.setQtyAvailable(inventory.getQtyAvailable() - reservingComponentDTO.qty());
+
             Component component = componentRepository.findById(reservingComponentDTO.componentId()).orElse(null);
             Calendar rightNow = Calendar.getInstance();
-            Reservation reservation = new Reservation(null,component, reservingComponentDTO.qty(), ReservationStatus.FROZEN,new Timestamp(rightNow.getTimeInMillis()));
+            Reservation reservation = new Reservation(
+                    null,
+                    component,
+                    reservingComponentDTO.qty(),
+                    ReservationStatus.FROZEN,
+                    new Timestamp(rightNow.getTimeInMillis()));
+
             inventoryRepository.saveAndFlush(inventory);
             reservationRepository.saveAndFlush(reservation);
 
@@ -50,7 +65,13 @@ public class ReservationService {
     public void release(ReservingComponentDTO releasingComponentDTO){
         Inventory inventory = inventoryRepository.findByComponentId(releasingComponentDTO.componentId());
         if(inventory.getQtyReserved() < releasingComponentDTO.qty()){
+            throw new WrongValueException("Cannot release over reserved qty");
         }
+
+        else if (releasingComponentDTO.qty() == 0) {
+            throw new WrongValueException("Why?");
+        }
+
         else {
             inventory.setQtyAvailable(inventory.getQtyAvailable() + releasingComponentDTO.qty());
             inventory.setQtyReserved(inventory.getQtyReserved() - releasingComponentDTO.qty());
