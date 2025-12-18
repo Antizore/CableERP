@@ -25,7 +25,7 @@ public class Customer {
     private String name;
     private String phone;
     private String email;
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Order> order = new ArrayList<>();
 
     public Long getId() {

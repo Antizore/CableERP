@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
+@Table(name = "customer_order")
 public class Order {
 
     protected Order(){}

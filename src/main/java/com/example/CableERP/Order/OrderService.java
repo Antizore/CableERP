@@ -24,21 +24,19 @@ public class OrderService {
     }
 
     public Order returnOrderById(Long id){
-        return orderRepository.findById(id).orElse(null);
+        return orderRepository.findById(id).orElseThrow();
     }
 
     public void saveOrderToDB(CreateOrderDTO customerOrderDTO){
         Calendar rightNow = Calendar.getInstance();
 
-
         Order order = new Order(
-                customerRepository.findById(customerOrderDTO.customerId()).orElse(null),
+                customerRepository.findById(customerOrderDTO.customerId()).orElseThrow(),
                 customerOrderDTO.orderNumber(),
                 OrderStatus.NEW,
                 new Timestamp(rightNow.getTimeInMillis()),
                 new Timestamp(rightNow.getTimeInMillis())
         );
-
 
         orderRepository.saveAndFlush(order);
     }
