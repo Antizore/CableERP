@@ -48,7 +48,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MissingEntityException.class)
     public ResponseEntity<String> handleCannotFindEntity(MissingEntityException ex){
         return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
+                .status(HttpStatus.BAD_REQUEST)
                 .body(ex.getMessage());
     }
 

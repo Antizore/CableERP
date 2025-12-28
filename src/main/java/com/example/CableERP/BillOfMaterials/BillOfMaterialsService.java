@@ -3,6 +3,7 @@ package com.example.CableERP.BillOfMaterials;
 
 import com.example.CableERP.Common.Exception.DuplicateException;
 import com.example.CableERP.Common.Exception.MissingEntityException;
+import com.example.CableERP.Common.Exception.WrongValueException;
 import com.example.CableERP.Component.Component;
 import com.example.CableERP.Component.ComponentDTO;
 import com.example.CableERP.Component.ComponentRepository;
@@ -114,6 +115,7 @@ public class BillOfMaterialsService {
 
         for(BomCreatingDTO item : bomCreatingDTOList){
             Component component = componentRepository.findById(item.componentId()).orElseThrow(() -> new MissingEntityException("Component not found"));
+            if (item.qty() <= 0 ) throw new WrongValueException("Qty cannot be less or equal 0");
             map1.add(
                     new BillOfMaterials(
                             product,
