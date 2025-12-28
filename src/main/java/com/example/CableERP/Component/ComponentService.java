@@ -26,12 +26,12 @@ public class ComponentService {
     }
 
 
-    public Component addComponent(Component component) throws Exception{
-        if (component.getName().isBlank()) throw new NoNameException("Component name cannot be blank");
-        else if (component.getCostPerUnit() < 0) throw new WrongValueException("Cost of component cannot be less than 0");
+    public Component addComponent(ComponentCreateDTO component){
+        if (component.name().isBlank()) throw new NoNameException("Component name cannot be blank");
+        else if (component.costPerUnit() < 0) throw new WrongValueException("Cost of component cannot be less than 0");
         else
         {
-            var save = componentRepository.saveAndFlush(component);
+            Component save = componentRepository.saveAndFlush(new Component(component.name(),component.unit(), component.costPerUnit()));
             CreateInventoryDTO inventory = new CreateInventoryDTO(save.getId(),0,0);
             inventoryService.createInventory(inventory);
             return save;

@@ -20,7 +20,7 @@ public class ComponentController {
 
 
     @PostMapping
-    public ResponseEntity<Component> addComponent(@RequestBody Component component) throws Exception {
+    public ResponseEntity<Component> addComponent(@RequestBody ComponentCreateDTO component) throws Exception {
         Component created = componentService.addComponent(component);
         URI location = URI.create("/components/"+created.getId());
 
