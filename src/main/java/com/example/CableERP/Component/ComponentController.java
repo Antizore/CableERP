@@ -51,7 +51,7 @@ public class ComponentController {
     }
 
 
-    @PatchMapping
+    @PatchMapping("/{id}")
     public ResponseEntity<Component> editComponent(@RequestParam Long id, @RequestBody ComponentCreateDTO component){
         return ResponseEntity
                 .ok()
