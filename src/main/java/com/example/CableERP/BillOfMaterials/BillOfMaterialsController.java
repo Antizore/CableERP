@@ -18,8 +18,10 @@ public class BillOfMaterialsController {
 
 
 
-    // there is no use of making get all BOMs because you can achieve it by just getting all the products, because
-    // in product you have associated BOM to it
+    /*
+    there is no use of making get all BOMs because you can achieve it by just getting all the products, because
+    in product you have associated BOM to it
+    */
     @GetMapping
     public ResponseEntity<List<BillOfMaterialsDTO>> getBill(@PathVariable Long id){
         return ResponseEntity
@@ -40,7 +42,7 @@ public class BillOfMaterialsController {
     }
 
 
-    // TODO: sprawdź czy nie lepiej PUT
+
     @PatchMapping
     public ResponseEntity<List<BillOfMaterials>> updateBill(@RequestBody List<BomCreatingDTO> billOfMaterialsList, @PathVariable Long id){
         billOfMaterialsService.updateBill(billOfMaterialsList, id);
