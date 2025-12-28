@@ -21,11 +21,7 @@ public class ProductService {
 
 
     public List<ProductDTO> getAllProducts(){
-
-
-
         List<Product> products = productRepository.findAll();
-
         return products.stream().map(product -> new ProductDTO(
                 product.getId(),
                 product.getName(),
@@ -40,7 +36,6 @@ public class ProductService {
                         ))
                         .collect(Collectors.toList())
         )).collect(Collectors.toList());
-
     }
 
 
@@ -64,15 +59,13 @@ public class ProductService {
                 ).orElseThrow();
     }
 
-    public ProductDTO updateProduct(Long id, Product product){
-
+    public ProductDTO updateProduct(Long id, ProductCreateDTO product){
         Product productToBeUpdated = productRepository.findById(id).orElseThrow();
-        if(!(product.getName() == null || product.getName().isBlank())) productToBeUpdated.setName(product.getName());
-        if(!(product.getDescription() == null || product.getDescription().isBlank())) productToBeUpdated.setDescription(product.getDescription());
+        if(!(product.name() == null || product.name().isBlank())) productToBeUpdated.setName(product.name());
+        if(!(product.description() == null || product.description().isBlank())) productToBeUpdated.setDescription(product.description());
+        // yeah I know, but just wanted it to work for now otherwise i will never end this first project
         productRepository.saveAndFlush(productToBeUpdated);
-
-        return getProduct(id);
-
+        return getProduct(productToBeUpdated.getId());
     }
 
 

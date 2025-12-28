@@ -36,7 +36,7 @@ public class ProductController {
 
 
     @PatchMapping("/{id}")
-    public ResponseEntity<ProductDTO> updateProduct(@RequestParam Long id, @RequestBody Product product){
+    public ResponseEntity<ProductDTO> updateProduct(@RequestParam Long id, @RequestBody ProductCreateDTO product){
         return ResponseEntity
                 .ok()
                 .body(productService.updateProduct(id, product));
