@@ -76,10 +76,10 @@ public class ProductService {
     }
 
 
-    public Product addProduct(Product product) {
-        if(product.getName() == null || product.getName().isBlank()) throw new NoNameException("Cannot add product without name");
+    public Product addProduct(ProductCreateDTO product) {
+        if(product.name() == null || product.name().isBlank()) throw new NoNameException("Cannot add product without name");
         else {
-            return productRepository.saveAndFlush(product);
+            return productRepository.saveAndFlush(new Product(product.name(), product.description()));
         }
     }
 

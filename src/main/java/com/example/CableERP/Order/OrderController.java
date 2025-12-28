@@ -34,7 +34,6 @@ public class OrderController {
     When wysyłam POST /orders/{id}/items
     Then pozycja zostaje zapisana, a suma zamówienia się aktualizuje
 
-
      */
     @PostMapping("/{id}/items")
     public ResponseEntity<?> createItemsInOrder(@RequestBody CreateOrderDTO customerOrder){
