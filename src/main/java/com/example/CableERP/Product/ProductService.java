@@ -2,7 +2,8 @@ package com.example.CableERP.Product;
 
 
 import com.example.CableERP.BillOfMaterials.BillOfMaterialsDTO;
-import com.example.CableERP.Common.Exception.MissingEntityException;
+import com.example.CableERP.BillOfMaterials.BillOfMaterialsRepository;
+import com.example.CableERP.Common.Exception.CannotDeleteException;
 import com.example.CableERP.Component.ComponentDTO;
 import com.example.CableERP.Common.Exception.NoNameException;
 import org.springframework.stereotype.Service;
@@ -14,9 +15,11 @@ import java.util.stream.Collectors;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final BillOfMaterialsRepository billOfMaterialsRepository;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, BillOfMaterialsRepository billOfMaterialsRepository) {
         this.productRepository = productRepository;
+        this.billOfMaterialsRepository = billOfMaterialsRepository;
     }
 
 
@@ -74,6 +77,12 @@ public class ProductService {
         else {
             return productRepository.saveAndFlush(new Product(product.name(), product.description()));
         }
+    }
+
+
+    public void deleteProduct(Long id) {
+        if(billOfMaterialsRepository.findAllByProduct_Id(id).isEmpty()) productRepository.deleteById(id);
+        else throw new CannotDeleteException("Cannot delete product that is actively used in BOM, delete all BOMs first");
     }
 
 

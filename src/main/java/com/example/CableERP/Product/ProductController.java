@@ -55,4 +55,11 @@ public class ProductController {
                     .body(createdProduct);
     }
 
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteProduct(@RequestParam Long id){
+        productService.deleteProduct(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }

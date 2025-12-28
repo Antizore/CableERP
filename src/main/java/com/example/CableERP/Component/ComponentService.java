@@ -2,9 +2,8 @@ package com.example.CableERP.Component;
 
 import com.example.CableERP.BillOfMaterials.BillOfMaterialsDTO;
 import com.example.CableERP.BillOfMaterials.BillOfMaterialsService;
-import com.example.CableERP.Common.Exception.CannotDeleteComponentActiveInBOM;
+import com.example.CableERP.Common.Exception.CannotDeleteException;
 import com.example.CableERP.Inventory.CreateInventoryDTO;
-import com.example.CableERP.Inventory.Inventory;
 import com.example.CableERP.Common.Exception.NoNameException;
 import com.example.CableERP.Common.Exception.WrongValueException;
 import com.example.CableERP.Inventory.InventoryService;
@@ -58,7 +57,7 @@ public class ComponentService {
             return "Deleted successfully";
         }
         else {
-            throw new CannotDeleteComponentActiveInBOM("Cannot delete components that are actively used in BOM. Delete BOM first.");
+            throw new CannotDeleteException("Cannot delete components that are actively used in BOM. Delete BOM first.");
         }
 
 
