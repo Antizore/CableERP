@@ -27,7 +27,7 @@ public class OrderService {
         return orderRepository.findById(id).orElseThrow();
     }
 
-    public void saveOrderToDB(CreateOrderDTO customerOrderDTO){
+    public Order saveOrderToDB(CreateOrderDTO customerOrderDTO){
         Calendar rightNow = Calendar.getInstance();
 
         Order order = new Order(
@@ -38,7 +38,7 @@ public class OrderService {
                 new Timestamp(rightNow.getTimeInMillis())
         );
 
-        orderRepository.saveAndFlush(order);
+        return orderRepository.saveAndFlush(order);
     }
 
 }
