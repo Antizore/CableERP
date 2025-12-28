@@ -47,14 +47,13 @@ public class ComponentService {
 
 
 
-    public String deleteComponent(Long id){
+    public void deleteComponent(Long id){
 
         List<BillOfMaterialsDTO> dtoList = billOfMaterialsService.getBill(id, getComponent(id));
 
         if (dtoList == null || dtoList.isEmpty())
         {
             componentRepository.deleteById(getComponent(id).getId());
-            return "Deleted successfully";
         }
         else {
             throw new CannotDeleteException("Cannot delete components that are actively used in BOM. Delete BOM first.");
@@ -63,13 +62,13 @@ public class ComponentService {
 
     }
 
-    public Component patchComponent(Long id, Component component){
+    public Component patchComponent(Long id, ComponentCreateDTO component){
 
         Component updatedComponent = getComponent(id);
 
-        if(!(component.getName() == null || component.getName().isBlank())) updatedComponent.setName(component.getName());
-        if(component.getUnit() != null) updatedComponent.setUnit(component.getUnit());
-        if(!(component.getCostPerUnit() == null || component.getCostPerUnit().isNaN() || component.getCostPerUnit().isInfinite())) updatedComponent.setCostPerUnit(component.getCostPerUnit());
+        if(!(component.name() == null || component.name().isBlank())) updatedComponent.setName(component.name());
+        if(component.unit() != null) updatedComponent.setUnit(component.unit());
+        if(!(component.costPerUnit() == null || component.costPerUnit().isNaN() || component.costPerUnit().isInfinite())) updatedComponent.setCostPerUnit(component.costPerUnit());
 
         componentRepository.saveAndFlush(updatedComponent);
 
