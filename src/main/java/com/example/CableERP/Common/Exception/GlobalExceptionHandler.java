@@ -45,5 +45,12 @@ public class GlobalExceptionHandler {
                 .body(ex.getMessage());
     }
 
+    @ExceptionHandler(MissingEntityException.class)
+    public ResponseEntity<String> handleCannotFindEntity(MissingEntityException ex){
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(ex.getMessage());
+    }
+
 
 }
