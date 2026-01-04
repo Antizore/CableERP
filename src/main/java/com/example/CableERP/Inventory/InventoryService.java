@@ -36,8 +36,12 @@ public class InventoryService {
     public Inventory updateInventory(Long id, UpdateInventoryDTO updateInventoryDTO){
         Inventory currentInventory = inventoryRepository.findById(id).orElseThrow();
         if(updateInventoryDTO.qtyAvilable() < 0 || updateInventoryDTO.qtyReserved() < 0) throw new WrongValueException("qty value cannot be less than 0");
-        currentInventory.setQtyReserved(updateInventoryDTO.qtyReserved());
-        currentInventory.setQtyAvailable(updateInventoryDTO.qtyAvilable());
+
+
+        if(!Double.isNaN(updateInventoryDTO.qtyReserved())) currentInventory.setQtyReserved(updateInventoryDTO.qtyReserved());
+        if(!Double.isNaN(updateInventoryDTO.qtyAvilable())) currentInventory.setQtyAvailable(updateInventoryDTO.qtyAvilable());
+
+
         return inventoryRepository.saveAndFlush(currentInventory);
     }
 
