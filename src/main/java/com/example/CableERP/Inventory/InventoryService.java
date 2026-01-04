@@ -35,13 +35,9 @@ public class InventoryService {
 
     public Inventory updateInventory(Long id, UpdateInventoryDTO updateInventoryDTO){
         Inventory currentInventory = inventoryRepository.findById(id).orElseThrow();
-        if(updateInventoryDTO.qtyAvilable() < 0 || updateInventoryDTO.qtyReserved() < 0) throw new WrongValueException("qty value cannot be less than 0");
-
-
-        if(!Double.isNaN(updateInventoryDTO.qtyReserved())) currentInventory.setQtyReserved(updateInventoryDTO.qtyReserved());
-        if(!Double.isNaN(updateInventoryDTO.qtyAvilable())) currentInventory.setQtyAvailable(updateInventoryDTO.qtyAvilable());
-
-
+        if((updateInventoryDTO.qtyAvilable() != null && updateInventoryDTO.qtyAvilable() < 0) || (updateInventoryDTO.qtyReserved() != null && updateInventoryDTO.qtyReserved() < 0)) throw new WrongValueException("qty value cannot be less than 0");
+        if(updateInventoryDTO.qtyReserved() != null) currentInventory.setQtyReserved(updateInventoryDTO.qtyReserved());
+        if(updateInventoryDTO.qtyAvilable() != null) currentInventory.setQtyAvailable(updateInventoryDTO.qtyAvilable());
         return inventoryRepository.saveAndFlush(currentInventory);
     }
 
@@ -54,8 +50,7 @@ public class InventoryService {
         }
         else {
             Inventory inventory1 = inventoryRepository.findByComponentId(inventory.componentId());
-            if( inventory1 != null)  throw new DuplicateException("Inventory for this component exists.");
-
+            if( inventory1 != null)  return updateInventory(inventory1.getId(), new UpdateInventoryDTO(inventory1.getQtyAvailable(), inventory1.getQtyReserved()));
             else {
                 if(inventory.qtyAvilable() < 0 || inventory.qtyReserved() < 0) throw new WrongValueException("qty value cannot be less than 0");
                 return inventoryRepository.saveAndFlush(

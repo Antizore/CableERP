@@ -1,3 +1,3 @@
 package com.example.CableERP.Inventory;
 
-public record UpdateInventoryDTO (double qtyAvilable, double qtyReserved){ }
+public record UpdateInventoryDTO (Double qtyAvilable, Double qtyReserved){ }

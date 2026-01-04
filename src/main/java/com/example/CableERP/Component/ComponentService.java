@@ -31,10 +31,10 @@ public class ComponentService {
         else if (component.costPerUnit() < 0) throw new WrongValueException("Cost of component cannot be less than 0");
         else
         {
-            Component save = componentRepository.saveAndFlush(new Component(component.name(),component.unit(), component.costPerUnit()));
-            CreateInventoryDTO inventory = new CreateInventoryDTO(save.getId(),0,0);
-            inventoryService.createInventory(inventory);
-            return save;
+            return componentRepository.saveAndFlush(new Component(component.name(),component.unit(), component.costPerUnit()));
+            //CreateInventoryDTO inventory = new CreateInventoryDTO(save.getId(),0,0);
+            //inventoryService.createInventory(inventory);
+            //return save;
         }
     }
 
