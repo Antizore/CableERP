@@ -19,29 +19,25 @@ public class ReservationService {
     final ComponentRepository componentRepository;
     final InventoryRepository inventoryRepository;
 
-    public ReservationService(ReservationRepository reservationRepository, ComponentRepository componentRepository, InventoryRepository inventoryRepository){
+    public ReservationService(ReservationRepository reservationRepository, ComponentRepository componentRepository, InventoryRepository inventoryRepository) {
         this.reservationRepository = reservationRepository;
         this.componentRepository = componentRepository;
         this.inventoryRepository = inventoryRepository;
     }
 
-    public List<Reservation> getAllReservations (){
+    public List<Reservation> getAllReservations() {
         return reservationRepository.findAll();
     }
 
 
-    public void froze(ReservingComponentDTO reservingComponentDTO){
+    public void froze(ReservingComponentDTO reservingComponentDTO) {
         Inventory inventory = inventoryRepository.findByComponentId(reservingComponentDTO.componentId());
 
-        if(inventory.getQtyAvailable() < inventory.getQtyReserved() + reservingComponentDTO.qty()){
+        if (inventory.getQtyAvailable() < inventory.getQtyReserved() + reservingComponentDTO.qty()) {
             throw new WrongValueException("Cannot reserve over available qty");
-        }
-
-        else if (reservingComponentDTO.qty() == 0) {
+        } else if (reservingComponentDTO.qty() == 0) {
             throw new WrongValueException("Why?");
-        }
-
-        else {
+        } else {
             inventory.setQtyReserved(inventory.getQtyReserved() + reservingComponentDTO.qty());
             inventory.setQtyAvailable(inventory.getQtyAvailable() - reservingComponentDTO.qty());
 
@@ -61,32 +57,21 @@ public class ReservationService {
     }
 
 
-
-    public void release(ReservingComponentDTO releasingComponentDTO){
+    public void release(ReservingComponentDTO releasingComponentDTO) {
         Inventory inventory = inventoryRepository.findByComponentId(releasingComponentDTO.componentId());
-        if(inventory.getQtyReserved() < releasingComponentDTO.qty()){
+        if (inventory.getQtyReserved() < releasingComponentDTO.qty()) {
             throw new WrongValueException("Cannot release over reserved qty");
-        }
-
-        else if (releasingComponentDTO.qty() == 0) {
+        } else if (releasingComponentDTO.qty() == 0) {
             throw new WrongValueException("Why?");
-        }
-
-        else {
+        } else {
             inventory.setQtyAvailable(inventory.getQtyAvailable() + releasingComponentDTO.qty());
             inventory.setQtyReserved(inventory.getQtyReserved() - releasingComponentDTO.qty());
             Component component = componentRepository.findById(releasingComponentDTO.componentId()).orElseThrow();
             Calendar rightNow = Calendar.getInstance();
-            Reservation releasing = new Reservation(null, component, releasingComponentDTO.qty(), ReservationStatus.RELEASED,new Timestamp(rightNow.getTimeInMillis()));
+            Reservation releasing = new Reservation(null, component, releasingComponentDTO.qty(), ReservationStatus.RELEASED, new Timestamp(rightNow.getTimeInMillis()));
             inventoryRepository.saveAndFlush(inventory);
             reservationRepository.saveAndFlush(releasing);
         }
-    }
-
-    public void updateStatus(PatchReservationStatusDTO patchReservationStatusDTO, Long id){
-        Reservation reservation = reservationRepository.findById(id).orElseThrow();
-        reservation.setReservationStatus(patchReservationStatusDTO.status());
-        reservationRepository.saveAndFlush(reservation);
     }
 
 

@@ -1,11 +1,9 @@
 package com.example.CableERP.Inventory;
 
-import com.example.CableERP.Common.Exception.DuplicateException;
-import com.example.CableERP.Common.Exception.MissingEntityException;
+
 import com.example.CableERP.Common.Exception.WrongValueException;
 import com.example.CableERP.Component.ComponentRepository;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
@@ -40,7 +38,6 @@ public class InventoryService {
         if(updateInventoryDTO.qtyAvilable() != null) currentInventory.setQtyAvailable(updateInventoryDTO.qtyAvilable());
         return inventoryRepository.saveAndFlush(currentInventory);
     }
-
 
     // fixed some errors, but now it seems not elegant, should be overwritten
     public Inventory createInventory(CreateInventoryDTO inventory){
