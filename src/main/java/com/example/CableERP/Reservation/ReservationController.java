@@ -13,13 +13,13 @@ public class ReservationController {
     final ReservationService reservationService;
 
 
-    public ReservationController(ReservationService reservationService){
+    public ReservationController(ReservationService reservationService) {
         this.reservationService = reservationService;
     }
 
 
     @GetMapping("/reservations")
-    public ResponseEntity<List<Reservation>> getAllReservations(){
+    public ResponseEntity<List<Reservation>> getAllReservations() {
         return ResponseEntity
                 .ok()
                 .body(reservationService.getAllReservations());
@@ -27,7 +27,7 @@ public class ReservationController {
 
 
     @PostMapping("/reserve")
-    public ResponseEntity<?> reserveComponent(@RequestBody ReservingComponentDTO reservation){
+    public ResponseEntity<?> reserveComponent(@RequestBody ReservingComponentDTO reservation) {
         reservationService.froze(reservation);
         return ResponseEntity
                 .ok()
@@ -36,13 +36,12 @@ public class ReservationController {
 
 
     @PostMapping("/release")
-    public ResponseEntity<?> releaseComponent(@RequestBody ReservingComponentDTO reservation){
+    public ResponseEntity<?> releaseComponent(@RequestBody ReservingComponentDTO reservation) {
         reservationService.release(reservation);
         return ResponseEntity
                 .ok()
                 .build();
     }
-
 
 
 }
