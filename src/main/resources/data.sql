@@ -59,7 +59,7 @@ INSERT INTO work_order (product_id, qty, status, created_at, started_at, finishe
 
 
 
-INSERT INTO vendor (name, phone, email, lead_time_days) VALUES
+INSERT INTO procurement (name, phone, email, lead_time_days) VALUES
   ('Alpha Supplies Sp. z o.o.', '+48 22 123 45 67', 'kontakt@alpha-supplies.pl', 5.50),
   ('Best Materials Ltd.', '+48 501 234 567', 'sales@bestmaterials.com', 3.25),
   ('Tech Components', '+48 22 765 43 21', 'info@tech-components.eu', 7.00),

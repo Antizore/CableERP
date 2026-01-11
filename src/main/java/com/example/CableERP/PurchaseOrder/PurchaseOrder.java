@@ -1,10 +1,9 @@
 package com.example.CableERP.PurchaseOrder;
 
 
-import com.example.CableERP.Vendor.Vendor;
+import com.example.CableERP.Procurement.Procurement;
 import jakarta.persistence.*;
 
-import java.sql.Time;
 import java.sql.Timestamp;
 
 @Entity
@@ -15,7 +14,7 @@ public class PurchaseOrder {
     private Long id;
 
     @ManyToOne
-    private Vendor vendor;
+    private Procurement procurement;
 
     @Enumerated
     private PurchaseOrderStatus purchaseOrderStatus;

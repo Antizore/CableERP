@@ -1,6 +1,6 @@
 package com.example.CableERP.Customer;
 
-import com.example.CableERP.Order.Order;
+import com.example.CableERP.Customer.CustomerOrder.Order;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;

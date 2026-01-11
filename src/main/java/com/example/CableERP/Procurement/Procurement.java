@@ -1,4 +1,4 @@
-package com.example.CableERP.Vendor;
+package com.example.CableERP.Procurement;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -8,11 +8,11 @@ import jakarta.persistence.Id;
 import java.sql.Time;
 
 @Entity
-public class Vendor {
+public class Procurement {
 
-    protected Vendor(){}
+    protected Procurement(){}
 
-    public Vendor(Long id, String name, String phone, String email, Double leadTimeDays, Time createdAt) {
+    public Procurement(Long id, String name, String phone, String email, Double leadTimeDays, Time createdAt) {
         this.id = id;
         this.name = name;
         this.phone = phone;

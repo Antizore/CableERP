@@ -2,8 +2,7 @@ package com.example.CableERP.Product;
 
 
 import com.example.CableERP.BillOfMaterials.BillOfMaterials;
-import com.example.CableERP.Order.Order;
-import com.example.CableERP.Order.OrderItem;
+import com.example.CableERP.Customer.CustomerOrder.OrderItem;
 import com.example.CableERP.WorkOrder.WorkOrder;
 import jakarta.persistence.*;
 

@@ -94,7 +94,7 @@ CREATE TABLE work_order (
 
 
 
-CREATE TABLE vendor (
+CREATE TABLE procurement (
     id BIGSERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     phone VARCHAR(50),
@@ -106,7 +106,7 @@ CREATE TABLE vendor (
 
 CREATE TABLE purchase_order (
     id BIGSERIAL PRIMARY KEY,
-    vendor_id INT NOT NULL REFERENCES vendor(id),
+    vendor_id INT NOT NULL REFERENCES procurement(id),
     status VARCHAR(20) NOT NULL CHECK (status IN ('draft', 'sent', 'received', 'cancelled')),
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     sent_at TIMESTAMP NULL,

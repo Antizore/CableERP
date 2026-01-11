@@ -1,4 +1,4 @@
-package com.example.CableERP.Order;
+package com.example.CableERP.Customer.CustomerOrder;
 
 
 import org.springframework.http.ResponseEntity;
