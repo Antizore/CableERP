@@ -11,4 +11,5 @@ import java.util.List;
 @Repository
 public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
     List<OrderItem> findAllByOrderId(@Param("order_id") Long orderId);
+    void deleteAllByOrderId(@Param("order_id") Long orderId);
 }

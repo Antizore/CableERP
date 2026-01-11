@@ -37,7 +37,7 @@ public class ComponentController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Component> getComponent(@RequestParam Long id){
+    public ResponseEntity<Component> getComponent(@PathVariable Long id){
         return ResponseEntity
                 .ok()
                 .body(componentService.getComponent(id));

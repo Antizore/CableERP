@@ -9,7 +9,7 @@ import java.util.List;
 
 @RestController
 @Transactional
-@RequestMapping("customers/orders")
+@RequestMapping("/customers/orders")
 public class OrderController {
     
     private final OrderService orderService;
@@ -35,8 +35,8 @@ public class OrderController {
     Then pozycja zostaje zapisana, a suma zamówienia się aktualizuje
 
      */
-    @PostMapping("/{id}/items")
-    public ResponseEntity<?> createItemsInOrder(@RequestParam Long orderId,@RequestBody List<CreateItemsInOrderDTO> itemsInOrderDTO){
+    @PostMapping("/{orderId}/items")
+    public ResponseEntity<?> createItemsInOrder(@PathVariable Long orderId,@RequestBody List<CreateItemsInOrderDTO> itemsInOrderDTO){
         orderService.addItemsToOrder(orderId, itemsInOrderDTO);
         return ResponseEntity
                 .ok()
