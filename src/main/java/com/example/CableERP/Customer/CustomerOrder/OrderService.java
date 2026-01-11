@@ -1,12 +1,15 @@
 package com.example.CableERP.Customer.CustomerOrder;
 
 
+import com.example.CableERP.Common.Exception.IllegalOperationException;
 import com.example.CableERP.Customer.CustomerRepository;
 import com.example.CableERP.Product.ProductCreateDTO;
 import com.example.CableERP.Product.ProductRepository;
+import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.sql.Timestamp;
@@ -68,7 +71,7 @@ public class OrderService {
 
     }
 
-    public Order saveOrderToDB(CreateOrderDTO customerOrderDTO){
+    public Order saveOrderToDB(@NonNull CreateOrderDTO customerOrderDTO){
         Calendar rightNow = Calendar.getInstance();
 
         Order order = new Order(
@@ -83,9 +86,11 @@ public class OrderService {
     }
 
 
-    public void addItemsToOrder(Long orderId,List<CreateItemsInOrderDTO> createItemsInOrderDTOList){
+    public void addItemsToOrder(Long orderId, @NonNull List<CreateItemsInOrderDTO> createItemsInOrderDTOList){
         Order order = orderRepository.findById(orderId).orElseThrow();
+        OrderStatus[] blockedStatuses = {OrderStatus.CANCELLED, OrderStatus.COMPLETED, OrderStatus.IN_PRODUCTION};
 
+        if(Arrays.stream(blockedStatuses).toList().contains(order.getOrderStatus())) throw new IllegalOperationException("Cannot add items to this order because of its status: "+order.getOrderStatus());
         List<OrderItem> orderItemList = new ArrayList<>();
         for(CreateItemsInOrderDTO item : createItemsInOrderDTOList){
             orderItemList.add(

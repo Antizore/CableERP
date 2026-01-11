@@ -52,5 +52,12 @@ public class GlobalExceptionHandler {
                 .body(ex.getMessage());
     }
 
+    @ExceptionHandler(IllegalOperationException.class)
+    public ResponseEntity<String> handleIllegalOperation(IllegalOperationException ex){
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(ex.getMessage());
+    }
+
 
 }
