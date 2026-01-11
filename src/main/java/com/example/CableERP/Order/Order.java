@@ -2,10 +2,13 @@ package com.example.CableERP.Order;
 
 
 import com.example.CableERP.Customer.Customer;
+import com.example.CableERP.Product.Product;
 import jakarta.persistence.*;
 
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "customer_order")
@@ -33,6 +36,9 @@ public class Order {
     private OrderStatus status;
     private Timestamp createdAt;
     private Timestamp updatedAt;
+
+    @OneToMany(mappedBy = "order")
+    private List<OrderItem> orderItemList = new ArrayList<>();
 
     public Long getId() {
         return id;

@@ -36,17 +36,17 @@ public class OrderController {
 
      */
     @PostMapping("/{id}/items")
-    public ResponseEntity<?> createItemsInOrder(@RequestBody CreateOrderDTO customerOrder){
+    public ResponseEntity<?> createItemsInOrder(@RequestParam Long orderId,@RequestBody List<CreateItemsInOrderDTO> itemsInOrderDTO){
+        orderService.addItemsToOrder(orderId, itemsInOrderDTO);
         return ResponseEntity
                 .ok()
-                .body(orderService.saveOrderToDB(customerOrder));
-
+                .build();
     }
 
 
     @GetMapping
     @Transactional(readOnly = true)
-    public ResponseEntity<List<Order>> getAllOrders(){
+    public ResponseEntity<List<ShowOrderDTO>> getAllOrders(){
         return ResponseEntity
                 .ok()
                 .body(orderService.returnAllOrders());

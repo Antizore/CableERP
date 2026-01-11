@@ -2,6 +2,8 @@ package com.example.CableERP.Product;
 
 
 import com.example.CableERP.BillOfMaterials.BillOfMaterials;
+import com.example.CableERP.Order.Order;
+import com.example.CableERP.Order.OrderItem;
 import com.example.CableERP.WorkOrder.WorkOrder;
 import jakarta.persistence.*;
 
@@ -36,7 +38,8 @@ public class Product {
     @OneToMany(mappedBy = "workOrderProduct", cascade = CascadeType.ALL)
     private List<WorkOrder> workOrderList = new ArrayList<>();
 
-
+    @OneToMany(mappedBy = "product")
+    private List<OrderItem> orderItemList = new ArrayList<>();
 
 
     public Long getId() { return id; }

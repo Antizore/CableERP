@@ -2,8 +2,10 @@ package com.example.CableERP.Order;
 
 
 import com.example.CableERP.Customer.CustomerRepository;
+import com.example.CableERP.Product.ProductRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.sql.Timestamp;
@@ -13,14 +15,28 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
     private final CustomerRepository customerRepository;
+    private final ProductRepository productRepository;
+    private final OrderItemRepository orderItemRepository;
 
-    public OrderService(OrderRepository orderRepository, CustomerRepository customerRepository){
+    public OrderService(OrderRepository orderRepository, CustomerRepository customerRepository, ProductRepository productRepository, OrderItemRepository orderItemRepository){
         this.orderRepository = orderRepository;
         this.customerRepository = customerRepository;
+        this.productRepository = productRepository;
+        this.orderItemRepository = orderItemRepository;
     }
 
-    public List<Order> returnAllOrders(){
-        return orderRepository.findAll();
+    public List<ShowOrderDTO> returnAllOrders(){
+
+        List<ShowOrderDTO> orders = new ArrayList<>();
+        for(Order order : orderRepository.findAll()){
+            orders.add(
+                    new ShowOrderDTO(order, orderItemRepository.findAllByOrderId(order.getId()))
+            );
+        }
+
+
+        return orders;
+
     }
 
     public Order returnOrderById(Long id){
@@ -40,5 +56,24 @@ public class OrderService {
 
         return orderRepository.saveAndFlush(order);
     }
+
+
+    public void addItemsToOrder(Long orderId,List<CreateItemsInOrderDTO> createItemsInOrderDTOList){
+        Order order = orderRepository.findById(orderId).orElseThrow();
+
+        List<OrderItem> orderItemList = new ArrayList<>();
+        for(CreateItemsInOrderDTO item : createItemsInOrderDTOList){
+            orderItemList.add(
+                    new OrderItem(
+                            order,
+                            productRepository.findById(item.productId()).orElseThrow(),
+                            item.qty()
+                    )
+            );
+        }
+        orderItemRepository.saveAllAndFlush(orderItemList);
+    }
+
+
 
 }
