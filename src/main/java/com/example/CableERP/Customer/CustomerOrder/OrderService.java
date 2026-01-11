@@ -2,6 +2,7 @@ package com.example.CableERP.Customer.CustomerOrder;
 
 
 import com.example.CableERP.Customer.CustomerRepository;
+import com.example.CableERP.Product.ProductCreateDTO;
 import com.example.CableERP.Product.ProductRepository;
 import org.springframework.stereotype.Service;
 
@@ -26,17 +27,30 @@ public class OrderService {
     }
 
     public List<ShowOrderDTO> returnAllOrders(){
-
         List<ShowOrderDTO> orders = new ArrayList<>();
+
+
+        /*
+
+            id BIGSERIAL PRIMARY KEY,
+            order_id BIGINT REFERENCES customer_order(id) ON DELETE CASCADE,
+            product_id BIGINT REFERENCES product(id),
+            qty NUMERIC(10,2) NOT NULL
+
+         */
+
         for(Order order : orderRepository.findAll()){
+            List<OrderItemDTO> orderItemDTOList = new ArrayList<>();
+            List<OrderItem> aa = orderItemRepository.findAllByOrderId(order.getId());
+            for(OrderItem order1 : aa){
+                orderItemDTOList.add(new OrderItemDTO(new ProductCreateDTO(order1.getProduct().getName(),order1.getProduct().getDescription()),order1.getQty()));
+            }
+
             orders.add(
-                    new ShowOrderDTO(order, orderItemRepository.findAllByOrderId(order.getId()))
+                    new ShowOrderDTO(order, orderItemDTOList)
             );
         }
-
-
         return orders;
-
     }
 
     public Order returnOrderById(Long id){
