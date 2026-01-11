@@ -54,7 +54,7 @@ public class OrderController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<Order> getSpecificOrder(@PathVariable Long id){
+    public ResponseEntity<ShowOrderDTO> getSpecificOrder(@PathVariable Long id){
 
         return ResponseEntity
                 .ok()

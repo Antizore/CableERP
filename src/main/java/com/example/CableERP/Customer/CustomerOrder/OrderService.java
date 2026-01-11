@@ -53,8 +53,19 @@ public class OrderService {
         return orders;
     }
 
-    public Order returnOrderById(Long id){
-        return orderRepository.findById(id).orElseThrow();
+    public ShowOrderDTO returnOrderById(Long id){
+        Order order = orderRepository.findById(id).orElseThrow();
+
+        List<OrderItemDTO> orderItemDTOList = new ArrayList<>();
+        List<OrderItem> aa = orderItemRepository.findAllByOrderId(order.getId());
+
+        for(OrderItem order1 : aa){
+            orderItemDTOList.add(new OrderItemDTO(new ProductCreateDTO(order1.getProduct().getName(),order1.getProduct().getDescription()),order1.getQty()));
+        }
+
+
+        return new ShowOrderDTO(order, orderItemDTOList);
+
     }
 
     public Order saveOrderToDB(CreateOrderDTO customerOrderDTO){
