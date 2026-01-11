@@ -8,11 +8,10 @@ import com.example.CableERP.Product.ProductRepository;
 import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.List;
+import java.util.*;
 import java.sql.Timestamp;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderService {
@@ -88,11 +87,23 @@ public class OrderService {
 
     public void addItemsToOrder(Long orderId, @NonNull List<CreateItemsInOrderDTO> createItemsInOrderDTOList){
         Order order = orderRepository.findById(orderId).orElseThrow();
-        OrderStatus[] blockedStatuses = {OrderStatus.CANCELLED, OrderStatus.COMPLETED, OrderStatus.IN_PRODUCTION};
-
-        if(Arrays.stream(blockedStatuses).toList().contains(order.getOrderStatus())) throw new IllegalOperationException("Cannot add items to this order because of its status: "+order.getOrderStatus());
+        List<OrderItem> currentItems = orderItemRepository.findAllByOrderId(orderId);
         List<OrderItem> orderItemList = new ArrayList<>();
+        OrderStatus[] blockedStatuses = {OrderStatus.CANCELLED, OrderStatus.COMPLETED, OrderStatus.IN_PRODUCTION};
+        if(Arrays.stream(blockedStatuses).toList().contains(order.getOrderStatus())) throw new IllegalOperationException("Cannot add items to this order because of its status: "+order.getOrderStatus());
+
+
+        // zmapować na <Long, OrderItem> aby móc porównywać
+        Map<Long, OrderItem> currentItemsMap = currentItems.stream().collect(Collectors.toMap(orderItem -> orderItem.getProduct().getId(), Function.identity()));
+
+
         for(CreateItemsInOrderDTO item : createItemsInOrderDTOList){
+
+            if(currentItemsMap.containsKey(item.productId())) {
+
+            }
+
+
             orderItemList.add(
                     new OrderItem(
                             order,

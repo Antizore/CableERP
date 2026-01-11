@@ -9,7 +9,7 @@ import java.util.List;
 
 @RestController
 @Transactional
-@RequestMapping("/orders")
+@RequestMapping("customers/orders")
 public class OrderController {
     
     private final OrderService orderService;
