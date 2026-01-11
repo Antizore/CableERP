@@ -1,5 +1,5 @@
 -- ================================
--- CLEANUP (dla środowiska testowego)
+-- CLEANUP
 -- ================================
 DROP TABLE IF EXISTS stock_reservation CASCADE;
 DROP TABLE IF EXISTS inventory_item CASCADE;
@@ -8,9 +8,7 @@ DROP TABLE IF EXISTS component CASCADE;
 DROP TABLE IF EXISTS product CASCADE;
 DROP TABLE IF EXISTS customer CASCADE;
 
--- ================================
--- FAZA 1 — PODSTAWOWE TABELKI
--- ================================
+
 CREATE TABLE customer (
     id BIGSERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
@@ -38,9 +36,7 @@ CREATE TABLE bill_of_material (
     qty NUMERIC(10,2) NOT NULL CHECK (qty > 0)
 );
 
--- ================================
--- FAZA 2 — MAGAZYN I REZERWACJE
--- ================================
+
 CREATE TABLE inventory_item (
     id BIGSERIAL PRIMARY KEY,
     component_id BIGINT NOT NULL REFERENCES component(id) ON DELETE CASCADE,
@@ -65,9 +61,6 @@ CREATE TABLE product_inventory (
 );
 
 
--- ========================
---  Faza 3 — Zamówienia klienta
--- ========================
 
 CREATE TABLE customer_order (
     id BIGSERIAL PRIMARY KEY,
@@ -86,9 +79,6 @@ CREATE TABLE customer_order_item (
 );
 
 
--- ========================
---  Faza 4 — Work Order
--- ========================
 
 
 CREATE TABLE work_order (
@@ -102,9 +92,7 @@ CREATE TABLE work_order (
 );
 
 
--- ========================
---  Faza 6 — Vendorzy
--- ========================
+
 
 CREATE TABLE vendor (
     id BIGSERIAL PRIMARY KEY,
