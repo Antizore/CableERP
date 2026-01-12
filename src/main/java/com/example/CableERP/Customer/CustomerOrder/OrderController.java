@@ -11,32 +11,25 @@ import java.util.List;
 @Transactional
 @RequestMapping("/customers/orders")
 public class OrderController {
-    
+
     private final OrderService orderService;
-    
-    public OrderController(OrderService orderService){
+
+    public OrderController(OrderService orderService) {
         this.orderService = orderService;
     }
 
 
     @PostMapping
-    public ResponseEntity<Order> createNewOrder(@RequestBody CreateOrderDTO customerOrder){
+    public ResponseEntity<Order> createNewOrder(@RequestBody CreateOrderDTO customerOrder) {
         return ResponseEntity
                 .ok()
                 .body(orderService.saveOrderToDB(customerOrder));
 
     }
 
-    /*
-    TODO: 3.2 Dodanie pozycji do zamówienia
 
-    Given zamówienie w statusie NEW
-    When wysyłam POST /orders/{id}/items
-    Then pozycja zostaje zapisana, a suma zamówienia się aktualizuje
-
-     */
     @PostMapping("/{orderId}/items")
-    public ResponseEntity<?> createItemsInOrder(@PathVariable Long orderId,@RequestBody List<CreateItemsInOrderDTO> itemsInOrderDTO){
+    public ResponseEntity<?> createItemsInOrder(@PathVariable Long orderId, @RequestBody List<CreateItemsInOrderDTO> itemsInOrderDTO) {
         orderService.addItemsToOrder(orderId, itemsInOrderDTO);
         return ResponseEntity
                 .ok()
@@ -46,7 +39,7 @@ public class OrderController {
 
     @GetMapping
     @Transactional(readOnly = true)
-    public ResponseEntity<List<ShowOrderDTO>> getAllOrders(){
+    public ResponseEntity<List<ShowOrderDTO>> getAllOrders() {
         return ResponseEntity
                 .ok()
                 .body(orderService.returnAllOrders());
