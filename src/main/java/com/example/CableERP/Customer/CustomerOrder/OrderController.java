@@ -47,13 +47,30 @@ public class OrderController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<ShowOrderDTO> getSpecificOrder(@PathVariable Long id){
+    public ResponseEntity<ShowOrderDTO> getSpecificOrder(@PathVariable Long id) {
 
         return ResponseEntity
                 .ok()
                 .body(orderService.returnOrderById(id));
     }
 
+    //TODO: THIS
+
+    @PatchMapping("")
+    public ResponseEntity<?> updateItemInOrder() {
+        return ResponseEntity
+                .ok()
+                .build();
+    }
+
+    //TODO: THIS
+
+    @DeleteMapping("")
+    public ResponseEntity<?> deleteItemFromOrder() {
+        return ResponseEntity
+                .ok()
+                .build();
+    }
 
 
 }
