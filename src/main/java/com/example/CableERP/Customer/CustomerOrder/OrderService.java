@@ -46,7 +46,7 @@ public class OrderService {
             List<OrderItemDTO> orderItemDTOList = new ArrayList<>();
             List<OrderItem> aa = orderItemRepository.findAllByOrderId(order.getId());
             for (OrderItem order1 : aa) {
-                orderItemDTOList.add(new OrderItemDTO(new ProductCreateDTO(order1.getProduct().getName(), order1.getProduct().getDescription()), order1.getQty()));
+                orderItemDTOList.add(new OrderItemDTO(order1.getId(), new ProductCreateDTO(order1.getProduct().getName(), order1.getProduct().getDescription()), order1.getQty()));
             }
 
             orders.add(
@@ -63,7 +63,7 @@ public class OrderService {
         List<OrderItem> aa = orderItemRepository.findAllByOrderId(order.getId());
 
         for (OrderItem order1 : aa) {
-            orderItemDTOList.add(new OrderItemDTO(new ProductCreateDTO(order1.getProduct().getName(), order1.getProduct().getDescription()), order1.getQty()));
+            orderItemDTOList.add(new OrderItemDTO(order1.getId(), new ProductCreateDTO(order1.getProduct().getName(), order1.getProduct().getDescription()), order1.getQty()));
         }
 
 
