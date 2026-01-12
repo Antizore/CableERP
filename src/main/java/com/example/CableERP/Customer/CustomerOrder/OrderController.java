@@ -63,10 +63,11 @@ public class OrderController {
                 .build();
     }
 
-    //TODO: THIS
 
-    @DeleteMapping("")
-    public ResponseEntity<?> deleteItemFromOrder() {
+
+    @DeleteMapping("/{orderId}/items")
+    public ResponseEntity<?> deleteItemFromOrder(@PathVariable Long orderId, @RequestParam(required = false) Long itemId) {
+        orderService.deleteItemsFromOrder(orderId,itemId);
         return ResponseEntity
                 .ok()
                 .build();
