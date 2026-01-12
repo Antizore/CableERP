@@ -54,10 +54,10 @@ public class OrderController {
                 .body(orderService.returnOrderById(id));
     }
 
-    //TODO: THIS
 
-    @PatchMapping("")
-    public ResponseEntity<?> updateItemInOrder() {
+    @PatchMapping("/{orderId}/items")
+    public ResponseEntity<?> updateItemInOrder(@PathVariable Long orderId, @RequestParam Long itemId, @RequestBody Double qty) {
+        orderService.updateItemInOrder(orderId, itemId, qty);
         return ResponseEntity
                 .ok()
                 .build();
