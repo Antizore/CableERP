@@ -1,13 +1,11 @@
 package com.example.CableERP.Procurement;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.sql.Time;
 
 @Entity
+@Table(name = "procurement")
 public class Procurement {
 
     protected Procurement(){}

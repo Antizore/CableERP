@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/vendors")
+@RequestMapping("/procurements")
 public class ProcurementController {
 
     private final ProcurementService procurementService;
