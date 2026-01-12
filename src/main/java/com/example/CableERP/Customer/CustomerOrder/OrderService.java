@@ -2,6 +2,7 @@ package com.example.CableERP.Customer.CustomerOrder;
 
 
 import com.example.CableERP.Common.Exception.IllegalOperationException;
+import com.example.CableERP.Common.Exception.WrongValueException;
 import com.example.CableERP.Customer.CustomerRepository;
 import com.example.CableERP.Product.ProductCreateDTO;
 import com.example.CableERP.Product.ProductRepository;
@@ -116,6 +117,27 @@ public class OrderService {
         //that's some lazy work...
         orderItemRepository.deleteAllByOrderId(orderId);
         orderItemRepository.saveAllAndFlush(orderItemList);
+    }
+
+
+    public void deleteItemsFromOrder(Long orderId, Long id){
+        Order order = orderRepository.findById(orderId).orElseThrow();
+        OrderStatus[] blockedStatuses = {OrderStatus.CANCELLED, OrderStatus.COMPLETED, OrderStatus.IN_PRODUCTION};
+        if (Arrays.stream(blockedStatuses).toList().contains(order.getOrderStatus()))
+            throw new IllegalOperationException("Cannot delete items from this order because of its status: " + order.getOrderStatus());
+        if(id == null) orderItemRepository.deleteAllByOrderId(orderId);
+        else orderItemRepository.deleteById(id);
+    }
+
+    public void updateItemInOrder(Long orderId, Long id, Double qty) {
+        Order order = orderRepository.findById(orderId).orElseThrow();
+        OrderStatus[] blockedStatuses = {OrderStatus.CANCELLED, OrderStatus.COMPLETED, OrderStatus.IN_PRODUCTION};
+        if (Arrays.stream(blockedStatuses).toList().contains(order.getOrderStatus()))
+            throw new IllegalOperationException("Cannot change items in this order because of its status: " + order.getOrderStatus());
+
+        OrderItem orderItem = orderItemRepository.findById(id).orElseThrow();
+        if(qty.isNaN() || qty==0 || qty < 0) throw new WrongValueException("Did you mean delete?");
+        else orderItem.setQty(qty);
     }
 
 
