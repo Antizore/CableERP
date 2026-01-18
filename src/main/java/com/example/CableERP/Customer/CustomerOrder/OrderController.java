@@ -20,6 +20,7 @@ public class OrderController {
 
 
 
+    // TODO: add estimated days in response
     @PostMapping
     public ResponseEntity<ShowOrderDTO> createNewOrder(@RequestParam Long customerId,@RequestBody List<CreateItemsInOrderDTO> itemsInOrderDTO) {
         Order order = orderService.saveOrderToDB(itemsInOrderDTO,customerId);
