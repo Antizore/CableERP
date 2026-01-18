@@ -71,18 +71,18 @@ public class OrderService {
 
     }
 
-    public Order saveOrderToDB(@NonNull CreateOrderDTO customerOrderDTO) {
+    public Order saveOrderToDB(@NonNull List<CreateItemsInOrderDTO> createItemsInOrderDTOList, Long customerId) {
         Calendar rightNow = Calendar.getInstance();
 
         Order order = new Order(
-                customerRepository.findById(customerOrderDTO.customerId()).orElseThrow(),
-                customerOrderDTO.orderNumber(),
+                customerRepository.findById(customerId).orElseThrow(),
                 OrderStatus.NEW,
                 new Timestamp(rightNow.getTimeInMillis()),
                 new Timestamp(rightNow.getTimeInMillis())
         );
-
-        return orderRepository.saveAndFlush(order);
+        Order saved = orderRepository.saveAndFlush(order);
+        addItemsToOrder(saved.getId(),createItemsInOrderDTOList);
+        return saved;
     }
 
 

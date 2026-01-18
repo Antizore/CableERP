@@ -19,22 +19,15 @@ public class OrderController {
     }
 
 
+
     @PostMapping
-    public ResponseEntity<Order> createNewOrder(@RequestBody CreateOrderDTO customerOrder) {
+    public ResponseEntity<ShowOrderDTO> createNewOrder(@RequestParam Long customerId,@RequestBody List<CreateItemsInOrderDTO> itemsInOrderDTO) {
+        Order order = orderService.saveOrderToDB(itemsInOrderDTO,customerId);
         return ResponseEntity
                 .ok()
-                .body(orderService.saveOrderToDB(customerOrder));
-
+                .body(orderService.returnOrderById(order.getId()));
     }
 
-
-    @PostMapping("/{orderId}/items")
-    public ResponseEntity<?> createItemsInOrder(@PathVariable Long orderId, @RequestBody List<CreateItemsInOrderDTO> itemsInOrderDTO) {
-        orderService.addItemsToOrder(orderId, itemsInOrderDTO);
-        return ResponseEntity
-                .ok()
-                .build();
-    }
 
 
     @GetMapping
@@ -48,13 +41,14 @@ public class OrderController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ShowOrderDTO> getSpecificOrder(@PathVariable Long id) {
-
         return ResponseEntity
                 .ok()
                 .body(orderService.returnOrderById(id));
     }
 
 
+    /*
+    Patching can break optimization algorithm, for now comment
     @PatchMapping("/{orderId}/items")
     public ResponseEntity<?> updateItemInOrder(@PathVariable Long orderId, @RequestParam Long itemId, @RequestBody Double qty) {
         orderService.updateItemInOrder(orderId, itemId, qty);
@@ -63,7 +57,7 @@ public class OrderController {
                 .build();
     }
 
-
+     */
 
     @DeleteMapping("/{orderId}/items")
     public ResponseEntity<?> deleteItemFromOrder(@PathVariable Long orderId, @RequestParam(required = false) Long itemId) {
