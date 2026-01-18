@@ -79,3 +79,10 @@ INSERT INTO purchase_order_item (purchase_order_id, component_id, qty) VALUES
     (2, 4, 120),
     (3, 1, 1000),
     (3, 3, 70);
+
+
+INSERT INTO alerts (status, category, created_at, read_at) VALUES
+('UNREAD', 'OPTIMIZATION', '2025-01-10 08:15:00', NULL),
+('READ', 'PLACEHOLDER', '2025-01-09 12:30:00', '2025-01-09 14:00:00'),
+('UNREAD', 'OPTIMIZATION', '2025-01-11 09:45:00', NULL);
+

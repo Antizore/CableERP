@@ -118,3 +118,12 @@ CREATE TABLE purchase_order_item (
     component_id INT NOT NULL REFERENCES component(id),
     qty NUMERIC(12,2) NOT NULL CHECK (qty > 0)
 );
+
+
+CREATE TABLE alerts (
+    id SERIAL PRIMARY KEY,
+    status VARCHAR(20) NOT NULL CHECK (status IN ('UNREAD', 'READ')),
+    category VARCHAR(20) NOT NULL CHECK (category IN ('OPTIMIZATION', 'PLACEHOLDER')),
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    read_at TIMESTAMP NULL
+);
