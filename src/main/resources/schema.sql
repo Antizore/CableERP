@@ -19,7 +19,8 @@ CREATE TABLE customer (
 CREATE TABLE product (
     id BIGSERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    description TEXT
+    description TEXT,
+    minutes_to_produce NUMERIC(10,4) NOT NULL check ( minutes_to_produce > 0 )
 );
 
 CREATE TABLE component (

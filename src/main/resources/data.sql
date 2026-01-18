@@ -3,9 +3,9 @@ INSERT INTO customer (name, phone, email) VALUES
 ('Jan Kowalski', '123-456-789', 'jan.kowalski@example.com'),
 ('Anna Nowak', '987-654-321', 'anna.nowak@example.com');
 
-INSERT INTO product (name, description) VALUES
-('Kabel USB-C 2m', 'Kabel do ładowania USB-C o długości 2 metry'),
-('Przedłużacz 5m', 'Przedłużacz elektryczny 5 metrów, 3 gniazda');
+INSERT INTO product (name, description, minutes_to_produce) VALUES
+('Kabel USB-C 2m', 'Kabel do ładowania USB-C o długości 2 metry', 1),
+('Przedłużacz 5m', 'Przedłużacz elektryczny 5 metrów, 3 gniazda', 1);
 
 INSERT INTO component (name, unit, cost_per_unit) VALUES
 ('Miedź 1mm', 'meter', 0.50),
