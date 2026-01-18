@@ -15,9 +15,8 @@ public class Order {
 
     protected Order(){}
 
-    public Order(Customer customer, String orderNumber, OrderStatus status, Timestamp createdAt, Timestamp updatedAt) {
+    public Order(Customer customer, OrderStatus status, Timestamp createdAt, Timestamp updatedAt) {
         this.customer = customer;
-        this.orderNumber = orderNumber;
         this.status = status;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
@@ -30,7 +29,6 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
     private Customer customer;
-    private String orderNumber;
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
     private Timestamp createdAt;
@@ -49,14 +47,6 @@ public class Order {
 
     public void setCustomer(Customer customer) {
         this.customer = customer;
-    }
-
-    public String getOrderNumber() {
-        return orderNumber;
-    }
-
-    public void setOrderNumber(String orderNumber) {
-        this.orderNumber = orderNumber;
     }
 
     public OrderStatus getOrderStatus() {

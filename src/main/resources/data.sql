@@ -44,9 +44,9 @@ VALUES
 (1002, 5, 3, 'RELEASED'); -- rezerwacja zwolniona
 
 
-INSERT INTO customer_order (customer_id, order_number, status) VALUES
-(1, 'ORD-2025-0001', 'NEW'),
-(2, 'ORD-2025-0002', 'COMPLETED');
+INSERT INTO customer_order (customer_id, status) VALUES
+(1,  'NEW'),
+(2, 'COMPLETED');
 
 INSERT INTO customer_order_item (order_id, product_id, qty) VALUES
 (1, 1, 10),  -- 10 kabli zasilających
