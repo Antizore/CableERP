@@ -1,4 +1,4 @@
 package com.example.CableERP.Procurement;
 
-public record ProcurementInComponentDTO() {
+public record ProcurementInComponentDTO(String name, String email, Double leadTimeDays) {
 }
