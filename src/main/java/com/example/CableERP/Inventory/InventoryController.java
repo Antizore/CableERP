@@ -19,17 +19,10 @@ public class InventoryController {
 
 
     @GetMapping()
-    public ResponseEntity<?> getInventory(@RequestParam(required = false) Long componentId){
-        if(componentId == null) {
+    public ResponseEntity<?> getInventory(){
             return ResponseEntity.
                     ok()
                     .body(inventoryService.returnInventoryList());
-        }
-        else {
-            return ResponseEntity.
-                    ok()
-                    .body(inventoryService.returnSingleInventoryByComponentId(componentId));
-        }
     }
 
     @GetMapping(path = "/{id}")
