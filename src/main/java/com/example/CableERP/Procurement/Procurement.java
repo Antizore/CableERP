@@ -1,5 +1,7 @@
 package com.example.CableERP.Procurement;
 
+import com.example.CableERP.Component.Component;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.sql.Time;
@@ -27,6 +29,9 @@ public class Procurement {
     private String email;
     private Double leadTimeDays;
     private Time createdAt;
+    @OneToOne
+    @JoinColumn(name = "component_id")
+    private Component component;
 
 
     public Long getId() {
@@ -71,5 +76,13 @@ public class Procurement {
 
     public void setCreatedAt(Time createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public Component getComponent() {
+        return component;
+    }
+
+    public void setComponent(Component component) {
+        this.component = component;
     }
 }
