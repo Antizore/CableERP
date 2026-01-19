@@ -47,7 +47,7 @@ CREATE TABLE inventory_item (
 
 CREATE TABLE stock_reservation (
     id BIGSERIAL PRIMARY KEY,
-    order_id BIGINT, -- pojawi się w Faza 3
+    order_id BIGINT,
     component_id BIGINT NOT NULL REFERENCES component(id) ON DELETE CASCADE,
     qty NUMERIC(10,2) NOT NULL CHECK (qty > 0),
     status VARCHAR(20) NOT NULL CHECK (status IN ('FROZEN', 'RELEASED')),
@@ -96,6 +96,7 @@ CREATE TABLE work_order (
 
 CREATE TABLE procurement (
     id BIGSERIAL PRIMARY KEY,
+    component_id BIGINT REFERENCES component(id) ON DELETE CASCADE,
     name VARCHAR(255) NOT NULL,
     phone VARCHAR(50),
     email VARCHAR(255) UNIQUE,
