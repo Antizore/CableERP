@@ -60,7 +60,8 @@ public class WorkOrderService {
     public void startWorkOrder(Long id){
         WorkOrder workOrder = workOrderRepository.findById(id).orElseThrow();
         //TODO zrobić customowy exception w module WorkOrder
-        if (workOrder.getStatus() != WorkOrderStatus.PLANNED) throw new WrongValueException("tu inny exception");
+        if (workOrder.getStatus() != WorkOrderStatus.PLANNED)
+            throw new WrongValueException("tu inny exception");
 
          List<BillOfMaterials> ListOfBills = billOfMaterialsRepository.findAllByProduct_Id(workOrder.getProduct().getId());
          List<Inventory> inventoryList = new ArrayList<>();
