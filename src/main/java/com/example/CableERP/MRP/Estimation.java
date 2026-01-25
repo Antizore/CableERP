@@ -62,4 +62,63 @@ public class Estimation {
     }
 
 
+    /*
+
+    [Timestamp, boolean]
+
+
+    2 ways of getting response
+
+    [Timestamp, true] => machine is available now, Timestamp = current time
+
+    [Timestamp, false] => machine is unavailable now, returned Timestamp gives the nearest date when machine
+                          will be free
+
+     */
+    public List<Object> estimateMachineAvailability() {
+        Timestamp lastPlanned = workOrderRepository.findLastPlanned();
+        Calendar calendar = Calendar.getInstance();
+        Timestamp now = new Timestamp(calendar.getTimeInMillis());
+        List<Object> response = new ArrayList<>();
+        if (now.after(lastPlanned)) {
+            response.add(now);
+            response.add(true);
+        } else {
+            response.add(lastPlanned);
+            response.add(false);
+        }
+        return response;
+    }
+
+
+    //take the later one, production cannot run without components and also when the machine is occupied
+    public Timestamp finalStart(Double daysFromNow, List<Object> machineAvailability) {
+        Timestamp firstDate = calculateDateFromDaysAndCurrentTimestamp(daysFromNow);
+        Timestamp secondDate = (Timestamp) machineAvailability.getFirst();
+        return (firstDate.after(secondDate)) ? firstDate : secondDate;
+    }
+
+
+    protected Timestamp calculateDateFromDaysAndCurrentTimestamp(double daysFromNow) {
+
+        int days = Integer.parseInt(Double.toString(daysFromNow).split("\\.")[0]);
+        int reminder = Integer.parseInt(Double.toString(daysFromNow).split("\\.")[1]);
+        double hours = reminder * 24.0 / 10.0;
+        int wholeHours = Integer.parseInt(Double.toString(hours).split("\\.")[0]);
+        int minutes = Integer.parseInt(Double.toString(hours).split("\\.")[1]);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_WEEK, days);
+        calendar.add(Calendar.HOUR, wholeHours);
+        calendar.add(Calendar.MINUTE, minutes);
+
+        return new Timestamp(calendar.getTimeInMillis());
+    }
+
+
+    public void returnApproxRealizationDate(Timestamp startDate, Double productionTime){
+
+    }
+
+
 }
