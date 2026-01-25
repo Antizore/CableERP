@@ -53,9 +53,9 @@ INSERT INTO customer_order_item (order_id, product_id, qty) VALUES
 (2, 2, 5);   -- 5 przedłużaczy 3m
 
 
-INSERT INTO work_order (product_id, qty, status, created_at, started_at, finished_at) VALUES
-(1, 10, 'PLANNED', '2025-01-05 08:15:00', NULL, NULL),
-(2,  45.00, 'FINISHED', '2025-01-04 09:30:00', NULL, NULL);
+INSERT INTO work_order (product_id, qty, status, created_at,planned_start_at ,started_at, finished_at, planned_end_at) VALUES
+(1, 10, 'PLANNED', '2025-01-05 08:15:00','2025-01-05 08:15:00', NULL, NULL,'2025-01-05 12:15:00'),
+(2,  45.00, 'FINISHED', '2025-01-04 09:30:00','2025-01-04 09:30:00', '2025-01-04 09:30:00', '2025-01-04 12:30:00','2025-01-04 12:30:00');
 
 
 

@@ -87,8 +87,10 @@ CREATE TABLE work_order (
     qty NUMERIC(10,2) NOT NULL,
     status VARCHAR(20) CHECK (status IN ('PLANNED', 'IN_PROGRESS','FINISHED')),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    started_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    finished_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    planned_start_at TIMESTAMP,
+    started_at TIMESTAMP,
+    finished_at TIMESTAMP,
+    planned_end_at TIMESTAMP
 );
 
 
