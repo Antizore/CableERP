@@ -8,5 +8,9 @@ public record ReturnAllWorkOrdersDTO (
         Double qty,
         WorkOrderStatus workOrderStatus,
         Timestamp createdAt,
+        Timestamp plannedStartAt,
         Timestamp startedAt,
-        Timestamp finishedAt) { }
+        Timestamp finishedAt,
+        Timestamp plannedEndAt
+
+) { }

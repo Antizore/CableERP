@@ -12,11 +12,16 @@ public class WorkOrder {
 
     protected WorkOrder(){}
 
-    public WorkOrder(Product workOrderProduct, Double qty, WorkOrderStatus status, Timestamp createdAt) {
+    public WorkOrder(Product workOrderProduct, Double qty, WorkOrderStatus status,Timestamp createdAt,
+                     Timestamp plannedStartAt, Timestamp startedAt, Timestamp finishedAt, Timestamp plannedEndAt) {
         this.workOrderProduct = workOrderProduct;
         this.qty = qty;
         this.status = status;
         this.createdAt = createdAt;
+        this.plannedStartAt = plannedStartAt;
+        this.startedAt = startedAt;
+        this.finishedAt = finishedAt;
+        this.plannedEndAt = plannedEndAt;
     }
 
     @Id
@@ -30,8 +35,10 @@ public class WorkOrder {
     @Enumerated(EnumType.STRING)
     private WorkOrderStatus status;
     private Timestamp createdAt;
+    private Timestamp plannedStartAt;
     private Timestamp startedAt;
     private Timestamp finishedAt;
+    private Timestamp plannedEndAt;
 
 
     public Long getId() {
@@ -84,5 +91,21 @@ public class WorkOrder {
 
     public void setFinishedAt(Timestamp finishedAt) {
         this.finishedAt = finishedAt;
+    }
+
+    public Timestamp getPlannedStartAt() {
+        return plannedStartAt;
+    }
+
+    public void setPlannedStartAt(Timestamp plannedStartAt) {
+        this.plannedStartAt = plannedStartAt;
+    }
+
+    public Timestamp getPlannedEndAt() {
+        return plannedEndAt;
+    }
+
+    public void setPlannedEndAt(Timestamp plannedEndAt) {
+        this.plannedEndAt = plannedEndAt;
     }
 }
