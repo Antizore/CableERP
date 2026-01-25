@@ -30,9 +30,9 @@ public class Estimation {
 
             List<BillOfMaterialsForEstimate> listOfNeededComponents = orderItem.getProduct().getBillOfMaterialsList().
                     stream().map(
-                    b -> new BillOfMaterialsForEstimate(b.getQty(), new Component(b.getComponent().getName(),
-                            b.getComponent().getUnit(),b.getComponent().getCostPerUnit()))
-            ).toList();
+                            b -> new BillOfMaterialsForEstimate(b.getQty(), new Component(b.getComponent().getName(),
+                                    b.getComponent().getUnit(), b.getComponent().getCostPerUnit()))
+                    ).toList();
 
             for (BillOfMaterialsForEstimate bill : listOfNeededComponents) {
                 summaricOfComponentNeeds.putIfAbsent(bill.component(), bill.qty() * orderItem.getQty());
@@ -48,13 +48,12 @@ public class Estimation {
         Map<Component, Double> componentAvailability = new HashMap<>();
 
         summaricOfComponentNeeds.forEach(
-                (k,v) -> {
+                (k, v) -> {
                     Double availableQty = inventoryRepository.findByComponentId(k.getId()).getQtyAvailable();
-                    if(v > availableQty) {
-                        componentAvailability.put(k,k.getProcurement().getLeadTimeDays());
-                    }
-                    else {
-                        componentAvailability.put(k,0.);
+                    if (v > availableQty) {
+                        componentAvailability.put(k, k.getProcurement().getLeadTimeDays());
+                    } else {
+                        componentAvailability.put(k, 0.);
                     }
                 }
         );
