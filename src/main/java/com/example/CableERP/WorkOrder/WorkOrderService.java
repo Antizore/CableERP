@@ -39,8 +39,10 @@ public class WorkOrderService {
                         workOrder.getQty(),
                         workOrder.getStatus(),
                         workOrder.getCreatedAt(),
+                        workOrder.getPlannedStartAt(),
                         workOrder.getStartedAt(),
-                        workOrder.getFinishedAt()
+                        workOrder.getFinishedAt(),
+                        workOrder.getPlannedEndAt()
                 )
         ).sorted((Comparator.comparing(ReturnAllWorkOrdersDTO::createdAt))).toList();
     }
@@ -50,7 +52,7 @@ public class WorkOrderService {
         if(createWorkOrderDTO.qty() <= 0) throw  new WrongValueException("Qty cannot be less or equal 0");
         Calendar calendar =  Calendar.getInstance();
         Product product = productRepository.findById(createWorkOrderDTO.productId()).orElseThrow();
-        WorkOrder workOrder = new WorkOrder(product, createWorkOrderDTO.qty(), WorkOrderStatus.PLANNED, new Timestamp(calendar.getTimeInMillis()));
+        WorkOrder workOrder = new WorkOrder(product, createWorkOrderDTO.qty(), WorkOrderStatus.PLANNED, new Timestamp(calendar.getTimeInMillis()), null, null,null,null);
         workOrderRepository.saveAndFlush(workOrder);
         return new CreateWorkOrderResponseDTO(workOrder.getId(),product.getId(),workOrder.getQty(), workOrder.getStatus());
     }
