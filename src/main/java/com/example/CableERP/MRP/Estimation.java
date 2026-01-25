@@ -21,7 +21,7 @@ public class Estimation {
         this.workOrderRepository = workOrderRepository;
     }
 
-    public Double estimateComponentsAvailiability(List<OrderItem> orderItemList) {
+    public Double estimateComponentsAvailiabilityInDaysFromNow(List<OrderItem> orderItemList) {
 
         Map<Component, Double> summaricOfComponentNeeds = new HashMap<>();
         for (OrderItem orderItem : orderItemList) {
