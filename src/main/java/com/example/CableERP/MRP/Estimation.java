@@ -1,30 +1,27 @@
 package com.example.CableERP.MRP;
 
-import com.example.CableERP.BillOfMaterials.BillOfMaterialsDTO;
 import com.example.CableERP.BillOfMaterials.BillOfMaterialsForEstimate;
 import com.example.CableERP.Component.Component;
-import com.example.CableERP.Component.ComponentDTO;
 import com.example.CableERP.Customer.CustomerOrder.OrderItem;
-import com.example.CableERP.Inventory.Inventory;
 import com.example.CableERP.Inventory.InventoryRepository;
-import com.example.CableERP.Procurement.ProcurementRepository;
+import com.example.CableERP.WorkOrder.WorkOrderRepository;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.util.*;
 
 
-public class EstimateOrderDate {
+public class Estimation {
 
     private final InventoryRepository inventoryRepository;
+    private final WorkOrderRepository workOrderRepository;
 
-    public EstimateOrderDate(InventoryRepository inventoryRepository) {
+    public Estimation(InventoryRepository inventoryRepository, WorkOrderRepository workOrderRepository) {
         this.inventoryRepository = inventoryRepository;
+        this.workOrderRepository = workOrderRepository;
     }
 
-    public Double estimate(List<OrderItem> orderItemList) {
+    public Double estimateComponentsAvailiability(List<OrderItem> orderItemList) {
 
         Map<Component, Double> summaricOfComponentNeeds = new HashMap<>();
         for (OrderItem orderItem : orderItemList) {
