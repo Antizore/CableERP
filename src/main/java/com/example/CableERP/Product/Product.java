@@ -3,7 +3,6 @@ package com.example.CableERP.Product;
 
 import com.example.CableERP.BillOfMaterials.BillOfMaterials;
 import com.example.CableERP.Customer.CustomerOrder.OrderItem;
-import com.example.CableERP.WorkOrder.WorkOrder;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -33,9 +32,6 @@ public class Product {
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<BillOfMaterials> billOfMaterialsList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "workOrderProduct", cascade = CascadeType.ALL)
-    private List<WorkOrder> workOrderList = new ArrayList<>();
 
     @OneToMany(mappedBy = "product")
     private List<OrderItem> orderItemList = new ArrayList<>();
@@ -70,14 +66,6 @@ public class Product {
 
     public void setBillOfMaterialsList(List<BillOfMaterials> billOfMaterialsList) {
         this.billOfMaterialsList = billOfMaterialsList;
-    }
-
-    public List<WorkOrder> getWorkOrderList() {
-        return workOrderList;
-    }
-
-    public void setWorkOrderList(List<WorkOrder> workOrderList) {
-        this.workOrderList = workOrderList;
     }
 
     public List<OrderItem> getOrderItemList() {
