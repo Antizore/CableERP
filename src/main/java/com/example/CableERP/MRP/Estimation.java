@@ -2,26 +2,47 @@ package com.example.CableERP.MRP;
 
 import com.example.CableERP.BillOfMaterials.BillOfMaterialsForEstimate;
 import com.example.CableERP.Component.Component;
+import com.example.CableERP.Component.ComponentRepository;
 import com.example.CableERP.Customer.CustomerOrder.OrderItem;
+import com.example.CableERP.Customer.CustomerOrder.OrderRepository;
 import com.example.CableERP.Inventory.InventoryRepository;
-import com.example.CableERP.WorkOrder.WorkOrderRepository;
+import org.springframework.stereotype.Service;
 
+import java.math.RoundingMode;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.text.DecimalFormat;
 import java.util.*;
 
-
+@Service
 public class Estimation {
 
     private final InventoryRepository inventoryRepository;
-    private final WorkOrderRepository workOrderRepository;
+    private final ComponentRepository componentRepository;
+    private final OrderRepository orderRepository;
 
-    public Estimation(InventoryRepository inventoryRepository, WorkOrderRepository workOrderRepository) {
+    public Estimation(InventoryRepository inventoryRepository, ComponentRepository componentRepository, OrderRepository orderRepository) {
         this.inventoryRepository = inventoryRepository;
-        this.workOrderRepository = workOrderRepository;
+        this.componentRepository = componentRepository;
+        this.orderRepository = orderRepository;
     }
 
-    public Double estimateComponentsAvailiabilityInDaysFromNow(List<OrderItem> orderItemList) {
+    // first one is planned start
+    // second one is planned end
+    public List<Timestamp> estimate(List<OrderItem> orderItemList) {
+
+        Timestamp plannedStart = finalStart( estimateComponentsAvailiabilityInDaysFromNow(orderItemList),
+                estimateMachineAvailability());
+
+        Timestamp plannedEnd = returnApproxRealizationDate(plannedStart,orderItemList);
+
+        return List.of(plannedStart,plannedEnd);
+
+    }
+
+
+
+    private Double estimateComponentsAvailiabilityInDaysFromNow(List<OrderItem> orderItemList) {
 
         Map<Component, Double> summaricOfComponentNeeds = new HashMap<>();
         for (OrderItem orderItem : orderItemList) {
@@ -49,11 +70,12 @@ public class Estimation {
 
         summaricOfComponentNeeds.forEach(
                 (k, v) -> {
-                    Double availableQty = inventoryRepository.findByComponentId(k.getId()).getQtyAvailable();
+                    Component component = componentRepository.findByName(k.getName());
+                    Double availableQty = inventoryRepository.findByComponentId(component.getId()).getQtyAvailable();
                     if (v > availableQty) {
-                        componentAvailability.put(k, k.getProcurement().getLeadTimeDays());
+                        componentAvailability.put(component, component.getProcurement().getLeadTimeDays());
                     } else {
-                        componentAvailability.put(k, 0.);
+                        componentAvailability.put(component, 0.);
                     }
                 }
         );
@@ -75,8 +97,8 @@ public class Estimation {
                           will be free
 
      */
-    public List<Object> estimateMachineAvailability() {
-        Timestamp lastPlanned = workOrderRepository.findLastPlanned();
+    private List<Object> estimateMachineAvailability() {
+        Timestamp lastPlanned = orderRepository.findFirstByPlannedEndAtIsNotNullOrderByPlannedEndAtDesc().getPlannedEndAt();
         Calendar calendar = Calendar.getInstance();
         Timestamp now = new Timestamp(calendar.getTimeInMillis());
         List<Object> response = new ArrayList<>();
@@ -92,22 +114,23 @@ public class Estimation {
 
 
     //take the later one, production cannot run without components and also when the machine is occupied
-    public Timestamp finalStart(Double daysFromNow, List<Object> machineAvailability) {
-        Timestamp firstDate = calculateDateFromDaysAndCurrentTimestamp(daysFromNow);
+    private Timestamp finalStart(Double daysFromNow, List<Object> machineAvailability) {
+        Date date = new Date();
+        Timestamp firstDate = calculateFutureDateFromGivenTimestampAndDays(daysFromNow, new Timestamp(date.getTime()));
         Timestamp secondDate = (Timestamp) machineAvailability.getFirst();
         return (firstDate.after(secondDate)) ? firstDate : secondDate;
     }
 
 
-    protected Timestamp calculateDateFromDaysAndCurrentTimestamp(double daysFromNow) {
-
-        int days = Integer.parseInt(Double.toString(daysFromNow).split("\\.")[0]);
-        int reminder = Integer.parseInt(Double.toString(daysFromNow).split("\\.")[1]);
-        double hours = reminder * 24.0 / 10.0;
+    private Timestamp calculateFutureDateFromGivenTimestampAndDays(double givenDays, Timestamp givenDate){
+        int days = Integer.parseInt(Double.toString(givenDays).split("\\.")[0]);
+        int reminder = Integer.parseInt(Double.toString(givenDays).split("\\.")[1]);
+        double hours = reminder * 24.0 / 100.0;
         int wholeHours = Integer.parseInt(Double.toString(hours).split("\\.")[0]);
         int minutes = Integer.parseInt(Double.toString(hours).split("\\.")[1]);
 
         Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(givenDate.getTime());
         calendar.add(Calendar.DAY_OF_WEEK, days);
         calendar.add(Calendar.HOUR, wholeHours);
         calendar.add(Calendar.MINUTE, minutes);
@@ -116,8 +139,19 @@ public class Estimation {
     }
 
 
-    public void returnApproxRealizationDate(Timestamp startDate, Double productionTime){
+    private Timestamp returnApproxRealizationDate(Timestamp startDate, List<OrderItem> orderItemList){
+        double prodtimeInMinutes = 0;
+        for (OrderItem orderItem : orderItemList) {
+            prodtimeInMinutes += orderItem.getProduct().getMinutesToProduceOnePiece() * orderItem.getQty();
+        }
 
+        double prodtimeInDays = prodtimeInMinutes/60.0/24.0;
+        DecimalFormat df = new DecimalFormat("#.##");
+        df.setRoundingMode(RoundingMode.HALF_UP);
+        String value = (df.format(prodtimeInDays));
+        value = value.replace(",",".");
+
+        return calculateFutureDateFromGivenTimestampAndDays(Double.parseDouble(value),startDate);
     }
 
 
