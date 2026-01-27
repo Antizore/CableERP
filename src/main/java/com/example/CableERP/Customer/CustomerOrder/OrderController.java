@@ -1,11 +1,14 @@
 package com.example.CableERP.Customer.CustomerOrder;
 
 
+import com.example.CableERP.MRP.Estimation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @Transactional
@@ -22,11 +25,11 @@ public class OrderController {
 
     // TODO: add estimated days in response
     @PostMapping
-    public ResponseEntity<ShowOrderDTO> createNewOrder(@RequestParam Long customerId,@RequestBody List<CreateItemsInOrderDTO> itemsInOrderDTO) {
+    public ResponseEntity<Order> createNewOrder(@RequestParam Long customerId, @RequestBody List<CreateItemsInOrderDTO> itemsInOrderDTO) {
         Order order = orderService.saveOrderToDB(itemsInOrderDTO,customerId);
         return ResponseEntity
                 .ok()
-                .body(orderService.returnOrderById(order.getId()));
+                .body(order);
     }
 
 
