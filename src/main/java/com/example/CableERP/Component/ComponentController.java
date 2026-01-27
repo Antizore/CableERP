@@ -30,14 +30,14 @@ public class ComponentController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Component>> getComponents(){
+    public ResponseEntity<List<ComponentResponseDTO>> getComponents(){
         return ResponseEntity
                 .ok()
                 .body(componentService.getComponents());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Component> getComponent(@PathVariable Long id){
+    public ResponseEntity<ComponentResponseDTO> getComponent(@PathVariable Long id){
         return ResponseEntity
                 .ok()
                 .body(componentService.getComponent(id));

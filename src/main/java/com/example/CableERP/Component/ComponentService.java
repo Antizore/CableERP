@@ -39,21 +39,45 @@ public class ComponentService {
     }
 
 
-    public List<Component> getComponents(){
-        return componentRepository.findAll();
+    public List<ComponentResponseDTO> getComponents(){
+        //return componentRepository.findAll();
+
+        return componentRepository.findAll().stream().map(
+                component -> new ComponentResponseDTO(
+                        component.getId(),
+                        component.getName(),
+                        component.getUnit(),
+                        component.getCostPerUnit()
+                        //component.getProcurement()
+                        //component.getReservationList()
+                )
+        ).toList();
     }
 
-    public Component getComponent(Long id){return componentRepository.findById(id).orElseThrow();}
+    public ComponentResponseDTO getComponent(Long id){
+        Component component = componentRepository.findById(id).orElseThrow();
+
+        return new ComponentResponseDTO(
+                 component.getId(),
+                 component.getName(),
+                 component.getUnit(),
+                 component.getCostPerUnit()
+         );
+    }
+
+    public Component getComponentService(Long id){
+        return componentRepository.findById(id).orElseThrow();
+    }
 
 
 
     public void deleteComponent(Long id){
 
-        List<BillOfMaterialsDTO> dtoList = billOfMaterialsService.getBill(id, getComponent(id));
+        List<BillOfMaterialsDTO> dtoList = billOfMaterialsService.getBill(id, getComponentService(id));
 
         if (dtoList == null || dtoList.isEmpty())
         {
-            componentRepository.deleteById(getComponent(id).getId());
+            componentRepository.deleteById(getComponentService(id).getId());
         }
         else {
             throw new CannotDeleteException("Cannot delete components that are actively used in BOM. Delete BOM first.");
