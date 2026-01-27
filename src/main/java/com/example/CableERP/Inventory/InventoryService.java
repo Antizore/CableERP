@@ -3,6 +3,7 @@ package com.example.CableERP.Inventory;
 
 import com.example.CableERP.Common.Exception.WrongValueException;
 import com.example.CableERP.Component.ComponentRepository;
+import com.example.CableERP.Component.ComponentResponseDTO;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -20,12 +21,35 @@ public class InventoryService {
     }
 
 
-    public List<Inventory> returnInventoryList(){
-        return inventoryRepository.findAll();
+    public List<ShowInventoryDTO> returnInventoryList(){
+        return inventoryRepository.findAll().stream().map(
+                inventory ->                             new ShowInventoryDTO(
+                        inventory.getId(),
+                        inventory.getQtyAvailable(),
+                        inventory.getQtyReserved(),
+                        new ComponentResponseDTO(
+                                inventory.getComponent().getId(),
+                                inventory.getComponent().getName(),
+                                inventory.getComponent().getUnit(),
+                                inventory.getComponent().getCostPerUnit()
+                        )
+                )
+        ).toList();
     }
 
-    public Inventory returnSingleInventory(Long id){
-        return inventoryRepository.findById(id).orElseThrow();
+    public ShowInventoryDTO returnSingleInventory(Long id){
+        Inventory inventory = inventoryRepository.findById(id).orElseThrow();
+        return new ShowInventoryDTO(
+                inventory.getId(),
+                inventory.getQtyAvailable(),
+                inventory.getQtyReserved(),
+                new ComponentResponseDTO(
+                        inventory.getComponent().getId(),
+                        inventory.getComponent().getName(),
+                        inventory.getComponent().getUnit(),
+                        inventory.getComponent().getCostPerUnit()
+                )
+        );
     }
 
     public Inventory returnSingleInventoryByComponentId (Long id){return inventoryRepository.findByComponentId(id);}

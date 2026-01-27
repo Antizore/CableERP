@@ -1,4 +1,11 @@
 package com.example.CableERP.Inventory;
 
-public record ShowInventoryDTO() {
+import com.example.CableERP.Component.ComponentResponseDTO;
+
+public record ShowInventoryDTO(
+        Long id,
+        double qtyAvailable,
+        double qtyReserved,
+        ComponentResponseDTO component
+) {
 }
