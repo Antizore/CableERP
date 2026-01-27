@@ -63,12 +63,16 @@ CREATE TABLE product_inventory (
 
 
 
-CREATE TABLE customer_order (
+CREATE TABLE customer_order(
     id BIGSERIAL PRIMARY KEY,
-    customer_id BIGINT REFERENCES customer(id) ON DELETE CASCADE,
-    status VARCHAR(20) CHECK (status IN ('NEW','RESERVED','IN_PRODUCTION','COMPLETED','CANCELLED')),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    customer_id BIGINT NOT NULL REFERENCES customer (id) ON DELETE CASCADE,
+    status VARCHAR(20) NOT NULL CHECK (status IN ('NEW','RESERVED','IN_PRODUCTION','COMPLETED','CANCELLED')),
+    planned_start_at TIMESTAMP,
+    planned_end_at TIMESTAMP,
+    started_at TIMESTAMP,
+    finished_at TIMESTAMP,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE customer_order_item (
@@ -78,20 +82,6 @@ CREATE TABLE customer_order_item (
     qty NUMERIC(10,2) NOT NULL
 );
 
-
-
-
-CREATE TABLE work_order (
-    id BIGSERIAL PRIMARY KEY,
-    product_id BIGINT REFERENCES product(id),
-    qty NUMERIC(10,2) NOT NULL,
-    status VARCHAR(20) CHECK (status IN ('PLANNED', 'IN_PROGRESS','FINISHED')),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    planned_start_at TIMESTAMP,
-    started_at TIMESTAMP,
-    finished_at TIMESTAMP,
-    planned_end_at TIMESTAMP
-);
 
 
 
