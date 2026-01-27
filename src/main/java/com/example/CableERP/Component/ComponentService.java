@@ -88,7 +88,7 @@ public class ComponentService {
 
     public Component patchComponent(Long id, ComponentCreateDTO component){
 
-        Component updatedComponent = getComponent(id);
+        Component updatedComponent = getComponentService(id);
 
         if(!(component.name() == null || component.name().isBlank())) updatedComponent.setName(component.name());
         if(component.unit() != null) updatedComponent.setUnit(component.unit());
