@@ -13,7 +13,7 @@ import java.util.List;
 @Table(name = "customer_order")
 public class Order {
 
-    protected Order(){}
+    protected Order() {}
 
     public Order(Customer customer, OrderStatus status, Timestamp createdAt, Timestamp updatedAt) {
         this.customer = customer;
@@ -22,20 +22,40 @@ public class Order {
         this.updatedAt = updatedAt;
     }
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
-    @JoinColumn(name = "customer_id", referencedColumnName = "id")
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
+
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
     private OrderStatus status;
+
+    @Column(name = "planned_start_at")
+    private Timestamp plannedStartAt;
+
+    @Column(name = "planned_end_at")
+    private Timestamp plannedEndAt;
+
+    @Column(name = "started_at")
+    private Timestamp startedAt;
+
+    @Column(name = "finished_at")
+    private Timestamp finishedAt;
+
+    @Column(name = "created_at", nullable = false, updatable = false)
     private Timestamp createdAt;
+
+    @Column(name = "updated_at", nullable = false)
     private Timestamp updatedAt;
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItemList = new ArrayList<>();
+
+    /* ===== Getters / setters ===== */
 
     public Long getId() {
         return id;
@@ -49,27 +69,52 @@ public class Order {
         this.customer = customer;
     }
 
-    public OrderStatus getOrderStatus() {
+    public OrderStatus getStatus() {
         return status;
     }
 
-    public void setOrderStatus(OrderStatus status) {
+    public void setStatus(OrderStatus status) {
         this.status = status;
+    }
+
+    public Timestamp getPlannedStartAt() {
+        return plannedStartAt;
+    }
+
+    public void setPlannedStartAt(Timestamp plannedStartAt) {
+        this.plannedStartAt = plannedStartAt;
+    }
+
+    public Timestamp getPlannedEndAt() {
+        return plannedEndAt;
+    }
+
+    public void setPlannedEndAt(Timestamp plannedEndAt) {
+        this.plannedEndAt = plannedEndAt;
+    }
+
+    public Timestamp getStartedAt() {
+        return startedAt;
+    }
+
+    public void setStartedAt(Timestamp startedAt) {
+        this.startedAt = startedAt;
+    }
+
+    public Timestamp getFinishedAt() {
+        return finishedAt;
+    }
+
+    public void setFinishedAt(Timestamp finishedAt) {
+        this.finishedAt = finishedAt;
     }
 
     public Timestamp getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Timestamp createdAt) {
-        this.createdAt = createdAt;
-    }
-
     public Timestamp getUpdatedAt() {
         return updatedAt;
     }
-
-    public void setUpdatedAt(Timestamp updatedAt) {
-        this.updatedAt = updatedAt;
-    }
 }
+
