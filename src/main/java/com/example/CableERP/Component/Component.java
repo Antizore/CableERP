@@ -48,56 +48,16 @@ public class Component {
     private List<ComponentVendor> componentVendors = new ArrayList<>();
 
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Unit getUnit() {
-        return unit;
-    }
-
-    public void setUnit(Unit unit) {
-        this.unit = unit;
-    }
-
-    public Double getCostPerUnit() {
-        return costPerUnit;
-    }
-
-    public void setCostPerUnit(Double costPerUnit) {
-        this.costPerUnit = costPerUnit;
-    }
-
-    public List<BillOfMaterials> getBillOfMaterialsList() {
-        return billOfMaterialsList;
-    }
-
-    public void setBillOfMaterialsList(List<BillOfMaterials> billOfMaterialsList) {
-        this.billOfMaterialsList = billOfMaterialsList;
-    }
-
-    public Inventory getInventory() {
-        return inventory;
-    }
-
-    public void setInventory(Inventory inventory) {
-        this.inventory = inventory;
-    }
-
-    public List<Reservation> getReservationList() {
-        return reservationList;
-    }
-
-    public void setReservationList(List<Reservation> reservationList) {
-        this.reservationList = reservationList;
-    }
+    // Getters and Setters
+    public Long getId() { return id; }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+    public Unit getUnit() { return unit; }
+    public void setUnit(Unit unit) { this.unit = unit; }
+    public Double getCostPerUnit() { return costPerUnit; }
+    public void setCostPerUnit(Double costPerUnit) { this.costPerUnit = costPerUnit; }
+    public List<ComponentVendor> getComponentVendors() { return componentVendors; }
+    public Inventory getInventory() { return inventory; }
+    public void setInventory(Inventory inventory) { this.inventory = inventory; }
 
 }
