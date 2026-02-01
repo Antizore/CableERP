@@ -1,87 +1,49 @@
 package com.example.CableERP.Reservation;
 
 import com.example.CableERP.Component.Component;
+import com.example.CableERP.Customer.CustomerOrder.Order;
 import jakarta.persistence.*;
-
 import java.sql.Timestamp;
 
 @Entity
 @Table(name = "stock_reservation")
 public class Reservation {
 
-    protected Reservation(){}
+    protected Reservation() {}
 
-    public Reservation(Long id, Component component, double qty, ReservationStatus status, Timestamp createdAt){
+    public Reservation(Order order, Component component, double qty) {
+        this.customerOrder = order;
         this.component = component;
         this.qty = qty;
-        this.status = status;
-        this.createdAt = createdAt;
+        this.isFulfilled = false;
+        this.createdAt = new Timestamp(System.currentTimeMillis());
     }
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name="component_id",referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "customer_order_id")
+    private Order customerOrder; // Link do zamówienia klienta
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "component_id", nullable = false)
     private Component component;
 
-    @Column(name = "qty")
     private double qty;
 
-    @Column(name = "status")
-    @Enumerated(EnumType.STRING)
-    private ReservationStatus status;
+    @Column(name = "is_fulfilled")
+    private boolean isFulfilled = false; // Czy fizycznie mamy towar?
 
-    @Column(name = "created_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "created_at")
     private Timestamp createdAt;
 
-    public void setCreatedAt(Timestamp createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public void setReservationStatus(ReservationStatus status) {
-        this.status = status;
-    }
-
-    public void setQty(double qty) {
-        this.qty = qty;
-    }
-
-    public void setComponent(Component component) {
-        this.component = component;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public Component getComponent() {
-        return component;
-    }
-
-    public double getQty() {
-        return qty;
-    }
-
-    public ReservationStatus getReservationStatus() {
-        return status;
-    }
-
-    public Timestamp getCreatedAt() {
-        return createdAt;
-    }
+    // Getters and Setters
+    public Long getId() { return id; }
+    public boolean isFulfilled() { return isFulfilled; }
+    public void setFulfilled(boolean fulfilled) { isFulfilled = fulfilled; }
+    public double getQty() { return qty; }
+    public void setQty(double qty) { this.qty = qty; }
+    public Component getComponent() { return component; }
 }
-
-
-/*
- id BIGSERIAL PRIMARY KEY,
-    order_id BIGINT, -- pojawi się w Faza 3
-    component_id BIGINT NOT NULL REFERENCES component(id) ON DELETE CASCADE,
-    qty NUMERIC(10,2) NOT NULL CHECK (qty > 0),
-    status VARCHAR(20) NOT NULL CHECK (status IN ('FROZEN', 'RELEASED')),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-
-
- */
