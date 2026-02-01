@@ -1,10 +1,9 @@
 package com.example.CableERP.Customer.CustomerOrder;
 
-
 import com.example.CableERP.Customer.Customer;
+import com.example.CableERP.PurchaseOrder.PurchaseOrder;
+import com.example.CableERP.Reservation.Reservation;
 import jakarta.persistence.*;
-
-
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,11 +14,11 @@ public class Order {
 
     protected Order() {}
 
-    public Order(Customer customer, OrderStatus status, Timestamp createdAt, Timestamp updatedAt) {
+    public Order(Customer customer, OrderStatus status) {
         this.customer = customer;
         this.status = status;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
+        this.createdAt = new Timestamp(System.currentTimeMillis());
+        this.updatedAt = new Timestamp(System.currentTimeMillis());
     }
 
     @Id
@@ -31,7 +30,6 @@ public class Order {
     private Customer customer;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 20)
     private OrderStatus status;
 
     @Column(name = "planned_start_at")
@@ -40,81 +38,28 @@ public class Order {
     @Column(name = "planned_end_at")
     private Timestamp plannedEndAt;
 
-    @Column(name = "started_at")
-    private Timestamp startedAt;
-
-    @Column(name = "finished_at")
-    private Timestamp finishedAt;
-
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @Column(name = "created_at")
     private Timestamp createdAt;
 
-    @Column(name = "updated_at", nullable = false)
+    @Column(name = "updated_at")
     private Timestamp updatedAt;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItemList = new ArrayList<>();
 
-    /* ===== Getters / setters ===== */
+    @OneToMany(mappedBy = "customerOrder", cascade = CascadeType.ALL)
+    private List<Reservation> reservations = new ArrayList<>();
 
-    public Long getId() {
-        return id;
-    }
+    @OneToMany(mappedBy = "linkedCustomerOrder")
+    private List<PurchaseOrder> linkedPurchaseOrders = new ArrayList<>();
 
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }
-
-    public OrderStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(OrderStatus status) {
-        this.status = status;
-    }
-
-    public Timestamp getPlannedStartAt() {
-        return plannedStartAt;
-    }
-
-    public void setPlannedStartAt(Timestamp plannedStartAt) {
-        this.plannedStartAt = plannedStartAt;
-    }
-
-    public Timestamp getPlannedEndAt() {
-        return plannedEndAt;
-    }
-
-    public void setPlannedEndAt(Timestamp plannedEndAt) {
-        this.plannedEndAt = plannedEndAt;
-    }
-
-    public Timestamp getStartedAt() {
-        return startedAt;
-    }
-
-    public void setStartedAt(Timestamp startedAt) {
-        this.startedAt = startedAt;
-    }
-
-    public Timestamp getFinishedAt() {
-        return finishedAt;
-    }
-
-    public void setFinishedAt(Timestamp finishedAt) {
-        this.finishedAt = finishedAt;
-    }
-
-    public Timestamp getCreatedAt() {
-        return createdAt;
-    }
-
-    public Timestamp getUpdatedAt() {
-        return updatedAt;
-    }
+    // Getters and Setters
+    public Long getId() { return id; }
+    public OrderStatus getStatus() { return status; }
+    public void setStatus(OrderStatus status) { this.status = status; }
+    public List<OrderItem> getOrderItemList() { return orderItemList; }
+    public Timestamp getPlannedStartAt() { return plannedStartAt; }
+    public void setPlannedStartAt(Timestamp plannedStartAt) { this.plannedStartAt = plannedStartAt; }
+    public void setPlannedEndAt(Timestamp plannedEndAt) { this.plannedEndAt = plannedEndAt; }
 }
 

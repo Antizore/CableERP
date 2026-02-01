@@ -70,9 +70,7 @@ public class OrderService {
 
         Order order = new Order(
                 customerRepository.findById(customerId).orElseThrow(),
-                OrderStatus.NEW,
-                new Timestamp(rightNow.getTimeInMillis()),
-                new Timestamp(rightNow.getTimeInMillis())
+                OrderStatus.NEW
         );
         Order saved = orderRepository.saveAndFlush(order);
         addItemsToOrder(saved.getId(), createItemsInOrderDTOList);
