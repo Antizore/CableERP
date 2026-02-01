@@ -2,25 +2,29 @@ package com.example.CableERP.Inventory;
 
 import com.example.CableERP.Component.Component;
 import jakarta.persistence.*;
+import java.sql.Timestamp;
+import java.time.Instant;
 
 @Entity
 @Table(name = "inventory_item")
 public class Inventory {
 
-    protected Inventory(){}
+    protected Inventory() {}
 
-
-    public Inventory(double qtyAvailable, double qtyReserved, Component component) {
+    public Inventory(Component component, double qtyAvailable, double qtyReserved) {
+        this.component = component;
         this.qtyAvailable = qtyAvailable;
         this.qtyReserved = qtyReserved;
-        this.component = component;
+        this.updatedAt = Timestamp.from(Instant.now());
     }
-
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @OneToOne(optional = false)
+    @JoinColumn(name = "component_id", unique = true)
+    private Component component;
 
     @Column(name = "qty_available")
     private double qtyAvailable;
@@ -28,37 +32,14 @@ public class Inventory {
     @Column(name = "qty_reserved")
     private double qtyReserved;
 
+    @Column(name = "updated_at")
+    private Timestamp updatedAt;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="component_id",referencedColumnName = "id")
-    private Component component;
-
-
-    public Long getId() {
-        return id;
-    }
-
-    public double getQtyAvailable() {
-        return qtyAvailable;
-    }
-
-    public void setQtyAvailable(double qtyAvailable) {
-        this.qtyAvailable = qtyAvailable;
-    }
-
-    public double getQtyReserved() {
-        return qtyReserved;
-    }
-
-    public void setQtyReserved(double qtyReserved) {
-        this.qtyReserved = qtyReserved;
-    }
-
-    public Component getComponent() {
-        return component;
-    }
-
-    public void setComponent(Component component) {
-        this.component = component;
-    }
+    // Getters and Setters...
+    public Long getId() { return id; }
+    public Component getComponent() { return component; }
+    public double getQtyAvailable() { return qtyAvailable; }
+    public void setQtyAvailable(double qtyAvailable) { this.qtyAvailable = qtyAvailable; }
+    public double getQtyReserved() { return qtyReserved; }
+    public void setQtyReserved(double qtyReserved) { this.qtyReserved = qtyReserved; }
 }
