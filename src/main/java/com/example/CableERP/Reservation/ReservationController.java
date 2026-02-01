@@ -6,42 +6,30 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/orders")
+@RequestMapping("/reservations")
 public class ReservationController {
 
-
-    final ReservationService reservationService;
-
+    private final ReservationService reservationService;
 
     public ReservationController(ReservationService reservationService) {
         this.reservationService = reservationService;
     }
 
-
-    @GetMapping("/reservations")
+    @GetMapping
     public ResponseEntity<List<Reservation>> getAllReservations() {
-        return ResponseEntity
-                .ok()
-                .body(reservationService.getAllReservations());
+        return ResponseEntity.ok(reservationService.getAllReservations());
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<Void> createReservation(@RequestBody ReservationRequestDTO reservationRequest) {
+        reservationService.makeReservation(reservationRequest);
+        return ResponseEntity.ok().build();
     }
 
 
-    @PostMapping("/reserve")
-    public ResponseEntity<?> reserveComponent(@RequestBody ReservingComponentDTO reservation) {
-        reservationService.froze(reservation);
-        return ResponseEntity
-                .ok()
-                .build();
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> cancelReservation(@PathVariable Long id) {
+        reservationService.cancelReservation(id);
+        return ResponseEntity.ok().build();
     }
-
-
-    @PostMapping("/release")
-    public ResponseEntity<?> releaseComponent(@RequestBody ReservingComponentDTO reservation) {
-        reservationService.release(reservation);
-        return ResponseEntity
-                .ok()
-                .build();
-    }
-
-
 }
