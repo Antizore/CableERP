@@ -1,4 +1,7 @@
 package com.example.CableERP.Reservation;
 
-public class ReservationRequestDTO {
-}
+public record ReservationRequestDTO(
+        Long orderId,
+        Long componentId,
+        double qty
+) {}
