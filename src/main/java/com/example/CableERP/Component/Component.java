@@ -43,8 +43,8 @@ public class Component {
     @OneToMany(mappedBy = "component")
     private List<Reservation> reservationList;
 
-    @OneToOne(mappedBy = "component")
-    private Procurement procurement;
+    @OneToMany(mappedBy = "component", cascade = CascadeType.ALL)
+    private List<ComponentVendor> componentVendors = new ArrayList<>();
 
 
     public Long getId() {
