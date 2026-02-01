@@ -6,6 +6,7 @@ import com.example.CableERP.Inventory.Inventory;
 import com.example.CableERP.Procurement.Procurement;
 import com.example.CableERP.Reservation.Reservation;
 import com.example.CableERP.Common.Unit;
+import com.example.CableERP.Vendor.ComponentVendor;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.util.ArrayList;
@@ -99,11 +100,4 @@ public class Component {
         this.reservationList = reservationList;
     }
 
-    public Procurement getProcurement() {
-        return procurement;
-    }
-
-    public void setProcurement(Procurement procurement) {
-        this.procurement = procurement;
-    }
 }
