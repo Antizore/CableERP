@@ -25,7 +25,7 @@ public class Reservation {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_order_id")
-    private Order customerOrder; // Link do zamówienia klienta
+    private Order customerOrder;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "component_id", nullable = false)
@@ -34,7 +34,7 @@ public class Reservation {
     private double qty;
 
     @Column(name = "is_fulfilled")
-    private boolean isFulfilled = false; // Czy fizycznie mamy towar?
+    private boolean isFulfilled = false;
 
     @Column(name = "created_at")
     private Timestamp createdAt;
@@ -46,4 +46,5 @@ public class Reservation {
     public double getQty() { return qty; }
     public void setQty(double qty) { this.qty = qty; }
     public Component getComponent() { return component; }
+    public Order getCustomerOrder() {return customerOrder;}
 }

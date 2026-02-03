@@ -1,44 +1,116 @@
 package com.example.CableERP.Inventory;
 
-
 import com.example.CableERP.Common.Exception.WrongValueException;
+import com.example.CableERP.Component.Component;
 import com.example.CableERP.Component.ComponentRepository;
 import com.example.CableERP.Component.ComponentResponseDTO;
+import com.example.CableERP.Reservation.ReservationService;
+import jakarta.transaction.Transactional;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
 public class InventoryService {
 
-
-
     private final InventoryRepository inventoryRepository;
     private final ComponentRepository componentRepository;
+    private final ReservationService reservationService;
 
-    public InventoryService(InventoryRepository inventoryRepository, ComponentRepository componentRepository) {
+    public InventoryService(InventoryRepository inventoryRepository, ComponentRepository componentRepository,
+                            @Lazy ReservationService reservationService) {
         this.inventoryRepository = inventoryRepository;
         this.componentRepository = componentRepository;
+        this.reservationService = reservationService;
     }
 
 
-    public List<ShowInventoryDTO> returnInventoryList(){
-        return inventoryRepository.findAll().stream().map(
-                inventory ->                             new ShowInventoryDTO(
-                        inventory.getId(),
-                        inventory.getQtyAvailable(),
-                        inventory.getQtyReserved(),
-                        new ComponentResponseDTO(
-                                inventory.getComponent().getId(),
-                                inventory.getComponent().getName(),
-                                inventory.getComponent().getUnit(),
-                                inventory.getComponent().getCostPerUnit()
-                        )
-                )
-        ).toList();
+
+    public List<ShowInventoryDTO> getAllInventory() {
+        return inventoryRepository.findAll().stream()
+                .map(this::mapToDTO)
+                .toList();
     }
 
-    public ShowInventoryDTO returnSingleInventory(Long id){
-        Inventory inventory = inventoryRepository.findById(id).orElseThrow();
+    public ShowInventoryDTO getInventoryById(Long id) {
+        Inventory inventory = inventoryRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Inventory item not found id: " + id));
+        return mapToDTO(inventory);
+    }
+
+    public Inventory getInventoryEntityByComponentId(Long componentId) {
+        return inventoryRepository.findByComponentId(componentId)
+                .orElseThrow(() -> new RuntimeException("No inventory record for component: " + componentId));
+    }
+
+
+    @Transactional
+    public void receiveGoods(Long componentId, double quantity) {
+        if (quantity <= 0) throw new WrongValueException("Received quantity must be > 0");
+
+        Inventory inventory = getInventoryEntityByComponentId(componentId);
+        inventory.setQtyAvailable(inventory.getQtyAvailable() + quantity);
+        inventoryRepository.saveAndFlush(inventory);
+        reservationService.reallocateStockForComponent(componentId);
+    }
+
+    @Transactional
+    public void issueGoods(Long componentId, double quantity) {
+        Inventory inventory = getInventoryEntityByComponentId(componentId);
+
+        if (inventory.getQtyAvailable() < quantity) {
+            throw new WrongValueException("Not enough physical items to issue for production!");
+        }
+
+        inventory.setQtyAvailable(inventory.getQtyAvailable() - quantity);
+        double newReserved = Math.max(0, inventory.getQtyReserved() - quantity);
+        inventory.setQtyReserved(newReserved);
+        inventoryRepository.saveAndFlush(inventory);
+    }
+
+    @Transactional
+    public Inventory initializeOrUpdateInventory(CreateInventoryDTO dto) {
+        if (dto.componentId() == null) throw new WrongValueException("Component ID cannot be null");
+        if (dto.qtyAvailable() < 0 || dto.qtyReserved() < 0) throw new WrongValueException("Quantity cannot be negative");
+
+        return inventoryRepository.findByComponentId(dto.componentId())
+                .map(existing -> {
+                    existing.setQtyAvailable(dto.qtyAvailable());
+                    existing.setQtyReserved(dto.qtyReserved());
+                    return inventoryRepository.save(existing);
+                })
+                .orElseGet(() -> {
+                    Component component = componentRepository.findById(dto.componentId())
+                            .orElseThrow(() -> new RuntimeException("Component not found"));
+                    Inventory newInventory = new Inventory(component, dto.qtyAvailable(), dto.qtyReserved());
+                    return inventoryRepository.saveAndFlush(newInventory);
+                });
+    }
+
+
+    @Transactional
+    public Inventory manualCorrection(Long id, UpdateInventoryDTO dto) {
+        Inventory inventory = inventoryRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Inventory not found"));
+
+        if (dto.qtyAvailable() != null) {
+            if (dto.qtyAvailable() < 0) throw new WrongValueException("Available quantity cannot be negative");
+            inventory.setQtyAvailable(dto.qtyAvailable());
+        }
+
+        if (dto.qtyReserved() != null) {
+            if (dto.qtyReserved() < 0) throw new WrongValueException("Reserved quantity cannot be negative");
+            inventory.setQtyReserved(dto.qtyReserved());
+        }
+
+        return inventoryRepository.saveAndFlush(inventory);
+    }
+
+    public void deleteInventory(Long id) {
+        inventoryRepository.deleteById(id);
+    }
+
+    private ShowInventoryDTO mapToDTO(Inventory inventory) {
         return new ShowInventoryDTO(
                 inventory.getId(),
                 inventory.getQtyAvailable(),
@@ -51,40 +123,4 @@ public class InventoryService {
                 )
         );
     }
-
-    public Inventory returnSingleInventoryByComponentId (Long id){return inventoryRepository.findByComponentId(id);}
-
-
-    public Inventory updateInventory(Long id, UpdateInventoryDTO updateInventoryDTO){
-        Inventory currentInventory = inventoryRepository.findById(id).orElseThrow();
-        if((updateInventoryDTO.qtyAvilable() != null && updateInventoryDTO.qtyAvilable() < 0) || (updateInventoryDTO.qtyReserved() != null && updateInventoryDTO.qtyReserved() < 0)) throw new WrongValueException("qty value cannot be less than 0");
-        if(updateInventoryDTO.qtyReserved() != null) currentInventory.setQtyReserved(updateInventoryDTO.qtyReserved());
-        if(updateInventoryDTO.qtyAvilable() != null) currentInventory.setQtyAvailable(updateInventoryDTO.qtyAvilable());
-        return inventoryRepository.saveAndFlush(currentInventory);
-    }
-
-    // fixed some errors, but now it seems not elegant, should be overwritten
-    public Inventory createInventory(CreateInventoryDTO inventory){
-
-        if(inventory.componentId() == null){
-            throw new WrongValueException("Component Id cannot be null");
-        }
-        else {
-            Inventory inventory1 = inventoryRepository.findByComponentId(inventory.componentId());
-            if( inventory1 != null)  return updateInventory(inventory1.getId(), new UpdateInventoryDTO(inventory1.getQtyAvailable(), inventory1.getQtyReserved()));
-            else {
-                if(inventory.qtyAvilable() < 0 || inventory.qtyReserved() < 0) throw new WrongValueException("qty value cannot be less than 0");
-                return inventoryRepository.saveAndFlush(
-                        new Inventory(inventory.qtyAvilable(), inventory.qtyReserved(), componentRepository.findById(inventory.componentId()).orElseThrow())
-                );
-                 }
-            }
-
-    }
-
-    public void deleteInventory(Long id){
-        inventoryRepository.deleteById(id);
-    }
-
-
 }

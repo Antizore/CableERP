@@ -53,7 +53,7 @@ public class Order {
     @OneToMany(mappedBy = "linkedCustomerOrder")
     private List<PurchaseOrder> linkedPurchaseOrders = new ArrayList<>();
 
-    // Getters and Setters
+
     public Long getId() { return id; }
     public OrderStatus getStatus() { return status; }
     public void setStatus(OrderStatus status) { this.status = status; }

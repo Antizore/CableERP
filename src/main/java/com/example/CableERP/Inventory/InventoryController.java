@@ -1,7 +1,5 @@
 package com.example.CableERP.Inventory;
 
-import com.example.CableERP.Component.ComponentResponseDTO;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,49 +17,56 @@ public class InventoryController {
     }
 
 
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<List<ShowInventoryDTO>> getInventory(){
         return ResponseEntity
                 .ok()
-                .body(inventoryService.returnInventoryList());
+                .body(inventoryService.getAllInventory());
     }
 
-    @GetMapping(path = "/{id}")
-    public ResponseEntity <ShowInventoryDTO> getSingleInventory(@PathVariable Long id){
-        return ResponseEntity.
-                    ok()
-                    .body(
-                            inventoryService.returnSingleInventory(id)
-                    );
+    @GetMapping("/{id}")
+    public ResponseEntity<ShowInventoryDTO> getSingleInventory(@PathVariable Long id){
+        return ResponseEntity
+                .ok()
+                .body(inventoryService.getInventoryById(id));
     }
+
+
+    @PostMapping
+    public ResponseEntity<Void> initializeInventory(@RequestBody CreateInventoryDTO inventoryBody){
+        Inventory inventory = inventoryService.initializeOrUpdateInventory(inventoryBody);
+        URI location = URI.create("/inventory/" + inventory.getId());
+        return ResponseEntity
+                .created(location)
+                .build();
+    }
+
 
     @PatchMapping("/{id}")
-    public ResponseEntity <Inventory> updateSingleInventory(@PathVariable Long id, @RequestBody UpdateInventoryDTO updateInventoryDTO){
-        Inventory inventory = inventoryService.updateInventory(id,updateInventoryDTO);
+    public ResponseEntity<Inventory> manualCorrection(@PathVariable Long id, @RequestBody UpdateInventoryDTO updateInventoryDTO){
+        Inventory inventory = inventoryService.manualCorrection(id, updateInventoryDTO);
         return ResponseEntity
                 .ok()
                 .body(inventory);
     }
 
-
-    @PostMapping
-    public ResponseEntity<Inventory> addInventory(@RequestBody CreateInventoryDTO inventoryBody){
-        Inventory inventory = inventoryService.createInventory(inventoryBody);
-        URI location = URI.create("/inventory/"+inventory.getId());
-        return ResponseEntity.
-                created(location)
-                .build();
-    }
-
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteSingleInventory(@PathVariable Long id){
+    public ResponseEntity<String> deleteInventory(@PathVariable Long id){
         inventoryService.deleteInventory(id);
         return ResponseEntity
                 .ok()
                 .body("Deleted successfully");
     }
 
+    @PostMapping("/receive")
+    public ResponseEntity<String> receiveGoods(@RequestBody InventoryTransactionDTO transaction) {
+        inventoryService.receiveGoods(transaction.componentId(), transaction.qty());
+        return ResponseEntity.ok("Goods received successfully");
+    }
 
-
+    @PostMapping("/issue")
+    public ResponseEntity<String> issueGoods(@RequestBody InventoryTransactionDTO transaction) {
+        inventoryService.issueGoods(transaction.componentId(), transaction.qty());
+        return ResponseEntity.ok("Goods issued to production successfully");
+    }
 }
-

@@ -18,7 +18,7 @@ public class ProcurementController {
     }
 
 
-    //TODO: DTO Z UPDATE
+
     @PostMapping
     public ResponseEntity<Procurement> addVendor(@RequestBody Procurement procurement){
         procurementService.addVendor(procurement);

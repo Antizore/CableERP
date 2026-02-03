@@ -4,10 +4,12 @@ import com.example.CableERP.Component.Component;
 import com.example.CableERP.Component.ComponentRepository;
 import com.example.CableERP.Customer.CustomerOrder.Order;
 import com.example.CableERP.Customer.CustomerOrder.OrderRepository;
+import com.example.CableERP.Customer.CustomerOrder.OrderService;
 import com.example.CableERP.Inventory.Inventory;
 import com.example.CableERP.Inventory.InventoryRepository;
 import com.example.CableERP.Common.Exception.WrongValueException;
 import jakarta.transaction.Transactional;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,21 +21,23 @@ public class ReservationService {
     private final ComponentRepository componentRepository;
     private final InventoryRepository inventoryRepository;
     private final OrderRepository orderRepository;
+    private final OrderService orderService;
 
     public ReservationService(ReservationRepository reservationRepository,
                               ComponentRepository componentRepository,
                               InventoryRepository inventoryRepository,
-                              OrderRepository orderRepository) {
+                              OrderRepository orderRepository,
+                              @Lazy OrderService orderService) {
         this.reservationRepository = reservationRepository;
         this.componentRepository = componentRepository;
         this.inventoryRepository = inventoryRepository;
         this.orderRepository = orderRepository;
+        this.orderService = orderService;
     }
 
     public List<Reservation> getAllReservations() {
         return reservationRepository.findAll();
     }
-
 
     @Transactional
     public void makeReservation(ReservationRequestDTO request) {
@@ -53,10 +57,9 @@ public class ReservationService {
         Reservation reservation = new Reservation(order, component, request.qty());
         boolean hasCoverage = inventory.getQtyAvailable() >= inventory.getQtyReserved();
         reservation.setFulfilled(hasCoverage);
-        inventoryRepository.save(inventory);
-        reservationRepository.save(reservation);
+        inventoryRepository.saveAndFlush(inventory);
+        reservationRepository.saveAndFlush(reservation);
     }
-
 
     @Transactional
     public void cancelReservation(Long reservationId) {
@@ -66,15 +69,41 @@ public class ReservationService {
         double newReservedQty = inventory.getQtyReserved() - reservation.getQty();
         inventory.setQtyReserved(Math.max(newReservedQty, 0));
         inventoryRepository.save(inventory);
-        reservationRepository.delete(reservation); // Usuwamy rekord rezerwacji
+        reservationRepository.delete(reservation);
     }
 
     public double checkFreeStock(Long componentId) {
-        try {
-            Inventory inv = inventoryRepository.findByComponentId(componentId);
-            return inv.getQtyAvailable() - inv.getQtyReserved();
-        } catch (Exception e) {
-            return 0.0;
+        return inventoryRepository.findByComponentId(componentId)
+                .map(inv -> inv.getQtyAvailable() - inv.getQtyReserved())
+                .orElse(0.0);
+    }
+
+    @Transactional
+    public void reallocateStockForComponent(Long componentId) {
+        Inventory inventory = inventoryRepository.findByComponentId(componentId)
+                .orElseThrow(() -> new RuntimeException("Inventory not found"));
+
+        double availableToGive = inventory.getQtyAvailable();
+        List<Reservation> allReservations = reservationRepository
+                .findAllByComponentIdOrderByCustomerOrderCreatedAtAsc(componentId);
+
+        for (Reservation reservation : allReservations) {
+            double needed = reservation.getQty();
+
+            if (availableToGive >= needed) {
+                if (!reservation.isFulfilled()) {
+                    reservation.setFulfilled(true);
+                    reservationRepository.saveAndFlush(reservation);
+                    orderService.tryPromoteOrderToReady(reservation.getCustomerOrder().getId());
+                }
+                availableToGive -= needed;
+            } else {
+                if (reservation.isFulfilled()) {
+                    reservation.setFulfilled(false);
+                    reservationRepository.saveAndFlush(reservation);
+                }
+            }
         }
     }
+
 }

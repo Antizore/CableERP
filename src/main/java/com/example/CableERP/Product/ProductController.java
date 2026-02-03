@@ -20,7 +20,6 @@ public class ProductController {
 
     @GetMapping
     public ResponseEntity<List<ProductDTO>> getAllProducts(){
-        // TODO: MAKE PAGEABLE
         return ResponseEntity
                     .ok()
                     .body(productService.getAllProducts());

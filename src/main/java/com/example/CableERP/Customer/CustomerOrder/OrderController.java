@@ -1,7 +1,7 @@
 package com.example.CableERP.Customer.CustomerOrder;
 
 
-import com.example.CableERP.MRP.Estimation;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -21,17 +21,13 @@ public class OrderController {
         this.orderService = orderService;
     }
 
-
-
-    // TODO: add estimated days in response
     @PostMapping
     public ResponseEntity<Order> createNewOrder(@RequestParam Long customerId, @RequestBody List<CreateItemsInOrderDTO> itemsInOrderDTO) {
-        Order order = orderService.saveOrderToDB(itemsInOrderDTO,customerId);
+        Order order = orderService.placeOrder(customerId,itemsInOrderDTO);
         return ResponseEntity
                 .ok()
                 .body(order);
     }
-
 
 
     @GetMapping
@@ -63,9 +59,9 @@ public class OrderController {
 
      */
 
-    @DeleteMapping("/{orderId}/items")
-    public ResponseEntity<?> deleteItemFromOrder(@PathVariable Long orderId, @RequestParam(required = false) Long itemId) {
-        orderService.deleteItemsFromOrder(orderId,itemId);
+    @DeleteMapping("/{orderId}")
+    public ResponseEntity<?> deleteOrder(@PathVariable Long orderId, @RequestParam(required = false) Long itemId) {
+        orderService.deleteOrder(orderId);
         return ResponseEntity
                 .ok()
                 .build();

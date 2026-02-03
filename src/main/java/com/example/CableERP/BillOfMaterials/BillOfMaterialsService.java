@@ -85,29 +85,6 @@ public class BillOfMaterialsService {
         billOfMaterialsRepository.saveAllAndFlush(bomToSend.values().stream().toList());
     }
 
-
-    /*
-    Mój tok rozumowania jest taki, że front dostaje bom danego przedmiotu. Użytkownik sobie go edytuje i ja dostaję z
-    powrotem w jsonie wynik tego jak teraz użytkownik chce aby wyglądał bom. Powiedzmy, że ma
-
-    component_1 20szt
-    component_2 33szt
-
-    Dodał
-    component_3 10szt
-
-    oraz zmodyfikował
-    component_1 20szt -> component_1 10szt
-
-    Payload jaki oczekuję z powrotem to:
-
-    component_1 10szt
-    component_2 33szt
-    component_3 10szt
-
-    w teorii mógłbym wymagać tylko zmiany, ale nie spodziewam się w erpach że produkt składa się z miliona komponentów
-    a tak jest mi wygodniej :)
-     */
     public void updateBill(List<BomCreatingDTO> bomCreatingDTOList, Long id){
         Product product = productRepository.findById(id).orElseThrow();
         List<BillOfMaterials> productBOM = product.getBillOfMaterialsList();

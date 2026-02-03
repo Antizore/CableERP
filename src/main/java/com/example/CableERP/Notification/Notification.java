@@ -13,11 +13,11 @@ public class Notification {
 
     protected Notification(){}
 
-    public Notification(NotificationCategory category, NotificationStatus status, Timestamp createdAt, Timestamp readAt) {
+    public Notification(NotificationCategory category, NotificationStatus status, Timestamp createdAt, String message) {
         this.category = category;
         this.status = status;
         this.createdAt = createdAt;
-        this.readAt = readAt;
+        this.message = message;
     }
 
     @Id
@@ -29,6 +29,8 @@ public class Notification {
     NotificationStatus status;
     Timestamp createdAt;
     Timestamp readAt;
+    @Column(name = "message", length = 500)
+    String message;
 
 
     public Long getId() {
@@ -67,4 +69,8 @@ public class Notification {
     public void setReadAt(Timestamp readAt) {
         this.readAt = readAt;
     }
+
+    public String getMessage() {return message;}
+
+    public void setMessage(String message) {this.message = message;}
 }

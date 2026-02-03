@@ -4,9 +4,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface InventoryRepository extends JpaRepository<Inventory,Long> {
 
-    Inventory findByComponentId(@Param("component_id") Long componentId);
+    Optional<Inventory> findByComponentId(Long componentId);
 
 }

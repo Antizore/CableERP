@@ -32,24 +32,17 @@ public class ComponentService {
         else
         {
             return componentRepository.saveAndFlush(new Component(component.name(),component.unit(), component.costPerUnit()));
-            //CreateInventoryDTO inventory = new CreateInventoryDTO(save.getId(),0,0);
-            //inventoryService.createInventory(inventory);
-            //return save;
         }
     }
 
 
     public List<ComponentResponseDTO> getComponents(){
-        //return componentRepository.findAll();
-
         return componentRepository.findAll().stream().map(
                 component -> new ComponentResponseDTO(
                         component.getId(),
                         component.getName(),
                         component.getUnit(),
                         component.getCostPerUnit()
-                        //component.getProcurement()
-                        //component.getReservationList()
                 )
         ).toList();
     }
@@ -87,15 +80,11 @@ public class ComponentService {
     }
 
     public Component patchComponent(Long id, ComponentCreateDTO component){
-
         Component updatedComponent = getComponentService(id);
-
         if(!(component.name() == null || component.name().isBlank())) updatedComponent.setName(component.name());
         if(component.unit() != null) updatedComponent.setUnit(component.unit());
         if(!(component.costPerUnit() == null || component.costPerUnit().isNaN() || component.costPerUnit().isInfinite())) updatedComponent.setCostPerUnit(component.costPerUnit());
-
         componentRepository.saveAndFlush(updatedComponent);
-
         return updatedComponent;
     }
 

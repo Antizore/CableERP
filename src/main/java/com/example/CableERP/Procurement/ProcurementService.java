@@ -17,10 +17,10 @@ public class ProcurementService {
         this.procurementRepository = procurementRepository;
     }
 
-    //TODO: LEPSZA WERYFIKACJA
+
     public void addVendor(Procurement procurement){
         if(!procurementRepository.existsByName(procurement.getName())) procurementRepository.saveAndFlush(procurement);
-        else throw new DuplicateException("Vendor o takiej nazwie istnieje");
+        else throw new DuplicateException("Vendor with that name already exists");
     }
 
 

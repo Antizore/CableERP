@@ -13,8 +13,5 @@ public record ComponentResponseDTO(
         String name,
         Unit unit,
         Double costPerUnit
-        //Procurement procurement
-        //List<Reservation> reservationList
-
 ) {
 }

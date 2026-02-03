@@ -147,5 +147,6 @@ CREATE TABLE alerts (
                         status VARCHAR(20) NOT NULL CHECK (status IN ('UNREAD', 'READ')),
                         category VARCHAR(20) NOT NULL CHECK (category IN ('OPTIMIZATION', 'PLACEHOLDER')),
                         created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                        read_at TIMESTAMP NULL
+                        read_at TIMESTAMP NULL,
+                        message VARCHAR(500)
 );

@@ -1,18 +1,20 @@
 package com.example.CableERP.Customer.CustomerOrder;
 
-
+import com.example.CableERP.BillOfMaterials.BillOfMaterials;
 import com.example.CableERP.Common.Exception.IllegalOperationException;
-import com.example.CableERP.Common.Exception.WrongValueException;
 import com.example.CableERP.Customer.CustomerRepository;
-import com.example.CableERP.Inventory.InventoryRepository;
-import com.example.CableERP.MRP.Estimation;
-import com.example.CableERP.Product.ProductCreateDTO;
+import com.example.CableERP.MRP.EstimationService;
+import com.example.CableERP.MRP.OptimizationService;
+import com.example.CableERP.Product.Product;
 import com.example.CableERP.Product.ProductRepository;
-import org.jspecify.annotations.NonNull;
+import com.example.CableERP.Product.ProductCreateDTO;
+import com.example.CableERP.Reservation.ReservationRepository;
+import com.example.CableERP.Reservation.ReservationRequestDTO;
+import com.example.CableERP.Reservation.ReservationService;
 import org.springframework.stereotype.Service;
-import java.util.*;
+import org.springframework.transaction.annotation.Transactional;
 import java.sql.Timestamp;
-import java.util.function.Function;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,121 +24,123 @@ public class OrderService {
     private final CustomerRepository customerRepository;
     private final ProductRepository productRepository;
     private final OrderItemRepository orderItemRepository;
-    private final Estimation estimation;
+    private final EstimationService estimationService;
+    private final ReservationService reservationService;
+    private final ReservationRepository reservationRepository;
+    private final OptimizationService optimizationService;
 
-
-    public OrderService(OrderRepository orderRepository, CustomerRepository customerRepository,
-                        ProductRepository productRepository, OrderItemRepository orderItemRepository,
-                        InventoryRepository inventoryRepository, Estimation estimation) {
+    public OrderService(OrderRepository orderRepository,
+                        CustomerRepository customerRepository,
+                        ProductRepository productRepository,
+                        OrderItemRepository orderItemRepository,
+                        EstimationService estimationService,
+                        ReservationService reservationService,
+                        ReservationRepository reservationRepository, OptimizationService optimizationService) {
         this.orderRepository = orderRepository;
         this.customerRepository = customerRepository;
         this.productRepository = productRepository;
         this.orderItemRepository = orderItemRepository;
-        this.estimation = estimation;
+        this.estimationService = estimationService;
+        this.reservationService = reservationService;
+        this.reservationRepository = reservationRepository;
+        this.optimizationService = optimizationService;
     }
 
+
     public List<ShowOrderDTO> returnAllOrders() {
-        List<ShowOrderDTO> orders = new ArrayList<>();
-
-
-
-        for (Order order : orderRepository.findAll()) {
-            List<OrderItemDTO> orderItemDTOList = new ArrayList<>();
-            List<OrderItem> aa = orderItemRepository.findAllByOrderId(order.getId());
-            for (OrderItem order1 : aa) {
-                orderItemDTOList.add(new OrderItemDTO(order1.getId(), new ProductCreateDTO(order1.getProduct().getName(), order1.getProduct().getDescription()), order1.getQty()));
-            }
-
-            orders.add(
-                    new ShowOrderDTO(order, orderItemDTOList)
-            );
-        }
-        return orders;
+        return orderRepository.findAll().stream()
+                .map(this::mapToDTO)
+                .collect(Collectors.toList());
     }
 
     public ShowOrderDTO returnOrderById(Long id) {
-        Order order = orderRepository.findById(id).orElseThrow();
-        List<OrderItemDTO> orderItemDTOList = new ArrayList<>();
-        List<OrderItem> aa = orderItemRepository.findAllByOrderId(order.getId());
-        for (OrderItem order1 : aa) {
-            orderItemDTOList.add(new OrderItemDTO(order1.getId(), new ProductCreateDTO(order1.getProduct().getName(), order1.getProduct().getDescription()), order1.getQty()));
-        }
-
-        return new ShowOrderDTO(order, orderItemDTOList);
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Order not found: " + id));
+        return mapToDTO(order);
     }
 
-    public Order saveOrderToDB(@NonNull List<CreateItemsInOrderDTO> createItemsInOrderDTOList, Long customerId) {
-        Calendar rightNow = Calendar.getInstance();
 
+    @Transactional
+    public Order placeOrder(Long customerId, List<CreateItemsInOrderDTO> itemsDto) {
         Order order = new Order(
-                customerRepository.findById(customerId).orElseThrow(),
+                customerRepository.findById(customerId).orElseThrow(() -> new RuntimeException("Customer not found")),
                 OrderStatus.NEW
         );
-        Order saved = orderRepository.saveAndFlush(order);
-        addItemsToOrder(saved.getId(), createItemsInOrderDTOList);
-
-        List<OrderItem> orderItems = orderItemRepository.findAllByOrderId(saved.getId());
-
-        saved.setPlannedStartAt(estimation.estimate(orderItems).getFirst());
-        saved.setPlannedEndAt(estimation.estimate(orderItems).getLast());
-
-        return orderRepository.saveAndFlush(saved);
-    }
 
 
-    public void addItemsToOrder(Long orderId, @NonNull List<CreateItemsInOrderDTO> createItemsInOrderDTOList) {
-        Order order = orderRepository.findById(orderId).orElseThrow();
-        List<OrderItem> currentItems = orderItemRepository.findAllByOrderId(orderId);
-        List<OrderItem> orderItemList = new ArrayList<>();
-        OrderStatus[] blockedStatuses = {OrderStatus.CANCELLED, OrderStatus.COMPLETED, OrderStatus.IN_PRODUCTION};
-        if (Arrays.stream(blockedStatuses).toList().contains(order.getStatus()))
-            throw new IllegalOperationException("Cannot add items to this order because of its status: " + order.getStatus());
+        order = orderRepository.saveAndFlush(order);
 
 
-        Map<Long, OrderItem> currentItemsMap = currentItems.stream().collect(Collectors.toMap(orderItem -> orderItem.getProduct().getId(), Function.identity()));
+        List<OrderItem> orderItems = new ArrayList<>();
+        for (CreateItemsInOrderDTO dto : itemsDto) {
+            Product product = productRepository.findById(dto.productId())
+                    .orElseThrow(() -> new RuntimeException("Product not found: " + dto.productId()));
 
-
-        for (CreateItemsInOrderDTO item : createItemsInOrderDTOList) {
-
-            Double qty;
-            if (currentItemsMap.containsKey(item.productId())) {
-                qty = currentItemsMap.get(item.productId()).getQty() + item.qty();
-            } else qty = item.qty();
-
-
-            orderItemList.add(
-                    new OrderItem(
-                            order,
-                            productRepository.findById(item.productId()).orElseThrow(),
-                            qty
-                    )
-            );
+            OrderItem item = new OrderItem(order, product, dto.qty());
+            orderItems.add(item);
         }
-        //that's some lazy work...
-        orderItemRepository.deleteAllByOrderId(orderId);
-        orderItemRepository.saveAllAndFlush(orderItemList);
+        orderItemRepository.saveAllAndFlush(orderItems); // Zapisujemy pozycje
+
+        for (OrderItem item : orderItems) {
+            Product product = item.getProduct();
+            double productQty = item.getQty();
+
+            for (BillOfMaterials bom : product.getBillOfMaterialsList()) {
+                double componentQtyNeeded = bom.getQty() * productQty;
+                ReservationRequestDTO request = new ReservationRequestDTO(
+                        order.getId(),
+                        bom.getComponent().getId(),
+                        componentQtyNeeded
+                );
+                reservationService.makeReservation(request);
+            }
+        }
+        long missingComponentsCount = reservationRepository.countByCustomerOrderIdAndIsFulfilledFalse(order.getId());
+        if (missingComponentsCount == 0) {
+            order.setStatus(OrderStatus.READY_FOR_PRODUCTION);
+        } else {
+            order.setStatus(OrderStatus.WAITING_FOR_COMPONENTS);
+        }
+        List<Timestamp> schedule = estimationService.estimate(orderItems);
+        order.setPlannedStartAt(schedule.get(0));
+        order.setPlannedEndAt(schedule.get(1));
+
+        Order savedOrder = orderRepository.saveAndFlush(order);
+
+        optimizationService.checkForOptimization(savedOrder);
+        return savedOrder;
     }
 
-
-    public void deleteItemsFromOrder(Long orderId, Long id){
+    @Transactional
+    public void tryPromoteOrderToReady(Long orderId) {
         Order order = orderRepository.findById(orderId).orElseThrow();
-        OrderStatus[] blockedStatuses = {OrderStatus.CANCELLED, OrderStatus.COMPLETED, OrderStatus.IN_PRODUCTION};
-        if (Arrays.stream(blockedStatuses).toList().contains(order.getStatus()))
-            throw new IllegalOperationException("Cannot delete items from this order because of its status: " + order.getStatus());
-        if(id == null) orderItemRepository.deleteAllByOrderId(orderId);
-        else orderItemRepository.deleteById(id);
+        if (order.getStatus() != OrderStatus.WAITING_FOR_COMPONENTS) {
+            return;
+        }
+        long missingCount = reservationRepository.countByCustomerOrderIdAndIsFulfilledFalse(orderId);
+        if (missingCount == 0) {
+            order.setStatus(OrderStatus.READY_FOR_PRODUCTION);
+            orderRepository.saveAndFlush(order);
+            optimizationService.checkForOptimization(order);
+        }
     }
 
-    public void updateItemInOrder(Long orderId, Long id, Double qty) {
+    @Transactional
+    public void deleteOrder(Long orderId) {
         Order order = orderRepository.findById(orderId).orElseThrow();
-        OrderStatus[] blockedStatuses = {OrderStatus.CANCELLED, OrderStatus.COMPLETED, OrderStatus.IN_PRODUCTION};
-        if (Arrays.stream(blockedStatuses).toList().contains(order.getStatus()))
-            throw new IllegalOperationException("Cannot change items in this order because of its status: " + order.getStatus());
-
-        OrderItem orderItem = orderItemRepository.findById(id).orElseThrow();
-        if(qty.isNaN() || qty==0 || qty < 0) throw new WrongValueException("Did you mean delete?");
-        else orderItem.setQty(qty);
+        if (order.getStatus() == OrderStatus.IN_PRODUCTION || order.getStatus() == OrderStatus.COMPLETED) {
+            throw new IllegalOperationException("Cannot delete order in progress/completed");
+        }
+        orderRepository.delete(order);
     }
 
-
+    private ShowOrderDTO mapToDTO(Order order) {
+        List<OrderItemDTO> items = order.getOrderItemList().stream()
+                .map(i -> new OrderItemDTO(
+                        i.getId(),
+                        new ProductCreateDTO(i.getProduct().getName(), i.getProduct().getDescription()),
+                        i.getQty()))
+                .collect(Collectors.toList());
+        return new ShowOrderDTO(order, items);
+    }
 }
