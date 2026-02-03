@@ -59,6 +59,7 @@ public class Order {
     public void setStatus(OrderStatus status) { this.status = status; }
     public List<OrderItem> getOrderItemList() { return orderItemList; }
     public Timestamp getPlannedStartAt() { return plannedStartAt; }
+    public Timestamp getPlannedEndAt() { return plannedEndAt; }
     public void setPlannedStartAt(Timestamp plannedStartAt) { this.plannedStartAt = plannedStartAt; }
     public void setPlannedEndAt(Timestamp plannedEndAt) { this.plannedEndAt = plannedEndAt; }
 }
