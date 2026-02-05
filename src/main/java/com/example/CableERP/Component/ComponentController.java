@@ -53,9 +53,9 @@ public class ComponentController {
 
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteComponent(@PathVariable Long id){
-        return ResponseEntity
-                .noContent().build();
+    public ResponseEntity<Void> deleteComponent(@PathVariable Long id){
+        componentService.deleteComponent(id);
+        return ResponseEntity.noContent().build();
     }
 
 
