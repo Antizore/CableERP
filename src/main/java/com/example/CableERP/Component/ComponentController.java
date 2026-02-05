@@ -44,18 +44,18 @@ public class ComponentController {
     }
 
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteComponent(@RequestParam Long id){
-        return ResponseEntity
-                .noContent().build();
-    }
-
-
     @PatchMapping("/{id}")
-    public ResponseEntity<Component> editComponent(@RequestParam Long id, @RequestBody ComponentCreateDTO component){
+    public ResponseEntity<Component> editComponent(@PathVariable Long id, @RequestBody ComponentCreateDTO component){
         return ResponseEntity
                 .ok()
                 .body(componentService.patchComponent(id, component));
+    }
+
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteComponent(@PathVariable Long id){
+        return ResponseEntity
+                .noContent().build();
     }
 
 
