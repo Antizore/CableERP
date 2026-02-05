@@ -43,10 +43,12 @@ public class ComponentController {
 
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Component> editComponent(@PathVariable Long id, @RequestBody ComponentCreateDTO component){
+    public ResponseEntity<Component> updateComponent(
+            @PathVariable Long id,
+            @RequestBody ComponentUpdateDTO componentUpdateDTO){
+
         return ResponseEntity
-                .ok()
-                .body(componentService.patchComponent(id, component));
+                .ok(componentService.patchComponent(id, componentUpdateDTO));
     }
 
 
