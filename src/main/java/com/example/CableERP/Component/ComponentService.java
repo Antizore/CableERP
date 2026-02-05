@@ -10,6 +10,7 @@ import com.example.CableERP.Inventory.InventoryService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 
@@ -79,13 +80,21 @@ public class ComponentService {
 
     }
 
-    public Component patchComponent(Long id, ComponentCreateDTO component){
-        Component updatedComponent = getComponentService(id);
-        if(!(component.name() == null || component.name().isBlank())) updatedComponent.setName(component.name());
-        if(component.unit() != null) updatedComponent.setUnit(component.unit());
-        if(!(component.costPerUnit() == null || component.costPerUnit().isNaN() || component.costPerUnit().isInfinite())) updatedComponent.setCostPerUnit(component.costPerUnit());
-        componentRepository.saveAndFlush(updatedComponent);
-        return updatedComponent;
+    public Component patchComponent(Long id, ComponentUpdateDTO dto){
+        Component component = getComponentService(id);
+
+        Optional.ofNullable(dto.name())
+                .filter(name -> !name.isBlank())
+                .ifPresent(component::setName);
+
+        Optional.ofNullable(dto.unit())
+                .ifPresent(component::setUnit);
+
+        Optional.ofNullable(dto.costPerUnit())
+                .filter(costPerUnit -> !Double.isNaN(costPerUnit) && !Double.isInfinite(costPerUnit))
+                .ifPresent(component::setCostPerUnit);
+
+        return componentRepository.saveAndFlush(component);
     }
 
 
