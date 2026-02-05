@@ -1,4 +1,6 @@
 package com.example.CableERP.Component;
 
-public record ComponentUpdateDTO() {
+import com.example.CableERP.Common.Unit;
+
+public record ComponentUpdateDTO(String name, Unit unit, Double costPerUnit) {
 }
