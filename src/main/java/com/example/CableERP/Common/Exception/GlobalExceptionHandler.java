@@ -11,7 +11,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(NoNameException.class)
     public ResponseEntity<String> handleNoNameException(NoNameException ex){
         return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
+                .status(HttpStatus.NOT_FOUND)
                 .body(ex.getMessage());
     }
 
@@ -19,7 +19,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(NoEmailException.class)
     public ResponseEntity<String> handleNoEmailException(NoEmailException ex){
         return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
+                .status(HttpStatus.NOT_FOUND)
                 .body(ex.getMessage());
     }
 
@@ -48,7 +48,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MissingEntityException.class)
     public ResponseEntity<String> handleCannotFindEntity(MissingEntityException ex){
         return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
+                .status(HttpStatus.NOT_FOUND)
                 .body(ex.getMessage());
     }
 
