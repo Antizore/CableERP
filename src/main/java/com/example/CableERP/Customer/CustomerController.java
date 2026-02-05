@@ -8,7 +8,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/customers")
+@RequestMapping("/api/v1/customers")
 
 public class CustomerController {
 

@@ -12,7 +12,7 @@ import java.util.Map;
 
 @RestController
 @Transactional
-@RequestMapping("/customers/orders")
+@RequestMapping("/api/v1/customers/orders")
 public class OrderController {
 
     private final OrderService orderService;

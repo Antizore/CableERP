@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/products/{id}/bom")
+@RequestMapping("/api/v1/products/{id}/bom")
 public class BillOfMaterialsController {
 
     private final BillOfMaterialsService billOfMaterialsService;

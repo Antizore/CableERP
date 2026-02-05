@@ -9,7 +9,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/components")
+@RequestMapping("/api/v1/components")
 public class ComponentController {
 
     private final ComponentService componentService;
