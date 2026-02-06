@@ -1,10 +1,7 @@
 package com.example.CableERP.Component;
 
-
-import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.net.URI;
 import java.util.List;
 
