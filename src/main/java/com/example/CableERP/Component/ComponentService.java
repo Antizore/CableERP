@@ -3,26 +3,20 @@ package com.example.CableERP.Component;
 import com.example.CableERP.BillOfMaterials.BillOfMaterialsDTO;
 import com.example.CableERP.BillOfMaterials.BillOfMaterialsService;
 import com.example.CableERP.Common.Exception.CannotDeleteException;
-import com.example.CableERP.Inventory.CreateInventoryDTO;
 import com.example.CableERP.Common.Exception.NoNameException;
 import com.example.CableERP.Common.Exception.WrongValueException;
-import com.example.CableERP.Inventory.InventoryService;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 
 @Service
-
 public class ComponentService {
 
     private final ComponentRepository componentRepository;
-    private final InventoryService inventoryService;
     private final BillOfMaterialsService billOfMaterialsService;
 
-    public ComponentService(ComponentRepository componentRepository, InventoryService inventoryService, BillOfMaterialsService billOfMaterialsService) {
+    public ComponentService(ComponentRepository componentRepository, BillOfMaterialsService billOfMaterialsService) {
         this.componentRepository = componentRepository;
-        this.inventoryService = inventoryService;
         this.billOfMaterialsService = billOfMaterialsService;
     }
 
