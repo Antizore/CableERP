@@ -1,6 +1,14 @@
--- ================================
--- CLEANUP
--- ================================
+/*
+ * ================================================================
+ * DATABASE SCHEMA & SEED DATA
+ * System: Manufacturing Execution System (MES) / Inventory Core
+ * Dialect: PostgreSQL / H2 Compatible
+ * ================================================================
+ */
+
+-- ================================================================
+-- 0. CLEANUP (Reset Schema)
+-- ================================================================
 DROP TABLE IF EXISTS purchase_order_item CASCADE;
 DROP TABLE IF EXISTS purchase_order CASCADE;
 DROP TABLE IF EXISTS component_vendor CASCADE;
@@ -16,9 +24,9 @@ DROP TABLE IF EXISTS product CASCADE;
 DROP TABLE IF EXISTS customer CASCADE;
 DROP TABLE IF EXISTS alerts CASCADE;
 
--- ================================
+-- ================================================================
 -- 1. CORE ENTITIES
--- ================================
+-- ================================================================
 
 CREATE TABLE customer (
                           id BIGSERIAL PRIMARY KEY,
@@ -48,9 +56,9 @@ CREATE TABLE bill_of_material (
                                   qty NUMERIC(10,4) NOT NULL CHECK (qty > 0)
 );
 
--- ================================
+-- ================================================================
 -- 2. INVENTORY & RESERVATIONS
--- ================================
+-- ================================================================
 
 CREATE TABLE inventory_item (
                                 id BIGSERIAL PRIMARY KEY,
@@ -67,9 +75,9 @@ CREATE TABLE product_inventory (
                                    qty_reserved NUMERIC(10,2) NOT NULL DEFAULT 0 CHECK (qty_reserved >= 0)
 );
 
--- ================================
+-- ================================================================
 -- 3. ORDERS (SALES)
--- ================================
+-- ================================================================
 
 CREATE TABLE customer_order (
                                 id BIGSERIAL PRIMARY KEY,
@@ -90,7 +98,6 @@ CREATE TABLE customer_order_item (
                                      qty NUMERIC(10,2) NOT NULL
 );
 
-
 CREATE TABLE stock_reservation (
                                    id BIGSERIAL PRIMARY KEY,
                                    customer_order_id BIGINT REFERENCES customer_order(id) ON DELETE CASCADE,
@@ -100,10 +107,9 @@ CREATE TABLE stock_reservation (
                                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- ================================
+-- ================================================================
 -- 4. PROCUREMENT (VENDORS & PURCHASING)
--- ================================
-
+-- ================================================================
 
 CREATE TABLE vendor (
                         id BIGSERIAL PRIMARY KEY,
@@ -112,7 +118,6 @@ CREATE TABLE vendor (
                         email VARCHAR(255) UNIQUE,
                         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
 
 CREATE TABLE component_vendor (
                                   id BIGSERIAL PRIMARY KEY,
