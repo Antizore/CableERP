@@ -28,11 +28,14 @@ public class Component {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "name", unique = true, nullable = false)
     private String name;
 
+    @Column (name = "unit", nullable = false)
     @Enumerated(EnumType.STRING)
     private Unit unit;
 
+    @Column(name = "cost_per_unit", nullable = false, precision = 2)
     private Double costPerUnit;
 
     @OneToMany(mappedBy = "component")
