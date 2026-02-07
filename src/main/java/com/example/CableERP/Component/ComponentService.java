@@ -3,8 +3,9 @@ package com.example.CableERP.Component;
 import com.example.CableERP.BillOfMaterials.BillOfMaterialsDTO;
 import com.example.CableERP.BillOfMaterials.BillOfMaterialsService;
 import com.example.CableERP.Common.Exception.CannotDeleteException;
-import com.example.CableERP.Common.Exception.NoNameException;
-import com.example.CableERP.Common.Exception.WrongValueException;
+import com.example.CableERP.Common.Exception.DuplicateException;
+import com.example.CableERP.Vendor.ComponentVendor;
+import com.example.CableERP.Vendor.ShowComponentVendorDTO;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
@@ -21,61 +22,69 @@ public class ComponentService {
     }
 
 
-    public Component addComponent(ComponentCreateDTO component){
-        if (component.name().isBlank()) throw new NoNameException("Component name cannot be blank");
-        else if (component.costPerUnit() < 0) throw new WrongValueException("Cost of component cannot be less than 0");
-        else
-        {
-            return componentRepository.saveAndFlush(new Component(component.name(),component.unit(), component.costPerUnit()));
-        }
+    public Component addComponent(ComponentCreateDTO dto){
+        if(componentRepository.findByName(dto.name()).isPresent()) {
+            throw new DuplicateException("Component with name: " + dto.name() + " already exists");}
+
+        return componentRepository.saveAndFlush(new Component(dto.name(),dto.unit(), dto.costPerUnit()));
     }
 
 
-    public List<ComponentResponseDTO> getComponents(){
+    public List<ComponentResponseDTO> getComponents() {
         return componentRepository.findAll().stream().map(
                 component -> new ComponentResponseDTO(
                         component.getId(),
                         component.getName(),
                         component.getUnit(),
-                        component.getCostPerUnit()
+                        component.getCostPerUnit(),
+                        component.getComponentVendors().stream().map(
+                                componentVendor -> new ShowComponentVendorDTO(
+                                        componentVendor.getVendor().getId(),
+                                        componentVendor.getVendor().getName(),
+                                        componentVendor.getPrice(),
+                                        componentVendor.isPreferred()
+                                )
+                        ).toList()
+
                 )
         ).toList();
     }
 
-    public ComponentResponseDTO getComponent(Long id){
+    public ComponentResponseDTO getComponent(Long id) {
         Component component = componentRepository.findById(id).orElseThrow();
 
         return new ComponentResponseDTO(
-                 component.getId(),
-                 component.getName(),
-                 component.getUnit(),
-                 component.getCostPerUnit()
-         );
+                component.getId(),
+                component.getName(),
+                component.getUnit(),
+                component.getCostPerUnit(),
+                component.getComponentVendors().stream().map(
+                        componentVendor -> new ShowComponentVendorDTO(
+                                componentVendor.getVendor().getId(),
+                                componentVendor.getVendor().getName(),
+                                componentVendor.getPrice(),
+                                componentVendor.isPreferred()
+                        )
+                ).toList()
+        );
     }
-
-    public Component getComponentService(Long id){
-        return componentRepository.findById(id).orElseThrow();
-    }
-
 
 
     public void deleteComponent(Long id){
-
-        List<BillOfMaterialsDTO> dtoList = billOfMaterialsService.getBill(id, getComponentService(id));
+        Component component = componentRepository.findById(id).orElseThrow();
+        List<BillOfMaterialsDTO> dtoList = billOfMaterialsService.getBill(id, component);
 
         if (dtoList == null || dtoList.isEmpty())
         {
-            componentRepository.deleteById(getComponentService(id).getId());
+            componentRepository.deleteById(component.getId());
         }
         else {
             throw new CannotDeleteException("Cannot delete components that are actively used in BOM. Delete BOM first.");
         }
-
-
     }
 
-    public Component patchComponent(Long id, ComponentUpdateDTO dto){
-        Component component = getComponentService(id);
+    public ComponentResponseDTO patchComponent(Long id, ComponentUpdateDTO dto){
+        Component component = componentRepository.findById(id).orElseThrow();
 
         Optional.ofNullable(dto.name())
                 .filter(name -> !name.isBlank())
@@ -88,7 +97,22 @@ public class ComponentService {
                 .filter(costPerUnit -> !Double.isNaN(costPerUnit) && !Double.isInfinite(costPerUnit))
                 .ifPresent(component::setCostPerUnit);
 
-        return componentRepository.saveAndFlush(component);
+        componentRepository.saveAndFlush(component);
+
+        return new ComponentResponseDTO(
+                component.getId(),
+                component.getName(),
+                component.getUnit(),
+                component.getCostPerUnit(),
+                component.getComponentVendors().stream().map(
+                        componentVendor -> new ShowComponentVendorDTO(
+                                componentVendor.getVendor().getId(),
+                                componentVendor.getVendor().getName(),
+                                componentVendor.getPrice(),
+                                componentVendor.isPreferred()
+                        )
+                ).toList()
+        );
     }
 
 
