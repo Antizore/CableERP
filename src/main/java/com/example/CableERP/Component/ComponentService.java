@@ -21,11 +21,12 @@ public class ComponentService {
     }
 
 
-    public Component addComponent(ComponentCreateDTO dto){
+    public ComponentResponseDTO addComponent(ComponentCreateDTO dto){
         if(componentRepository.findByName(dto.name()).isPresent()) {
             throw new DuplicateException("Component with name: " + dto.name() + " already exists");}
 
-        return componentRepository.saveAndFlush(new Component(dto.name(),dto.unit(), dto.costPerUnit()));
+        Component component = componentRepository.saveAndFlush(new Component(dto.name(),dto.unit(), dto.costPerUnit()));
+        return mapToDTO(component);
     }
 
 

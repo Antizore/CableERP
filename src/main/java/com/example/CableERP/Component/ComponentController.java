@@ -20,12 +20,12 @@ public class ComponentController {
 
 
     @PostMapping
-    public ResponseEntity<Component> addComponent(@Validated @RequestBody ComponentCreateDTO component){
-        Component created = componentService.addComponent(component);
+    public ResponseEntity<ComponentResponseDTO> addComponent(@Validated @RequestBody ComponentCreateDTO component){
+        ComponentResponseDTO created = componentService.addComponent(component);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(created.getId())
+                .buildAndExpand(created.id())
                 .toUri();
 
         return ResponseEntity
