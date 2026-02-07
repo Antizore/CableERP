@@ -4,7 +4,6 @@ import com.example.CableERP.BillOfMaterials.BillOfMaterialsDTO;
 import com.example.CableERP.BillOfMaterials.BillOfMaterialsService;
 import com.example.CableERP.Common.Exception.CannotDeleteException;
 import com.example.CableERP.Common.Exception.DuplicateException;
-import com.example.CableERP.Vendor.ComponentVendor;
 import com.example.CableERP.Vendor.ShowComponentVendorDTO;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -31,42 +30,12 @@ public class ComponentService {
 
 
     public List<ComponentResponseDTO> getComponents() {
-        return componentRepository.findAll().stream().map(
-                component -> new ComponentResponseDTO(
-                        component.getId(),
-                        component.getName(),
-                        component.getUnit(),
-                        component.getCostPerUnit(),
-                        component.getComponentVendors().stream().map(
-                                componentVendor -> new ShowComponentVendorDTO(
-                                        componentVendor.getVendor().getId(),
-                                        componentVendor.getVendor().getName(),
-                                        componentVendor.getPrice(),
-                                        componentVendor.isPreferred()
-                                )
-                        ).toList()
-
-                )
-        ).toList();
+        return componentRepository.findAll().stream().map(this::mapToDTO).toList();
     }
 
     public ComponentResponseDTO getComponent(Long id) {
         Component component = componentRepository.findById(id).orElseThrow();
-
-        return new ComponentResponseDTO(
-                component.getId(),
-                component.getName(),
-                component.getUnit(),
-                component.getCostPerUnit(),
-                component.getComponentVendors().stream().map(
-                        componentVendor -> new ShowComponentVendorDTO(
-                                componentVendor.getVendor().getId(),
-                                componentVendor.getVendor().getName(),
-                                componentVendor.getPrice(),
-                                componentVendor.isPreferred()
-                        )
-                ).toList()
-        );
+        return mapToDTO(component);
     }
 
 
@@ -99,6 +68,11 @@ public class ComponentService {
 
         componentRepository.saveAndFlush(component);
 
+        return mapToDTO(component);
+    }
+
+
+    private ComponentResponseDTO mapToDTO(Component component){
         return new ComponentResponseDTO(
                 component.getId(),
                 component.getName(),
@@ -114,7 +88,6 @@ public class ComponentService {
                 ).toList()
         );
     }
-
 
 
 }
