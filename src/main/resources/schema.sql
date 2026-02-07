@@ -36,7 +36,7 @@ CREATE TABLE product (
 
 CREATE TABLE component (
                            id BIGSERIAL PRIMARY KEY,
-                           name VARCHAR(255) NOT NULL,
+                           name VARCHAR(255) UNIQUE NOT NULL,
                            unit VARCHAR(50) NOT NULL,
                            cost_per_unit NUMERIC(10,2) NOT NULL DEFAULT 0
 );

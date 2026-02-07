@@ -5,6 +5,7 @@ import com.example.CableERP.Component.Component;
 import com.example.CableERP.Component.ComponentRepository;
 import com.example.CableERP.Component.ComponentResponseDTO;
 import com.example.CableERP.Reservation.ReservationService;
+import com.example.CableERP.Vendor.ShowComponentVendorDTO;
 import jakarta.transaction.Transactional;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -119,7 +120,15 @@ public class InventoryService {
                         inventory.getComponent().getId(),
                         inventory.getComponent().getName(),
                         inventory.getComponent().getUnit(),
-                        inventory.getComponent().getCostPerUnit()
+                        inventory.getComponent().getCostPerUnit(),
+                        inventory.getComponent().getComponentVendors().stream().map(
+                                componentVendor -> new ShowComponentVendorDTO(
+                                        componentVendor.getVendor().getId(),
+                                        componentVendor.getVendor().getName(),
+                                        componentVendor.getPrice(),
+                                        componentVendor.isPreferred()
+                                )
+                        ).toList()
                 )
         );
     }
