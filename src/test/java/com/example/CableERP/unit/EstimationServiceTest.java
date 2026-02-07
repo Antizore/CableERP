@@ -37,7 +37,7 @@ public class EstimationServiceTest {
 
     @BeforeEach
     void setUp() {
-        estimationService = new EstimationService(inventoryRepository, orderRepository);
+        estimationService = new EstimationService(orderRepository);
     }
 
     @Test

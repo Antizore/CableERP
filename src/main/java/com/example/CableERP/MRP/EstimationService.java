@@ -20,7 +20,7 @@ public class EstimationService {
 
     private final OrderRepository orderRepository;
 
-    public EstimationService(InventoryRepository inventoryRepository, OrderRepository orderRepository) {
+    public EstimationService(OrderRepository orderRepository) {
         this.orderRepository = orderRepository;
     }
 

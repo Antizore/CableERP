@@ -79,22 +79,44 @@ public class OrderService {
             OrderItem item = new OrderItem(order, product, dto.qty());
             orderItems.add(item);
         }
-        orderItemRepository.saveAllAndFlush(orderItems); // Zapisujemy pozycje
+        orderItemRepository.saveAllAndFlush(orderItems);
 
+
+        Map<Long,Double> mapOfComponentIdAndQtyNeeded = new HashMap<>();
         for (OrderItem item : orderItems) {
             Product product = item.getProduct();
             double productQty = item.getQty();
 
             for (BillOfMaterials bom : product.getBillOfMaterialsList()) {
                 double componentQtyNeeded = bom.getQty() * productQty;
-                ReservationRequestDTO request = new ReservationRequestDTO(
-                        order.getId(),
-                        bom.getComponent().getId(),
-                        componentQtyNeeded
-                );
-                reservationService.makeReservation(request);
+
+                /*
+                mapOfComponentIdAndQtyNeeded.computeIfPresent(
+                        bom.getComponent().getId(), (key, val) -> val + componentQtyNeeded);
+
+                mapOfComponentIdAndQtyNeeded.computeIfAbsent(
+                        bom.getComponent().getId(), k -> componentQtyNeeded);
+
+                 */
+
+                mapOfComponentIdAndQtyNeeded.merge(bom.getComponent().getId(),componentQtyNeeded,Double::sum);
+
             }
         }
+
+
+        Long orderId = order.getId();
+        mapOfComponentIdAndQtyNeeded.forEach((componentId,componentQtyNeeded) -> {
+                ReservationRequestDTO request = new ReservationRequestDTO(
+                        orderId,
+                        componentId,
+                        componentQtyNeeded
+                );
+                reservationService.makeReservation(request);}
+        );
+
+
+
         long missingComponentsCount = reservationRepository.countByCustomerOrderIdAndIsFulfilledFalse(order.getId());
         if (missingComponentsCount == 0) {
             order.setStatus(OrderStatus.READY_FOR_PRODUCTION);
