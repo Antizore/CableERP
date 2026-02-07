@@ -45,7 +45,7 @@ CREATE TABLE bill_of_material (
                                   id BIGSERIAL PRIMARY KEY,
                                   product_id BIGINT NOT NULL REFERENCES product(id) ON DELETE CASCADE,
                                   component_id BIGINT NOT NULL REFERENCES component(id) ON DELETE CASCADE,
-                                  qty NUMERIC(10,2) NOT NULL CHECK (qty > 0)
+                                  qty NUMERIC(10,4) NOT NULL CHECK (qty > 0)
 );
 
 -- ================================

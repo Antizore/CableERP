@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 
 
 
-@jakarta.persistence.Entity
+@Entity
 @Table(name = "bill_of_material")
 public class BillOfMaterials {
 
@@ -18,18 +18,19 @@ public class BillOfMaterials {
         this.qty = qty;
     }
 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "component_id")
     private Component component;
 
+    @Column(nullable = false, precision = 10, scale = 4)
     private Double qty;
 
 

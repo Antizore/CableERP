@@ -11,5 +11,5 @@ public record BomCreatingDTO(
         Long componentId,
         @Positive(message = "qty must be greater than 0")
         @NotNull(message = "qty cannot be null")
-        @Digits(integer = 10, fraction = 2, message = "Currently supported (10,2)")
+        @Digits(integer = 10, fraction = 4, message = "Currently supported (10,4)")
         Double qty){}
