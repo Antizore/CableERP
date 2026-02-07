@@ -12,4 +12,4 @@ public record BomCreatingDTO(
         @Positive(message = "qty must be greater than 0")
         @NotNull(message = "qty cannot be null")
         @Digits(integer = 10, fraction = 4, message = "Currently supported (10,4)")
-        Double qty){}
+        double qty){}

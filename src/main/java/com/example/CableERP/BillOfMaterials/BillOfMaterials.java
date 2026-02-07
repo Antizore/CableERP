@@ -12,7 +12,7 @@ public class BillOfMaterials {
 
     protected BillOfMaterials(){}
 
-    public BillOfMaterials(Product product, Component component, Double qty) {
+    public BillOfMaterials(Product product, Component component, double qty) {
         this.product = product;
         this.component = component;
         this.qty = qty;
@@ -30,8 +30,8 @@ public class BillOfMaterials {
     @JoinColumn(name = "component_id")
     private Component component;
 
-    @Column(nullable = false, precision = 10, scale = 4)
-    private Double qty;
+    @Column(nullable = false, precision = 10)
+    private double qty;
 
 
     public Long getId() {
@@ -54,11 +54,11 @@ public class BillOfMaterials {
         this.component = component;
     }
 
-    public Double getQty() {
+    public double getQty() {
         return qty;
     }
 
-    public void setQty(Double qty) {
+    public void setQty(double qty) {
         this.qty = qty;
     }
 }
