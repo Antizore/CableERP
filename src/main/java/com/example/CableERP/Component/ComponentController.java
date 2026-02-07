@@ -1,7 +1,10 @@
 package com.example.CableERP.Component;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
 import java.net.URI;
 import java.util.List;
 
@@ -17,9 +20,13 @@ public class ComponentController {
 
 
     @PostMapping
-    public ResponseEntity<Component> addComponent(@RequestBody ComponentCreateDTO component){
+    public ResponseEntity<Component> addComponent(@Validated @RequestBody ComponentCreateDTO component){
         Component created = componentService.addComponent(component);
-        URI location = URI.create("/components/"+created.getId());
+
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(created.getId())
+                .toUri();
 
         return ResponseEntity
                 .created(location)
@@ -38,7 +45,7 @@ public class ComponentController {
 
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Component> updateComponent(
+    public ResponseEntity<ComponentResponseDTO> updateComponent(
             @PathVariable Long id,
             @RequestBody ComponentUpdateDTO componentUpdateDTO){
 
