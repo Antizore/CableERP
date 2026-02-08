@@ -22,7 +22,7 @@ SimpleERP is my initiative to rebuild that logic the right way using Java and Sp
 ## Tech Stack
 
 <ul>
-<li>Java 17</li>
+<li>Java 24</li>
 <li>Spring Boot 3 (Web, Data JPA)</li>
 <li>Hibernate (ORM)</li>
 <li>H2 Database (Dev/Test) / PostgreSQL (Production ready)</li>
