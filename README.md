@@ -1,5 +1,38 @@
 # SimpleERP
 
+During my internship at a manufacturing company, I got task to solve a critical bottleneck: the communication gap between Sales and Production Planning.
+
+Sales representatives lacked real-time visibility into the production queue. To quote a lead time or check if a "rush order" was possible, they had to constantly interrupt Production Managers with phone calls. This manual back-and-forth wasted valuable time and often led to missed optimization opportunities.
+
+I originally prototyped a solution using Excel macros and deep-nested formulas to bridge this gap. It worked, but it eventually grew into a 70MB monolith that was impossible to maintain and scale.
+
+SimpleERP is my initiative to rebuild that logic the right way using Java and Spring Boot. It aims to solve real-world manufacturing problems by providing:
+
+<ol>
+
+<li>Instant Visibility for Sales: Front-line employees get immediate, accurate delivery estimates without needing to consult a manager.
+
+</li>
+
+<li>Automated Hints for Managers: The system proactively identifies "Queue Blocking" and suggests optimizations (e.g., squeezing small orders into idle windows) to maximize efficiency.</li>
+
+</ol>
+
+
+## Tech Stack
+
+<ul>
+<li>Java 17</li>
+<li>Spring Boot 3 (Web, Data JPA)</li>
+<li>Hibernate (ORM)</li>
+<li>H2 Database (Dev/Test) / PostgreSQL (Production ready)</li>
+<li>JUnit 5 & Mockito (Unit & Integration Testing)</li>
+<li>Mermaid.js (Documentation & Visualization)</li>
+
+    
+</ul>
+
+
 ## Flow chart for creating new order:
 
 ```mermaid
@@ -73,6 +106,85 @@ sequenceDiagram
     Employee-->>Client: Order Confirmation
 
 ```
+## When goods arrive
+
+```mermaid
+
+sequenceDiagram
+    autonumber
+    actor User as Warehouse Employee
+    participant IC as InventoryController
+    participant IS as InventoryService
+    participant RS as ReservationService
+    participant OS as OrderService
+    participant OPTI as OptimizationService
+    participant NS as NotificationService
+
+    User->>IC: POST /receive (ComponentID, Qty=50)
+    activate IC
+    IC->>IS: receiveGoods(ID, 50)
+    activate IS
+    
+    note right of IS: 1. Update Physical Stock
+    IS->>IS: Inventory.qty += 50
+    IS->>IS: saveAndFlush()
+
+    note right of IS: 2. Trigger Waterfall Allocation
+    IS->>RS: reallocateStockForComponent(ID)
+    activate RS
+    
+    RS->>RS: Fetch Reservations (Sort by CreatedAt ASC)
+    
+    loop For Each Reservation (FIFO)
+        RS->>RS: Check: Available >= Needed?
+        
+        alt Stock Available
+            RS->>RS: Set Fulfilled = TRUE
+            RS->>RS: Decrease Available Pool
+            
+            note right of RS: 3. Check Order Status
+            RS->>OS: tryPromoteOrderToReady(OrderId)
+            activate OS
+            OS->>OS: Count Missing Parts
+            
+            alt All Parts Collected (Count == 0)
+                OS->>OS: Set Status = READY
+                
+                note right of OS: 4. Check for Gap (APS)
+                OS->>OPTI: checkForOptimization(Order)
+                activate OPTI
+                opt Gap Found > Duration
+                    OPTI->>NS: createAlert("Squeeze Order NOW!")
+                    activate NS
+                    NS-->>OPTI: Alert Saved
+                    deactivate NS
+                end
+                OPTI-->>OS: Done
+                deactivate OPTI
+                
+            else Still Missing Parts
+                OS->>OS: Status remains WAITING
+            end
+            OS-->>RS: Done
+            deactivate OS
+
+        else Insufficient Stock
+            RS->>RS: Set Fulfilled = FALSE (or keep unfulfilled)
+        end
+    end
+
+    RS-->>IS: Allocation Complete
+    deactivate RS
+    IS-->>IC: Done
+    deactivate IS
+    IC-->>User: 200 OK "Goods received"
+    deactivate IC
+
+
+```
+
+
+
 
 
 ## Gap logic vizualization
