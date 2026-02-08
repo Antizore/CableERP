@@ -4,9 +4,11 @@
 - [Introduction](#introduction)
 - [Tech Stack](#tech-stack)
 - [Core Workflows](#core-workflows)
-    -[Order placement](#order-placement-and-estimation-logic)
-    -[Automatic FIFO Allocation](#automatic-fifo-allocation)
+    - [Order placement](#order-placement-and-estimation-logic)
+    - [Automatic FIFO Allocation](#automatic-fifo-allocation)
 - [Optimization Logic (Gap Detection)](#gap-logic-optimization-vizualization)
+    - [Scenario A](#scenario-a-standard-fifo-inefficient)
+    - [Scenario B](#scenario-b-optimized-schedule) 
 - [Roadmap](#roadmap)
 - [How to run](#how-to-Run)
 
@@ -201,7 +203,7 @@ sequenceDiagram
 
 ## Gap logic optimization vizualization 
 Standard MRP systems often rely on a rigid FIFO strategy. While safe, this creates inefficiencies. If a high-priority order is blocked due to missing materials, the machine remains idle.
-SimpleERP optimizes this by proactively monitoring the schedule for idle time windows and identifying "jumper" candidates—smaller, ready-to-produce orders that fit within the gap.
+SimpleERP optimizes this by proactively monitoring the schedule for idle time windows and identifying "jumper" (smaller and ready to produce orders that fit within the gap).
 
 ### Scenario A: Standard FIFO (Inefficient)
 
