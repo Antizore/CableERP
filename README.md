@@ -5,53 +5,72 @@
 ```mermaid
 
 sequenceDiagram
-    Actor Client
-    Actor Employee
-    participant OrderService
-    participant ReservationService
-    participant Inventory
-    participant EstimationService
-    participant NotificationService
+    autonumber
+    actor Client
+    actor Employee
+    participant OS as OrderService
+    participant RS as ReservationService
+    participant INV as InventoryDB
+    participant ES as EstimationService
+    participant OPTI as OptimizationService
+    participant NS as NotificationService
 
-    Client->>Employee: Calling to make an order
-    Employee->>OrderService: POST /orders (Product A,B,C)
-    OrderService->>OrderService: Explode BOM (Product A,B,C -> Component X, Y, Z)
+    Client->>Employee: Places Order (Call/Email)
+    Employee->>OS: POST /orders
+    activate OS
     
-    loop For each Component
-        OrderService->>ReservationService: makeReservation()
-        ReservationService->>Inventory: Check Availability
-        alt Has Stock
-            Inventory ->> ReservationService: OK
-            ReservationService->>ReservationService: Set Fulfilled = TRUE
-        else No Stock
-            Inventory ->> ReservationService: Shortage
-            ReservationService->>ReservationService: Set Fulfilled = FALSE
+    note over OS: 1. BOM Explosion & Aggregation
+    OS->>OS: Calculate total parts needed
+
+    loop For Each Unique Component
+        OS->>RS: makeReservation()
+        activate RS
+        RS->>INV: Check Availability & Reserve
+        alt Stock Available
+            INV-->>RS: Stock OK
+            RS->>RS: Set Fulfilled = TRUE
+        else Shortage
+            INV-->>RS: Stock Low
+            RS->>RS: Set Fulfilled = FALSE
         end
+        RS-->>OS: Reservation Saved
+        deactivate RS
     end
 
-    ReservationService->>OrderService: Reservation created
-    ReservationService->>ReservationService: Check missing reservations
-
-    alt All Components ready
-      OrderService->>OrderService: Set status = READY
-    else Missing Components
-      OrderService->>OrderService: Set status = WAITING
+    note over OS: 2. Status Decision
+    OS->>RS: Check missing count
+    RS-->>OS: Returns count
+    alt Count == 0
+        OS->>OS: Status = READY
+    else Count > 0
+        OS->>OS: Status = WAITING
     end
 
-    OrderService->>EstimationService: estimate()
-    EstimationService->>EstimationService: Calculate Max(machineAvailability, vendorsLeadTime)
-    EstimationService->>OrderService: Return plannedStart and plannedEnd
+    note over OS: 3. Estimation (MRP)
+    OS->>ES: estimate()
+    activate ES
+    ES->>ES: Max(MachineQueue, VendorLeadTime)
+    ES-->>OS: Return PlannedStart/End
+    deactivate ES
 
-    OrderService->>OptimizationService: checkForOptimization()
+    note over OS: 4. Optimization
+    OS->>OPTI: checkForOptimization()
+    activate OPTI
+    
 
-    opt Candidate is ready for production
-      OptimizationService->>OptimizationService: Gap found
-      OptimizationService->>NotificationService: createAlert()
+    opt Gap > ProductionTime AND Order is READY
+        OPTI->>NS: createAlert()
+        activate NS
+
+        deactivate NS
     end
-    NotificationService->>NotificationService: send alert to production manager that optimization is possible
-     
-    OrderService->>Employee: 201 Created (Status: WAITING, Date: Future)
-    Employee->>Client: Gives estimated timelines with information that the timelines are subject to optimization and early delivery
+    
+    OPTI-->>OS: Done
+    deactivate OPTI
+
+    OS-->>Employee: 201 Created JSON
+    deactivate OS
+    Employee-->>Client: Order Confirmation
 
 ```
 
