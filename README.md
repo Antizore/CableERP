@@ -113,29 +113,27 @@ sequenceDiagram
 sequenceDiagram
     autonumber
     actor User as Warehouse Employee
-    participant IC as InventoryController
     participant IS as InventoryService
     participant RS as ReservationService
     participant OS as OrderService
     participant OPTI as OptimizationService
     participant NS as NotificationService
 
-    User->>IC: POST /receive (ComponentID, Qty=50)
-    activate IC
-    IC->>IS: receiveGoods(ID, 50)
+    User->>IS: /POST (through controller) receive (ComponentID, Qty=50)
     activate IS
+
     
     note right of IS: 1. Update Physical Stock
     IS->>IS: Inventory.qty += 50
-    IS->>IS: saveAndFlush()
 
-    note right of IS: 2. Trigger Waterfall Allocation
+
+    note right of IS: 2. Trigger Allocation for given component
     IS->>RS: reallocateStockForComponent(ID)
     activate RS
     
     RS->>RS: Fetch Reservations (Sort by CreatedAt ASC)
     
-    loop For Each Reservation (FIFO)
+    loop For Each Reservation
         RS->>RS: Check: Available >= Needed?
         
         alt Stock Available
@@ -143,20 +141,19 @@ sequenceDiagram
             RS->>RS: Decrease Available Pool
             
             note right of RS: 3. Check Order Status
-            RS->>OS: tryPromoteOrderToReady(OrderId)
+            RS->>OS: tryPromoteOrderToReady()
             activate OS
             OS->>OS: Count Missing Parts
             
-            alt All Parts Collected (Count == 0)
+            alt All Parts Collected (Missing Parts == 0)
                 OS->>OS: Set Status = READY
                 
                 note right of OS: 4. Check for Gap (APS)
                 OS->>OPTI: checkForOptimization(Order)
                 activate OPTI
-                opt Gap Found > Duration
-                    OPTI->>NS: createAlert("Squeeze Order NOW!")
+                opt Gap > ProductionTime NAD Order is READY
+                    OPTI->>NS: createAlert()
                     activate NS
-                    NS-->>OPTI: Alert Saved
                     deactivate NS
                 end
                 OPTI-->>OS: Done
@@ -175,10 +172,9 @@ sequenceDiagram
 
     RS-->>IS: Allocation Complete
     deactivate RS
-    IS-->>IC: Done
+    IS-->>User: 200 OK "Goods received"
     deactivate IS
-    IC-->>User: 200 OK "Goods received"
-    deactivate IC
+
 
 
 ```
