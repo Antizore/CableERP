@@ -1,11 +1,12 @@
 # SimpleERP
 
 ## 📑 Table of Contents
-- [The Story Behind](#-introduction)
-- [Tech Stack](#-tech-stack)
-- [Core Workflows](#-core-workflows)
-- [Optimization Logic (Gap Detection)](#-gap-logic-visualization-optimization)
-- [Roadmap](#-roadmap)
+- [Introduction](#introduction)
+- [Tech Stack](#tech-stack)
+- [Core Workflows](#core-workflows)
+- [Optimization Logic (Gap Detection)](#gap-logic-visualization-optimization)
+- [Roadmap](#roadmap)
+- [How to run](#how-to-Run)
 
 
 
@@ -272,5 +273,56 @@ This project is under active development. I am currently focusing on refactoring
 
 </ul>
 
+## How to Run
 
+### Prerequisites
+* **Java 24** (or higher) installed
+* **Git**
 
+### 1. Clone the repository
+```bash
+git clone [https://github.com/Antizore/SimpleERP.git](https://github.com/Antizore/SimpleERP.git)
+cd SimpleERP
+```
+### 2. Build the application
+Using the Maven Wrapper (recommended):
+```bash
+./mvnw clean install
+```
+(On Windows PowerShell use: .\mvnw clean install)
+
+### 3. Run the application
+
+```bash
+./mvnw spring-boot:run
+```
+### 4. Access the Application
+
+Once the application is running, you can access the following endpoints:
+<ul>
+<li>
+    API Documentation (Swagger UI):
+    <ul>
+        <li>http://localhost:8080/swagger-ui/index.html</li>
+        <li>Use this to test endpoints like POST /orders without external tools.</li>
+    </ul>
+</li>
+    
+<li>
+    H2 Database Console: 
+    <ul>
+        <li>http://localhost:8080/h2-console</li>
+        <li>Driver Class: org.h2.Driver</li>
+        <li>JDBC URL: jdbc:h2:mem:testdb (or check application.properties)</li>
+        <li>User Name: sa</li>
+        <li>Password: (leave empty)</li>
+    </ul>
+</li>
+</ul>
+   
+### 5. Run Tests
+
+To verify the logic (Unit & Integration tests):
+```bash
+./mvnw test
+```
