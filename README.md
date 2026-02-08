@@ -316,7 +316,7 @@ Once the application is running, you can access the following endpoints:
     <ul>
         <li>http://localhost:8080/h2-console</li>
         <li>Driver Class: org.h2.Driver</li>
-        <li>JDBC URL: jdbc:h2:mem:testdb (or check application.properties)</li>
+        <li>JDBC URL: jdbc:h2:mem:testdb</li>
         <li>User Name: sa</li>
         <li>Password: (leave empty)</li>
     </ul>
