@@ -1,6 +1,6 @@
 # SimpleERP
 
-Flow chart for creating new order:
+## Flow chart for creating new order:
 
 ```mermaid
 
@@ -56,6 +56,52 @@ sequenceDiagram
 ```
 
 
+## Gap logic vizualization
+
+Standard MRP systems often rely on a rigid FIFO (First-In, First-Out) strategy. While safe, this approach creates inefficiencies. If a high-priority order is blocked due to missing materials (e.g., waiting for vendor delivery) as shown below, the production machine remains idle, wasting valuable capacity. We can optimize it by actively monitors the schedule for idle time windows and identifies "jumper" candidates (smaller orders that are fully stocked (READY)) and suggest that there is possibility of fitting it within the idle window.
 
 
+```mermaid
+
+gantt
+    title Scenario A: Standard FIFO Allocation (Inefficient)
+    dateFormat  YYYY-MM-DD HH:mm
+    axisFormat  %H:%M
+    
+    section Machine Timeline
+    Gap (Machine Idle)         :done, gap1, 2025-02-10 08:00, 4h
+    Order #1 (Big & Waiting)   :crit, des1, 2025-02-10 12:00, 4h
+    
+    section New Order Arrives
+    Order #2 (Small & Ready)   :active, des2, after des1, 30m
+
+    section System Analysis
+    Optimization Opportunity!  :milestone, 2025-02-10 16:30, 0m
+
+
+
+```
+
+
+The system generates a Real-time Alert for the Production Manager, suggesting an immediate schedule override. This allows Order #2 to be executed during the idle time of Order #1, without delaying the main schedule.
+
+
+
+```mermaid
+
+gantt
+    title Scenario B: Optimized Schedule (Gap Logic Applied)
+    dateFormat  YYYY-MM-DD HH:mm
+    axisFormat  %H:%M
+    
+    section Machine Timeline
+    Order #2 (Small & Ready)   :active, des2, 2025-02-10 08:00, 30m
+    Gap (Reduced Idle Time)    :done, gap1, after des2, 3.5h
+    Order #1 (Big & Waiting)   :crit, des1, 2025-02-10 12:00, 4h
+    
+    section Benefit
+    Saved Time                 :milestone, 2025-02-10 16:30, 0m
+
+
+```
 
