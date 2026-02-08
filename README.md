@@ -25,7 +25,7 @@ SimpleERP is my initiative to rebuild that logic the right way using Java and Sp
 <li>Java 24</li>
 <li>Spring Boot 3 (Web, Data JPA)</li>
 <li>Hibernate (ORM)</li>
-<li>H2 Database (Dev/Test) / PostgreSQL (Production ready)</li>
+<li>H2 Database (Dev/Test) </li>
 <li>JUnit 5 & Mockito (Unit & Integration Testing)</li>
 <li>Mermaid.js (Documentation & Visualization)</li>
 
@@ -34,6 +34,8 @@ SimpleERP is my initiative to rebuild that logic the right way using Java and Sp
 
 
 ## Flow chart for creating new order:
+
+When a client places an order, the system performs a deep check of inventory, reserves components, and estimates the delivery date based on the bottleneck (Machine vs. Materials).
 
 ```mermaid
 
@@ -107,6 +109,8 @@ sequenceDiagram
 
 ```
 ## When goods arrive
+
+The system reacts to inventory changes in real-time. When goods are received, they are instantly allocated to the oldest waiting orders.
 
 ```mermaid
 
@@ -185,6 +189,10 @@ sequenceDiagram
 
 ## Gap logic vizualization
 
+### Scenario A: Standard FIFO (Inefficient)
+
+The machine sits idle for 4 hours waiting for Order #1.
+
 Standard MRP systems often rely on a rigid FIFO (First-In, First-Out) strategy. While safe, this approach creates inefficiencies. If a high-priority order is blocked due to missing materials (e.g., waiting for vendor delivery) as shown below, the production machine remains idle, wasting valuable capacity. We can optimize it by actively monitors the schedule for idle time windows and identifies "jumper" candidates (smaller orders that are fully stocked (READY)) and suggest that there is possibility of fitting it within the idle window.
 
 
@@ -209,8 +217,10 @@ gantt
 
 ```
 
+### Scenario B: Optimized Schedule
 
-The system generates a Real-time Alert for the Production Manager, suggesting an immediate schedule override. This allows Order #2 to be executed during the idle time of Order #1, without delaying the main schedule.
+The system generates a Real-time Alert for the Production Manager, suggesting an immediate schedule override. Order #2 is executed during the idle time.
+
 
 
 
@@ -231,4 +241,26 @@ gantt
 
 
 ```
+
+
+
+
+
+Roadmap
+
+This project is under active development. Besides fixing stuff there and here and also making it more unify (I was actively learning during making this project so there are parts that need fixing and standarization because at that time I thought that was the best idea). Here are the next steps:
+
+<ul>
+
+<li>[ ] Queue Management API: Endpoints for the Production Manager to drag-and-drop orders (accepting optimization suggestions).</li>
+
+<li>[ ] Security: Implementing Spring Security (JWT) for role-based access (Warehouse vs. Production Manager).</li>
+
+<li>[ ] Multi-Machine Support: Logic to handle multiple production lines simultaneously.</li> 
+
+<li>[ ] Dockerization: Containerizing the application for easier deployment.</li>
+
+</ul>
+
+
 
