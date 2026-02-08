@@ -4,7 +4,7 @@
 - [Introduction](#introduction)
 - [Tech Stack](#tech-stack)
 - [Core Workflows](#core-workflows)
-- [Optimization Logic (Gap Detection)](#gap-logic-visualization-optimization)
+- [Optimization Logic (Gap Detection)](#gap-logic-vizualization-(optimization))
 - [Roadmap](#roadmap)
 - [How to run](#how-to-Run)
 
