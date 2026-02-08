@@ -1,5 +1,16 @@
 # SimpleERP
 
+## 📑 Table of Contents
+- [The Story Behind](#-introduction)
+- [Tech Stack](#-tech-stack)
+- [Core Workflows](#-core-workflows)
+- [Optimization Logic (Gap Detection)](#-gap-logic-visualization-optimization)
+- [Roadmap](#-roadmap)
+
+
+
+## Introduction
+
 During my internship at a manufacturing company, I got task to solve a critical bottleneck: the communication gap between Sales and Production Planning.
 
 Sales representatives lacked real-time visibility into the production queue. To quote a lead time or check if a "rush order" was possible, they had to constantly interrupt Production Managers with phone calls. This manual back-and-forth wasted valuable time and often led to missed optimization opportunities.
@@ -33,9 +44,10 @@ SimpleERP is my initiative to rebuild that logic the right way using Java and Sp
 </ul>
 
 
-## Flow chart for creating new order:
+## Core Workflows
 
-When a client places an order, the system performs a deep check of inventory, reserves components, and estimates the delivery date based on the bottleneck (Machine vs. Materials).
+### Order Placement & Estimation Logic (MRP)
+When a client places an order, the system performs a deep check of inventory, reserves components via **BOM Explosion**, and estimates the delivery date based on the bottleneck (Machine Availability vs. Vendor Lead Times).
 
 ```mermaid
 
@@ -108,9 +120,9 @@ sequenceDiagram
     Employee-->>Client: Order Confirmation
 
 ```
-## When goods arrive
+### Automatic FIFO Allocation (The Waterfall Trigger)
 
-The system reacts to inventory changes in real-time. When goods are received, they are instantly allocated to the oldest waiting orders.
+The system reacts to inventory changes in real-time. When goods are received, they are instantly allocated to the oldest waiting orders (FIFO Strategy), potentially unlocking them for production.
 
 ```mermaid
 
@@ -184,16 +196,14 @@ sequenceDiagram
 ```
 
 
+## Gap logic vizualization (Optimization)
 
-
-
-## Gap logic vizualization
+Standard MRP systems often rely on a rigid FIFO strategy. While safe, this creates inefficiencies. If a high-priority order is blocked due to missing materials, the machine remains idle.
+SimpleERP optimizes this by proactively monitoring the schedule for idle time windows and identifying "jumper" candidates—smaller, ready-to-produce orders that fit within the gap.
 
 ### Scenario A: Standard FIFO (Inefficient)
 
 The machine sits idle for 4 hours waiting for Order #1.
-
-Standard MRP systems often rely on a rigid FIFO (First-In, First-Out) strategy. While safe, this approach creates inefficiencies. If a high-priority order is blocked due to missing materials (e.g., waiting for vendor delivery) as shown below, the production machine remains idle, wasting valuable capacity. We can optimize it by actively monitors the schedule for idle time windows and identifies "jumper" candidates (smaller orders that are fully stocked (READY)) and suggest that there is possibility of fitting it within the idle window.
 
 
 ```mermaid
@@ -222,8 +232,6 @@ gantt
 The system generates a Real-time Alert for the Production Manager, suggesting an immediate schedule override. Order #2 is executed during the idle time.
 
 
-
-
 ```mermaid
 
 gantt
@@ -246,9 +254,11 @@ gantt
 
 
 
-Roadmap
+## Roadmap
 
-This project is under active development. Besides fixing stuff there and here and also making it more unify (I was actively learning during making this project so there are parts that need fixing and standarization because at that time I thought that was the best idea). Here are the next steps:
+This project is under active development. I am currently focusing on refactoring the codebase to unify patterns learned throughout the development process.
+
+### Upcoming Features:
 
 <ul>
 
