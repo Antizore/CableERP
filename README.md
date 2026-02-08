@@ -284,7 +284,7 @@ This project is under active development. I am currently focusing on refactoring
 
 ### 1. Clone the repository
 ```bash
-git clone [https://github.com/Antizore/SimpleERP.git](https://github.com/Antizore/SimpleERP.git)
+git clone https://github.com/Antizore/SimpleERP.git
 cd SimpleERP
 ```
 ### 2. Build the application
@@ -316,7 +316,7 @@ Once the application is running, you can access the following endpoints:
     <ul>
         <li>http://localhost:8080/h2-console</li>
         <li>Driver Class: org.h2.Driver</li>
-        <li>JDBC URL: jdbc:h2:mem:testdb</li>
+        <li>JDBC: jdbc:h2:mem:testdb</li>
         <li>User Name: sa</li>
         <li>Password: (leave empty)</li>
     </ul>
