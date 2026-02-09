@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>CableERP</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>CableERP</name>
-	<description>CableERP project</description>
+	<artifactId>SimpleErp</artifactId>
+	<version>1.0.0</version>
+	<name>SimpleERP</name>
+	<description>Pascal Nawrocki's portfolio project</description>
 	<url/>
 	<licenses>
 		<license/>
