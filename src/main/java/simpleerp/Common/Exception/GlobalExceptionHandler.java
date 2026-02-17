@@ -1,0 +1,63 @@
+package simpleerp.Common.Exception;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+
+@ControllerAdvice
+public class GlobalExceptionHandler {
+
+    @ExceptionHandler(NoNameException.class)
+    public ResponseEntity<String> handleNoNameException(NoNameException ex){
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(ex.getMessage());
+    }
+
+
+    @ExceptionHandler(NoEmailException.class)
+    public ResponseEntity<String> handleNoEmailException(NoEmailException ex){
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(ex.getMessage());
+    }
+
+    @ExceptionHandler(DuplicateException.class)
+    public ResponseEntity<String> handleDuplicateException(DuplicateException ex){
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(ex.getMessage());
+    }
+
+    @ExceptionHandler(WrongValueException.class)
+    public ResponseEntity<String> handleWrongValueException(WrongValueException ex){
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(ex.getMessage());
+    }
+
+
+    @ExceptionHandler(CannotDeleteException.class)
+    public ResponseEntity<String> handleCannotDeleteComponentActiveInBOM(CannotDeleteException ex){
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(ex.getMessage());
+    }
+
+    @ExceptionHandler(MissingEntityException.class)
+    public ResponseEntity<String> handleCannotFindEntity(MissingEntityException ex){
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(ex.getMessage());
+    }
+
+    @ExceptionHandler(IllegalOperationException.class)
+    public ResponseEntity<String> handleIllegalOperation(IllegalOperationException ex){
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(ex.getMessage());
+    }
+
+
+}
