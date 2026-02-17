@@ -279,7 +279,7 @@ This project is under active development. I am currently focusing on refactoring
 ## How to Run
 
 ### Prerequisites
-* **Java 24** (or higher) installed
+* **Java 25** installed
 * **Git**
 
 ### 1. Clone the repository
