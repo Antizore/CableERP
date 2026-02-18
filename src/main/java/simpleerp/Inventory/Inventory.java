@@ -1,6 +1,6 @@
 package simpleerp.Inventory;
 
-import simpleerp.Component.Component;
+import simpleerp.component.Component;
 import jakarta.persistence.*;
 import java.sql.Timestamp;
 import java.time.Instant;

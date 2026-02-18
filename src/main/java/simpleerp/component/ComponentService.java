@@ -1,4 +1,4 @@
-package simpleerp.Component;
+package simpleerp.component;
 
 import simpleerp.BillOfMaterials.BillOfMaterialsDTO;
 import simpleerp.BillOfMaterials.BillOfMaterialsService;
@@ -23,7 +23,7 @@ public class ComponentService {
 
     public ComponentResponseDTO addComponent(ComponentCreateDTO dto){
         if(componentRepository.findByName(dto.name()).isPresent()) {
-            throw new DuplicateException("Component with name: " + dto.name() + " already exists");}
+            throw new DuplicateException("component with name: " + dto.name() + " already exists");}
 
         Component component = componentRepository.saveAndFlush(new Component(dto.name(),dto.unit(), dto.costPerUnit()));
         return mapToDTO(component);

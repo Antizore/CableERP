@@ -1,4 +1,4 @@
-package simpleerp.Component;
+package simpleerp.component;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.query.Param;

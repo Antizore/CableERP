@@ -1,6 +1,6 @@
 package simpleerp.Reservation;
 
-import simpleerp.Component.Component;
+import simpleerp.component.Component;
 import simpleerp.Customer.CustomerOrder.Order;
 import jakarta.persistence.*;
 import java.sql.Timestamp;

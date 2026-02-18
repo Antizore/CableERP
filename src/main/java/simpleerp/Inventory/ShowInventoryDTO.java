@@ -1,6 +1,6 @@
 package simpleerp.Inventory;
 
-import simpleerp.Component.ComponentResponseDTO;
+import simpleerp.component.ComponentResponseDTO;
 
 public record ShowInventoryDTO(
         Long id,

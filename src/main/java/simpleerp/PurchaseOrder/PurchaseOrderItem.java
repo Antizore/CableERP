@@ -1,7 +1,7 @@
 package simpleerp.PurchaseOrder;
 
 
-import simpleerp.Component.Component;
+import simpleerp.component.Component;
 import jakarta.persistence.*;
 
 @Entity

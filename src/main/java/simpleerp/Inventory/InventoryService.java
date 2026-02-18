@@ -1,9 +1,9 @@
 package simpleerp.Inventory;
 
 import simpleerp.Common.Exception.WrongValueException;
-import simpleerp.Component.Component;
-import simpleerp.Component.ComponentRepository;
-import simpleerp.Component.ComponentResponseDTO;
+import simpleerp.component.Component;
+import simpleerp.component.ComponentRepository;
+import simpleerp.component.ComponentResponseDTO;
 import simpleerp.Reservation.ReservationService;
 import simpleerp.Vendor.ShowComponentVendorDTO;
 import jakarta.transaction.Transactional;
@@ -71,7 +71,7 @@ public class InventoryService {
 
     @Transactional
     public Inventory initializeOrUpdateInventory(CreateInventoryDTO dto) {
-        if (dto.componentId() == null) throw new WrongValueException("Component ID cannot be null");
+        if (dto.componentId() == null) throw new WrongValueException("component ID cannot be null");
         if (dto.qtyAvailable() < 0 || dto.qtyReserved() < 0) throw new WrongValueException("Quantity cannot be negative");
 
         return inventoryRepository.findByComponentId(dto.componentId())
@@ -82,7 +82,7 @@ public class InventoryService {
                 })
                 .orElseGet(() -> {
                     Component component = componentRepository.findById(dto.componentId())
-                            .orElseThrow(() -> new RuntimeException("Component not found"));
+                            .orElseThrow(() -> new RuntimeException("component not found"));
                     Inventory newInventory = new Inventory(component, dto.qtyAvailable(), dto.qtyReserved());
                     return inventoryRepository.saveAndFlush(newInventory);
                 });

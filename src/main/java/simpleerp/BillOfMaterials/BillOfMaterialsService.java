@@ -4,9 +4,9 @@ package simpleerp.BillOfMaterials;
 import simpleerp.Common.Exception.DuplicateException;
 import simpleerp.Common.Exception.MissingEntityException;
 import simpleerp.Common.Exception.WrongValueException;
-import simpleerp.Component.Component;
-import simpleerp.Component.ComponentDTO;
-import simpleerp.Component.ComponentRepository;
+import simpleerp.component.Component;
+import simpleerp.component.ComponentDTO;
+import simpleerp.component.ComponentRepository;
 import simpleerp.Product.Product;
 import simpleerp.Product.ProductRepository;
 import org.springframework.stereotype.Service;
@@ -88,7 +88,7 @@ public class BillOfMaterialsService {
         List<BillOfMaterials> map1 = new ArrayList<>();
 
         for(BomCreatingDTO item : bomCreatingDTOList){
-            Component component = componentRepository.findById(item.componentId()).orElseThrow(() -> new MissingEntityException("Component not found"));
+            Component component = componentRepository.findById(item.componentId()).orElseThrow(() -> new MissingEntityException("component not found"));
             if (item.qty() <= 0 ) throw new WrongValueException("Qty cannot be less or equal 0");
             map1.add(
                     new BillOfMaterials(

@@ -1,4 +1,4 @@
-package simpleerp.Component;
+package simpleerp.component;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;

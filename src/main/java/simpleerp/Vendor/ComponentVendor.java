@@ -1,6 +1,6 @@
 package simpleerp.Vendor;
 
-import simpleerp.Component.Component;
+import simpleerp.component.Component;
 import jakarta.persistence.*;
 
 @Entity

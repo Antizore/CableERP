@@ -1,4 +1,4 @@
-package simpleerp.Component;
+package simpleerp.component;
 
 public class ComponentMRPDTO  {
 

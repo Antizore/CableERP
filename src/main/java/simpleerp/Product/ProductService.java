@@ -4,7 +4,7 @@ package simpleerp.Product;
 import simpleerp.BillOfMaterials.BillOfMaterialsDTO;
 import simpleerp.BillOfMaterials.BillOfMaterialsRepository;
 import simpleerp.Common.Exception.CannotDeleteException;
-import simpleerp.Component.ComponentDTO;
+import simpleerp.component.ComponentDTO;
 import simpleerp.Common.Exception.NoNameException;
 import org.springframework.stereotype.Service;
 

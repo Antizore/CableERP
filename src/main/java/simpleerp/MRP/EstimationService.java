@@ -1,7 +1,7 @@
 package simpleerp.MRP;
 
 import simpleerp.BillOfMaterials.BillOfMaterials;
-import simpleerp.Component.Component;
+import simpleerp.component.Component;
 import simpleerp.Vendor.ComponentVendor;
 import simpleerp.Customer.CustomerOrder.Order;
 import simpleerp.Customer.CustomerOrder.OrderItem;

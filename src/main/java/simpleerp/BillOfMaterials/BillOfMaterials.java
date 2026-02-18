@@ -1,6 +1,6 @@
 package simpleerp.BillOfMaterials;
 
-import simpleerp.Component.Component;
+import simpleerp.component.Component;
 import simpleerp.Product.Product;
 import jakarta.persistence.*;
 

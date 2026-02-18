@@ -1,7 +1,7 @@
 package simpleerp.Reservation;
 
-import simpleerp.Component.Component;
-import simpleerp.Component.ComponentRepository;
+import simpleerp.component.Component;
+import simpleerp.component.ComponentRepository;
 import simpleerp.Customer.CustomerOrder.Order;
 import simpleerp.Customer.CustomerOrder.OrderRepository;
 import simpleerp.Customer.CustomerOrder.OrderService;
@@ -44,7 +44,7 @@ public class ReservationService {
         Order order = orderRepository.findById(request.orderId())
                 .orElseThrow(() -> new RuntimeException("Order not found: " + request.orderId()));
         Component component = componentRepository.findById(request.componentId())
-                .orElseThrow(() -> new RuntimeException("Component not found: " + request.componentId()));
+                .orElseThrow(() -> new RuntimeException("component not found: " + request.componentId()));
         Inventory inventory = component.getInventory();
         if (inventory == null) {
             inventory = new Inventory(component, 0, 0);
