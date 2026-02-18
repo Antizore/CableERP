@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ReservationService {
@@ -35,10 +36,6 @@ public class ReservationService {
         this.orderService = orderService;
     }
 
-    public List<Reservation> getAllReservations() {
-        return reservationRepository.findAll();
-    }
-
     @Transactional
     public void makeReservation(ReservationRequestDTO request) {
         if (request.qty() <= 0) {
@@ -59,6 +56,16 @@ public class ReservationService {
         reservation.setFulfilled(hasCoverage);
         inventoryRepository.saveAndFlush(inventory);
         reservationRepository.saveAndFlush(reservation);
+    }
+
+    public List<ReservationResponseDTO> getAllReservations() {
+        return reservationRepository.findAll().stream().map(
+                reservation ->
+                        new ReservationResponseDTO(
+                        reservation.getId(),
+                        reservation.getQty(),
+                        reservation.isFulfilled())
+        ).collect(Collectors.toList());
     }
 
     @Transactional
