@@ -1,15 +1,15 @@
 package simpleerp.unit;
 
-import simpleerp.BillOfMaterials.BillOfMaterials;
+import simpleerp.bom.BillOfMaterials;
 import simpleerp.component.Component;
-import simpleerp.Customer.CustomerOrder.Order;
-import simpleerp.Customer.CustomerOrder.OrderItem;
-import simpleerp.Customer.CustomerOrder.OrderRepository;
-import simpleerp.Inventory.Inventory;
-import simpleerp.Inventory.InventoryRepository;
-import simpleerp.MRP.EstimationService;
-import simpleerp.Product.Product;
-import simpleerp.Vendor.ComponentVendor;
+import simpleerp.customer.co.Order;
+import simpleerp.customer.co.OrderItem;
+import simpleerp.customer.co.OrderRepository;
+import simpleerp.inventory.Inventory;
+import simpleerp.inventory.InventoryRepository;
+import simpleerp.mrp.EstimationService;
+import simpleerp.product.Product;
+import simpleerp.vendor.ComponentVendor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

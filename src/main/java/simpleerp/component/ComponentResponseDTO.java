@@ -1,8 +1,8 @@
 package simpleerp.component;
 
 
-import simpleerp.Common.Unit;
-import simpleerp.Vendor.ShowComponentVendorDTO;
+import simpleerp.common.Unit;
+import simpleerp.vendor.ShowComponentVendorDTO;
 
 import java.util.List;
 

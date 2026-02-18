@@ -1,11 +1,11 @@
 package simpleerp.component;
 
 
-import simpleerp.BillOfMaterials.BillOfMaterials;
-import simpleerp.Inventory.Inventory;
-import simpleerp.Reservation.Reservation;
-import simpleerp.Common.Unit;
-import simpleerp.Vendor.ComponentVendor;
+import simpleerp.bom.BillOfMaterials;
+import simpleerp.inventory.Inventory;
+import simpleerp.reservation.Reservation;
+import simpleerp.common.Unit;
+import simpleerp.vendor.ComponentVendor;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;

@@ -1,10 +1,9 @@
 package simpleerp.integration;
 
-import simpleerp.Customer.CustomerOrder.*;
-import simpleerp.Customer.CustomerOrder.*;
-import simpleerp.Inventory.Inventory;
-import simpleerp.Inventory.InventoryRepository;
-import simpleerp.Inventory.InventoryService;
+import simpleerp.customer.co.*;
+import simpleerp.inventory.Inventory;
+import simpleerp.inventory.InventoryRepository;
+import simpleerp.inventory.InventoryService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

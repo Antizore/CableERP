@@ -1,10 +1,10 @@
 package simpleerp.component;
 
-import simpleerp.BillOfMaterials.BillOfMaterialsDTO;
-import simpleerp.BillOfMaterials.BillOfMaterialsService;
-import simpleerp.Common.Exception.CannotDeleteException;
-import simpleerp.Common.Exception.DuplicateException;
-import simpleerp.Vendor.ShowComponentVendorDTO;
+import simpleerp.bom.BillOfMaterialsDTO;
+import simpleerp.bom.BillOfMaterialsService;
+import simpleerp.common.exception.CannotDeleteException;
+import simpleerp.common.exception.DuplicateException;
+import simpleerp.vendor.ShowComponentVendorDTO;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;

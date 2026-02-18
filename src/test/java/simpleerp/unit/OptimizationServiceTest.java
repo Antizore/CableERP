@@ -1,12 +1,12 @@
 package simpleerp.unit;
 
-import simpleerp.Customer.CustomerOrder.Order;
-import simpleerp.Customer.CustomerOrder.OrderItem;
-import simpleerp.Customer.CustomerOrder.OrderRepository;
-import simpleerp.Customer.CustomerOrder.OrderStatus;
-import simpleerp.MRP.OptimizationService;
-import simpleerp.Notification.NotificationService;
-import simpleerp.Product.Product;
+import simpleerp.customer.co.Order;
+import simpleerp.customer.co.OrderItem;
+import simpleerp.customer.co.OrderRepository;
+import simpleerp.customer.co.OrderStatus;
+import simpleerp.mrp.OptimizationService;
+import simpleerp.notification.NotificationService;
+import simpleerp.product.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -1,6 +1,6 @@
 package simpleerp.component;
 
-import simpleerp.Common.Unit;
+import simpleerp.common.Unit;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;

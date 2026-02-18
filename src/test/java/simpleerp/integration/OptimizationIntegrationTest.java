@@ -1,10 +1,10 @@
 package simpleerp.integration;
 
-import simpleerp.Customer.CustomerOrder.CreateItemsInOrderDTO;
-import simpleerp.Customer.CustomerOrder.Order;
-import simpleerp.Customer.CustomerOrder.OrderService;
-import simpleerp.Notification.Notification;
-import simpleerp.Notification.NotificationRepository;
+import simpleerp.customer.co.CreateItemsInOrderDTO;
+import simpleerp.customer.co.Order;
+import simpleerp.customer.co.OrderService;
+import simpleerp.notification.Notification;
+import simpleerp.notification.NotificationRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
