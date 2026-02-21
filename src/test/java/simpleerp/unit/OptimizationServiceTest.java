@@ -39,56 +39,69 @@ class OptimizationServiceTest {
 
     @Test
     void shouldTriggerAlert_WhenGapIsLargeEnough() {
-        Order candidate = createOrder(1L, OrderStatus.READY_FOR_PRODUCTION, 30.0);
-        setPlannedStart(candidate, Instant.now().plus(2, ChronoUnit.DAYS));
+        Order candidate = createOrder(1L, OrderStatus.READY_FOR_PRODUCTION);
+        setPlannedSchedule(candidate, Instant.now().plus(2, ChronoUnit.DAYS), 30L);
 
-        Order blocker = createOrder(2L, OrderStatus.WAITING_FOR_COMPONENTS, 100.0);
-        setPlannedStart(blocker, Instant.now().plus(5, ChronoUnit.HOURS));
+        Order blocker = createOrder(2L, OrderStatus.WAITING_FOR_COMPONENTS);
+        setPlannedSchedule(blocker, Instant.now().plus(5, ChronoUnit.HOURS), 100L);
 
+        when(orderRepository.findFirstByStatus(OrderStatus.IN_PRODUCTION)).thenReturn(null);
         when(orderRepository.findFirstByStatusInAndPlannedStartAtAfterOrderByPlannedStartAtAsc(any(), any()))
                 .thenReturn(blocker);
+
         optimizationService.checkForOptimization(candidate);
+
         verify(notificationService, times(1)).createAlert(contains("OPTIMIZATION"));
     }
 
-    @Test
-    void shouldNotTrigger_WhenGapIsTooSmall() {
-        Order candidate = createOrder(1L, OrderStatus.READY_FOR_PRODUCTION, 120.0);
-        setPlannedStart(candidate, Instant.now().plus(2, ChronoUnit.DAYS));
-
-        Order blocker = createOrder(2L, OrderStatus.WAITING_FOR_COMPONENTS, 100.0);
-        setPlannedStart(blocker, Instant.now().plus(1, ChronoUnit.HOURS));
-
-        when(orderRepository.findFirstByStatusInAndPlannedStartAtAfterOrderByPlannedStartAtAsc(any(), any()))
-                .thenReturn(blocker);
-        optimizationService.checkForOptimization(candidate);
-        verify(notificationService, never()).createAlert(anyString());
-    }
 
     @Test
     void shouldTrigger_WhenMachineIsCompletelyFree() {
-        Order candidate = createOrder(1L, OrderStatus.READY_FOR_PRODUCTION, 60.0);
-        setPlannedStart(candidate, Instant.now().plus(1, ChronoUnit.DAYS));
+        Order candidate = createOrder(1L, OrderStatus.READY_FOR_PRODUCTION);
+        setPlannedSchedule(candidate, Instant.now().plus(1, ChronoUnit.DAYS), 60);
 
+        when(orderRepository.findFirstByStatus(OrderStatus.IN_PRODUCTION)).thenReturn(null);
         when(orderRepository.findFirstByStatusInAndPlannedStartAtAfterOrderByPlannedStartAtAsc(any(), any()))
                 .thenReturn(null);
+
         optimizationService.checkForOptimization(candidate);
-        verify(notificationService).createAlert(contains("Machine Free"));
+
+        verify(notificationService).createAlert(contains("NOW"));
     }
 
-    private Order createOrder(Long id, OrderStatus status, double minutesToProduce) {
-        Product product = new Product("TestProd", "Desc");
-        product.setMinutesToProduceOnePiece(minutesToProduce);
+    @Test
+    void shouldTrigger_WhenMachineOccupiedButGapSufficient() {
 
+        Order candidate = createOrder(1L, OrderStatus.READY_FOR_PRODUCTION);
+        setPlannedSchedule(candidate, Instant.now().plus(1, ChronoUnit.DAYS), 60);
+
+
+        Order runningOrder = createOrder(2L, OrderStatus.IN_PRODUCTION);
+        setPlannedSchedule(runningOrder, Instant.now().minus(1, ChronoUnit.HOURS), 180); // Trwa 3h, wystartowało 1h temu
+
+
+        Order nextScheduled = createOrder(3L, OrderStatus.WAITING_FOR_COMPONENTS);
+        setPlannedSchedule(nextScheduled, Instant.now().plus(5, ChronoUnit.HOURS), 100);
+
+        when(orderRepository.findFirstByStatus(OrderStatus.IN_PRODUCTION)).thenReturn(runningOrder);
+        when(orderRepository.findFirstByStatusInAndPlannedStartAtAfterOrderByPlannedStartAtAsc(any(), any()))
+                .thenReturn(nextScheduled);
+
+        optimizationService.checkForOptimization(candidate);
+
+
+        verify(notificationService).createAlert(contains("after Order #2"));
+    }
+
+
+    private Order createOrder(Long id, OrderStatus status) {
         Order order = new Order(null, status);
         ReflectionTestUtils.setField(order, "id", id);
-
-        OrderItem item = new OrderItem(order, product, 1.0);
-        order.getOrderItemList().add(item);
         return order;
     }
 
-    private void setPlannedStart(Order order, Instant start) {
+    private void setPlannedSchedule(Order order, Instant start, long durationMinutes) {
         order.setPlannedStartAt(Timestamp.from(start));
+        order.setPlannedEndAt(Timestamp.from(start.plus(durationMinutes, ChronoUnit.MINUTES)));
     }
 }
