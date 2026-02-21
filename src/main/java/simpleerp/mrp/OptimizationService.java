@@ -48,8 +48,12 @@ public class OptimizationService {
                 ? runningOrder.getPlannedEndAt().toInstant()
                 : now;
 
+        if(machineFreeAt.isBefore(now)){
+            machineFreeAt = now;
+        }
+
         Order nextScheduledOrder = orderRepository.findFirstByStatusInAndPlannedStartAtAfterOrderByPlannedStartAtAsc(
-                List.of(OrderStatus.WAITING_FOR_COMPONENTS, OrderStatus.READY_FOR_PRODUCTION, OrderStatus.IN_PRODUCTION),
+                List.of(OrderStatus.WAITING_FOR_COMPONENTS, OrderStatus.READY_FOR_PRODUCTION),
                 Timestamp.from(now)
         );
         if (nextScheduledOrder == null) {
