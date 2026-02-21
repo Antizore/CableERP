@@ -37,7 +37,14 @@ public class OptimizationService {
             return;
         }
 
-        long durationMinutes = calculateDurationMinutes(candidateOrder);
+
+        long durationMinutes = Duration.between(
+                plannedStart,
+                candidateOrder.getPlannedEndAt().toInstant()
+        ).toMinutes();
+
+
+
         Order nextScheduledOrder = orderRepository.findFirstByStatusInAndPlannedStartAtAfterOrderByPlannedStartAtAsc(
                 List.of(OrderStatus.WAITING_FOR_COMPONENTS, OrderStatus.READY_FOR_PRODUCTION, OrderStatus.IN_PRODUCTION),
                 Timestamp.from(now)
@@ -82,14 +89,5 @@ public class OptimizationService {
         notificationService.createAlert(msg);
     }
 
-    private long calculateDurationMinutes(Order order) {
-        double totalMinutes = 0;
-        for (OrderItem item : order.getOrderItemList()) {
-            Double prodTime = item.getProduct().getMinutesToProduceOnePiece();
-            if (prodTime != null) {
-                totalMinutes += prodTime * item.getQty();
-            }
-        }
-        return (long) Math.ceil(totalMinutes * 1.1);
-    }
+
 }
