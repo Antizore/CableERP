@@ -58,11 +58,11 @@ public class OptimizationService {
         );
 
         if (nextScheduledOrder == null) {
-            suggestJump(candidateOrder, "NOW (Machine Free)", durationMinutes);
+            suggestJump(candidateOrder, machineFreeAt, durationMinutes, runningOrder);
             return;
         }
         if (nextScheduledOrder.getId().equals(candidateOrder.getId())) {
-            suggestJump(candidateOrder, "NOW", durationMinutes);
+            suggestJump(candidateOrder, machineFreeAt, durationMinutes, runningOrder);
             return;
         }
 
