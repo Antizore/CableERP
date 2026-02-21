@@ -90,7 +90,7 @@ class OptimizationServiceTest {
         optimizationService.checkForOptimization(candidate);
 
 
-        verify(notificationService).createAlert(contains("after Order #2"));
+        verify(notificationService).createAlert(contains("Order #3"));
     }
 
 
