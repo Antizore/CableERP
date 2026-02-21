@@ -54,8 +54,9 @@ public class OptimizationService {
 
         Order nextScheduledOrder = orderRepository.findFirstByStatusInAndPlannedStartAtAfterOrderByPlannedStartAtAsc(
                 List.of(OrderStatus.WAITING_FOR_COMPONENTS, OrderStatus.READY_FOR_PRODUCTION),
-                Timestamp.from(now)
+                Timestamp.from(machineFreeAt)
         );
+
         if (nextScheduledOrder == null) {
             suggestJump(candidateOrder, "NOW (Machine Free)", durationMinutes);
             return;
