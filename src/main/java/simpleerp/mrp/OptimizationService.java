@@ -15,6 +15,7 @@ import java.util.List;
 @Service
 public class OptimizationService {
 
+    private static final int MIN_PLANNED_START_GAP_MINUTES = 60;
     private final OrderRepository orderRepository;
     private final NotificationService notificationService;
 
@@ -32,7 +33,7 @@ public class OptimizationService {
         Instant now = Instant.now();
         Instant plannedStart = candidateOrder.getPlannedStartAt().toInstant();
 
-        if (Duration.between(now, plannedStart).toMinutes() < 60) {
+        if (Duration.between(now, plannedStart).toMinutes() < MIN_PLANNED_START_GAP_MINUTES) {
             return;
         }
 
