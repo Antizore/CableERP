@@ -30,7 +30,7 @@ public class OrderController {
 
     @GetMapping
     @Transactional(readOnly = true)
-    public ResponseEntity<List<ShowOrderDTO>> getAllOrders() {
+    public ResponseEntity<List<ResponseDTO>> getAllOrders() {
         return ResponseEntity
                 .ok()
                 .body(orderService.returnAllOrders());
@@ -38,7 +38,7 @@ public class OrderController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<ShowOrderDTO> getSpecificOrder(@PathVariable Long id) {
+    public ResponseEntity<ResponseDTO> getSpecificOrder(@PathVariable Long id) {
         return ResponseEntity
                 .ok()
                 .body(orderService.returnOrderById(id));

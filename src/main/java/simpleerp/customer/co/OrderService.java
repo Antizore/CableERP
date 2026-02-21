@@ -47,16 +47,26 @@ public class OrderService {
     }
 
 
-    public List<ShowOrderDTO> returnAllOrders() {
-        return orderRepository.findAll().stream()
-                .map(this::mapToDTO)
-                .collect(Collectors.toList());
+    public List<ResponseDTO> returnAllOrders() {
+        return orderRepository.findAll().stream().map(
+                order -> new ResponseDTO(
+                        order.getId(),
+                        order.getStatus(),
+                        order.getPlannedStartAt(),
+                        order.getPlannedEndAt()
+                )
+        ).toList();
     }
 
-    public ShowOrderDTO returnOrderById(Long id) {
+    public ResponseDTO returnOrderById(Long id) {
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Order not found: " + id));
-        return mapToDTO(order);
+        return new ResponseDTO(
+                order.getId(),
+                order.getStatus(),
+                order.getPlannedStartAt(),
+                order.getPlannedEndAt()
+        );
     }
 
 
@@ -156,13 +166,5 @@ public class OrderService {
         orderRepository.delete(order);
     }
 
-    private ShowOrderDTO mapToDTO(Order order) {
-        List<OrderItemDTO> items = order.getOrderItemList().stream()
-                .map(i -> new OrderItemDTO(
-                        i.getId(),
-                        new ProductCreateDTO(i.getProduct().getName(), i.getProduct().getDescription()),
-                        i.getQty()))
-                .collect(Collectors.toList());
-        return new ShowOrderDTO(order, items);
-    }
+
 }
