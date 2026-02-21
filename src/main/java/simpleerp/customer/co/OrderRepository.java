@@ -15,4 +15,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             List<OrderStatus> statuses,
             Timestamp now
     );
+
+    Order findFirstByStatus(OrderStatus orderStatus);
+
 }
