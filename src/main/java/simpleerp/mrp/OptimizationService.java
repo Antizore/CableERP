@@ -68,18 +68,18 @@ public class OptimizationService {
 
 
         Instant ceiling = nextScheduledOrder.getPlannedStartAt().toInstant();
-        long gapMinutes = Duration.between(now, ceiling).toMinutes();
+        long gapMinutes = Duration.between(machineFreeAt, ceiling).toMinutes();
 
         if (gapMinutes > durationMinutes) {
             String msg = String.format(
                     "OPTIMIZATION: Order #%d is READY and takes %d min. " +
-                            "Machine is waiting for Order #%d until %s. " +
-                            "You can squeeze Order #%d in NOW!",
+                            "Machine is free from %s until %s (Order #%d). " +
+                            "You can squeeze it in",
                     candidateOrder.getId(),
                     durationMinutes,
-                    nextScheduledOrder.getId(),
-                    nextScheduledOrder.getPlannedStartAt().toString(),
-                    candidateOrder.getId()
+                    machineFreeAt,
+                    ceiling,
+                    nextScheduledOrder.getId()
             );
             notificationService.createAlert(msg);
         }
