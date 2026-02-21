@@ -85,14 +85,19 @@ public class OptimizationService {
         }
     }
 
-    private void suggestJump(Order order, String availability, long duration) {
+    private void suggestJump(Order order, Instant availableFrom, long duration, Order runningOrder) {
+
+        String availabilityMsg = (runningOrder == null)
+                ? "NOW"
+                : "after Order #" + runningOrder.getId() + " finishes at " + availableFrom;
+
         String msg = String.format(
                 "OPTIMIZATION: Order #%d (Planned: %s) is READY and takes only %d min. " +
                         "Machine is available %s. Start it early!",
                 order.getId(),
                 order.getPlannedStartAt(),
                 duration,
-                availability
+                availabilityMsg
         );
         notificationService.createAlert(msg);
     }
