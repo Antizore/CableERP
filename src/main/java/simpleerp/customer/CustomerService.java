@@ -20,20 +20,22 @@ public class CustomerService {
         this.customerRepository = customerRepository;
     }
 
+
+    @Transactional
+    public Customer createCustomer(CreateCustomerDTO customer) {
+        Optional<Customer> existingCustomer = Optional.ofNullable(
+                customerRepository.findCustomerByEmail(customer.email()));
+        if (existingCustomer.isPresent()) throw new
+                DuplicateException("Customer with email " + customer.email() + " already exists.");
+        else return customerRepository.saveAndFlush(new Customer(customer.name(),customer.phone(), customer.email()));
+    }
+
+
     public List<Customer> getListOfCustomers(){
         return customerRepository.findAll();
     }
 
-    @Transactional
-    public Customer createCustomer(Customer customer) {
-        Optional<Customer> existingCustomer = Optional.ofNullable(customerRepository.findCustomerByEmail(customer.getEmail()));
 
-        if (customer.getEmail() == null || customer.getEmail().isEmpty()) throw new NoEmailException("Cannot add Customer without email");
-        else if ( customer.getName() == null || customer.getName().isEmpty()) throw  new NoNameException("Cannot add customer without name");
-        else if (existingCustomer.isPresent()) throw new DuplicateException("Customer with email " + customer.getEmail() + " already exists.");
-        else return customerRepository.saveAndFlush(customer);
-
-        }
 
 
     }
