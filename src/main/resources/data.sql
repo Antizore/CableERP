@@ -3,8 +3,8 @@
 -- =================================================================================
 
 -- 1. Base Configuration (Customers & Vendors)
-INSERT INTO customer (id, name, phone, email) VALUES
-    (1, 'John Doe (Tester)', '+1 555 0199', 'john@test.com');
+INSERT INTO customer (name, phone, email) VALUES
+    ('John Doe (Tester)', '+1 555 0199', 'john@test.com');
 
 INSERT INTO vendor (id, name, email) VALUES
                                          (1, 'Fast Delivery Corp', 'fast@vendor.com'),      -- Lead time: ~1 day
@@ -16,8 +16,8 @@ INSERT INTO vendor (id, name, email) VALUES
 -- Expectation: Status READY, Start Date = Today.
 -- =================================================================================
 
-INSERT INTO product (id, name, description, minutes_to_produce) VALUES
-    (1, 'Product A (In Stock)', 'All components available immediately', 15.0);
+INSERT INTO product (name, description, minutes_to_produce) VALUES
+    ('Product A (In Stock)', 'All components available immediately', 15.0);
 
 INSERT INTO component (id, name, unit, cost_per_unit) VALUES
     (10, 'Component A (Standard)', 'qty', 1.00);
@@ -38,8 +38,8 @@ INSERT INTO inventory_item (component_id, qty_available, qty_reserved) VALUES
 -- Expectation: Status WAITING, Start Date = Today + 7 days (Vendor Lead Time).
 -- =================================================================================
 
-INSERT INTO product (id, name, description, minutes_to_produce) VALUES
-    (2, 'Product B (Backordered)', 'Missing parts, long lead time', 30.0);
+INSERT INTO product (name, description, minutes_to_produce) VALUES
+    ('Product B (Backordered)', 'Missing parts, long lead time', 30.0);
 
 INSERT INTO component (id, name, unit, cost_per_unit) VALUES
     (20, 'Component B (Scarce)', 'qty', 5.00);
@@ -64,8 +64,8 @@ INSERT INTO inventory_item (component_id, qty_available, qty_reserved) VALUES
 -- Expectation: 1st order becomes READY, 2nd remains WAITING.
 -- =================================================================================
 
-INSERT INTO product (id, name, description, minutes_to_produce) VALUES
-    (3, 'Product C (FIFO Test)', 'Testing allocation queue logic', 10.0);
+INSERT INTO product (name, description, minutes_to_produce) VALUES
+    ('Product C (FIFO Test)', 'Testing allocation queue logic', 10.0);
 
 INSERT INTO component (id, name, unit, cost_per_unit) VALUES
     (30, 'Component C (Empty)', 'qty', 2.00);
@@ -88,8 +88,8 @@ INSERT INTO inventory_item (component_id, qty_available, qty_reserved) VALUES
 -- =================================================================================
 
 -- 1. Product CANDIDATE (Small, fast, available)
-INSERT INTO product (id, name, description, minutes_to_produce) VALUES
-    (4, 'Product D (Filler)', 'Quick production, components in stock', 20.0);
+INSERT INTO product (name, description, minutes_to_produce) VALUES
+    ( 'Product D (Filler)', 'Quick production, components in stock', 20.0);
 
 -- 2. Product BLOCKER (Large, scheduled for future)
 INSERT INTO product (id, name, description, minutes_to_produce) VALUES
