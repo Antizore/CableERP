@@ -23,13 +23,13 @@ public class Inventory {
     private Long id;
 
     @OneToOne(optional = false)
-    @JoinColumn(name = "component_id", unique = true)
+    @JoinColumn(name = "component_id", unique = true, nullable = false)
     private Component component;
 
-    @Column(name = "qty_available")
+    @Column(name = "qty_available", nullable = false, precision = 10, scale = 2)
     private double qtyAvailable;
 
-    @Column(name = "qty_reserved")
+    @Column(name = "qty_reserved", nullable = false, precision = 10, scale = 2)
     private double qtyReserved;
 
     @Column(name = "updated_at")
@@ -39,9 +39,10 @@ public class Inventory {
     public Long getId() { return id; }
     public Component getComponent() { return component; }
     public double getQtyAvailable() { return qtyAvailable; }
-    public void setQtyAvailable(double qtyAvailable) { this.qtyAvailable = qtyAvailable; }
     public double getQtyReserved() { return qtyReserved; }
-    public void setQtyReserved(double qtyReserved) { this.qtyReserved = qtyReserved; }
     public Timestamp getUpdatedAt() {return updatedAt;}
+
+    public void setQtyAvailable(double qtyAvailable) { this.qtyAvailable = qtyAvailable; }
+    public void setQtyReserved(double qtyReserved) { this.qtyReserved = qtyReserved; }
     public void setUpdatedAt(Timestamp updatedAt) {this.updatedAt = updatedAt;}
 }
