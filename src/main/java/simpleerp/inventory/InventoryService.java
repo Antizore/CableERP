@@ -94,16 +94,11 @@ public class InventoryService {
         Inventory inventory = inventoryRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Inventory not found"));
 
-        if (dto.qtyAvailable() != null) {
-            if (dto.qtyAvailable() < 0) throw new WrongValueException("Available quantity cannot be negative");
-            inventory.setQtyAvailable(dto.qtyAvailable());
-        }
-
-        if (dto.qtyReserved() != null) {
-            if (dto.qtyReserved() < 0) throw new WrongValueException("Reserved quantity cannot be negative");
-            inventory.setQtyReserved(dto.qtyReserved());
-        }
-
+        //Jakarta validation in dto is handling that
+        //if (dto.qtyAvailable() < 0) throw new WrongValueException("Available quantity cannot be negative");
+        inventory.setQtyAvailable(dto.qtyAvailable());
+        //if (dto.qtyReserved() < 0) throw new WrongValueException("Reserved quantity cannot be negative");
+        inventory.setQtyReserved(dto.qtyReserved());
         return inventoryRepository.saveAndFlush(inventory);
     }
 
