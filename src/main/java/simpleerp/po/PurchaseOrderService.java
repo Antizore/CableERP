@@ -1,6 +1,7 @@
 package simpleerp.po;
 
 
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -13,6 +14,7 @@ public class PurchaseOrderService {
     }
 
 
+    @Transactional
     public void orderPurchase(PurchaseOrder purchaseOrder){
         purchaseOrderRepository.saveAndFlush(purchaseOrder);
     }

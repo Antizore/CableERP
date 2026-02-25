@@ -107,6 +107,7 @@ public class InventoryService {
         return inventoryRepository.saveAndFlush(inventory);
     }
 
+    @Transactional
     public void deleteInventory(Long id) {
         inventoryRepository.deleteById(id);
     }

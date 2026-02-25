@@ -1,5 +1,6 @@
 package simpleerp.component;
 
+import jakarta.transaction.Transactional;
 import simpleerp.bom.BillOfMaterialsDTO;
 import simpleerp.bom.BillOfMaterialsService;
 import simpleerp.common.exception.CannotDeleteException;
@@ -20,7 +21,7 @@ public class ComponentService {
         this.billOfMaterialsService = billOfMaterialsService;
     }
 
-
+    @Transactional
     public ComponentResponseDTO addComponent(ComponentCreateDTO dto){
         if(componentRepository.findByName(dto.name()).isPresent()) {
             throw new DuplicateException("component with name: " + dto.name() + " already exists");}
@@ -39,7 +40,7 @@ public class ComponentService {
         return mapToDTO(component);
     }
 
-
+    @Transactional
     public void deleteComponent(Long id){
         Component component = componentRepository.findById(id).orElseThrow();
         List<BillOfMaterialsDTO> dtoList = billOfMaterialsService.getBill(id, component);
@@ -53,6 +54,7 @@ public class ComponentService {
         }
     }
 
+    @Transactional
     public ComponentResponseDTO patchComponent(Long id, ComponentUpdateDTO dto){
         Component component = componentRepository.findById(id).orElseThrow();
 

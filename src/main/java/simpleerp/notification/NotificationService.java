@@ -1,6 +1,7 @@
 package simpleerp.notification;
 
 
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -22,6 +23,7 @@ public class NotificationService {
                 : notificationRepository.findAll();
     }
 
+    @Transactional
     public void createAlert(String message) {
         String safeMessage = (message.length() > 500) ? message.substring(0, 500) : message;
         Notification notification = new Notification(

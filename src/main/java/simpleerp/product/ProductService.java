@@ -1,6 +1,7 @@
 package simpleerp.product;
 
 
+import jakarta.transaction.Transactional;
 import simpleerp.bom.BillOfMaterialsDTO;
 import simpleerp.bom.BillOfMaterialsRepository;
 import simpleerp.common.exception.CannotDeleteException;
@@ -62,6 +63,7 @@ public class ProductService {
                 ).orElseThrow();
     }
 
+    @Transactional
     public ProductDTO updateProduct(Long id, ProductCreateDTO product){
         Product productToBeUpdated = productRepository.findById(id).orElseThrow();
         if(!(product.name() == null || product.name().isBlank())) productToBeUpdated.setName(product.name());
@@ -72,6 +74,7 @@ public class ProductService {
     }
 
 
+    @Transactional
     public Product addProduct(ProductCreateDTO product) {
         if(product.name() == null || product.name().isBlank()) throw new NoNameException("Cannot add product without name");
         else {
@@ -80,6 +83,7 @@ public class ProductService {
     }
 
 
+    @Transactional
     public void deleteProduct(Long id) {
         if(billOfMaterialsRepository.findAllByProduct_Id(id).isEmpty()) productRepository.deleteById(id);
         else throw new CannotDeleteException("Cannot delete product that is actively used in BOM, delete all BOMs first");
