@@ -52,13 +52,13 @@ public class Component {
 
     public Long getId() { return id; }
     public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
     public Unit getUnit() { return unit; }
-    public void setUnit(Unit unit) { this.unit = unit; }
     public Double getCostPerUnit() { return costPerUnit; }
-    public void setCostPerUnit(Double costPerUnit) { this.costPerUnit = costPerUnit; }
     public List<ComponentVendor> getComponentVendors() { return componentVendors; }
     public Inventory getInventory() { return inventory; }
-    public void setInventory(Inventory inventory) { this.inventory = inventory; }
 
+    public void setName(String name) { this.name = name; }
+    public void setUnit(Unit unit) { this.unit = unit; }
+    public void setCostPerUnit(Double costPerUnit) { this.costPerUnit = costPerUnit; }
+    public void setInventory(Inventory inventory) { this.inventory = inventory; }
 }
