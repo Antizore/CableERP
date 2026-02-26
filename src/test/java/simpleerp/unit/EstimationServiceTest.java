@@ -47,7 +47,9 @@ public class EstimationServiceTest {
                 .thenReturn(Optional.empty());
 
         Component copperWire = new Component("Copper", null, 10.0);
-        ComponentVendor vendor = new ComponentVendor(copperWire, null, 7, 5.0);
+
+        int vendorLeadTimeDays = 7;
+        ComponentVendor vendor = new ComponentVendor(copperWire, null, vendorLeadTimeDays, 5.0);
 
         vendor.setPreferred(true);
         copperWire.getComponentVendors().add(vendor);
@@ -64,11 +66,19 @@ public class EstimationServiceTest {
         Timestamp start = result.get(0);
         Timestamp end = result.get(1);
         Instant now = Instant.now();
-        Instant expectedStart = now.plus(7, ChronoUnit.DAYS);
+
+        Instant expectedStart = now.plus(vendorLeadTimeDays, ChronoUnit.DAYS);
         long diff = Math.abs(expectedStart.toEpochMilli() - start.getTime());
 
-        assertTrue(diff < 1000, "Start should be delayed by Vendor Lead Time (7 days). Diff: " + diff + "ms");
-        long expectedEnd = start.toInstant().plus(10, ChronoUnit.MINUTES).toEpochMilli();
+
+        // because of using Instant.now() i need to add tolerance so the test does not fail because of some milliseconds
+        // note to self: Time Mocking with Clock instance
+        long toleranceMs = 1000;
+        assertTrue(diff < toleranceMs, "Start should be delayed by Vendor Lead Time (7 days). Diff: "
+                + diff + "ms");
+
+        long productionTimeInMinutes = 10;
+        long expectedEnd = start.toInstant().plus(productionTimeInMinutes, ChronoUnit.MINUTES).toEpochMilli();
         assertEquals(expectedEnd, end.getTime(), "End time should be 10 min after start");
     }
 
