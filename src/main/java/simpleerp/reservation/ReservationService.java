@@ -79,12 +79,6 @@ public class ReservationService {
         reservationRepository.delete(reservation);
     }
 
-    public double checkFreeStock(Long componentId) {
-        return inventoryRepository.findByComponentId(componentId)
-                .map(inv -> inv.getQtyAvailable() - inv.getQtyReserved())
-                .orElse(0.0);
-    }
-
     @Transactional
     public void reallocateStockForComponent(Long componentId) {
         Inventory inventory = inventoryRepository.findByComponentId(componentId)
