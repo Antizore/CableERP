@@ -11,6 +11,7 @@
     - [Scenario B](#scenario-b-optimized-schedule) 
 - [Roadmap](#roadmap)
 - [How to run](#how-to-Run)
+- [Testing scenarios](#testing-scenarios)
 
 
 
@@ -329,3 +330,45 @@ To verify the logic (Unit & Integration tests):
 ```bash
 ./mvnw test
 ```
+
+
+## Testing Scenarios
+
+The following scenarios outline the functional verification of the SimpleERP core engine. These cases cover inventory allocation, scheduling bottlenecks, and the optimization logic used to minimize machine idle time.
+
+### Scenario 1: Immediate Order Fulfillment (Standard Process)
+**Objective:** To verify that the system correctly identifies available inventory and schedules production for the earliest possible slot.
+* **Preconditions:** All components required for Product ID 1 are present in the `INVENTORY` table with sufficient quantity to meet the Bill of Materials (BOM) requirements.
+* **Execution:** Submit a `POST` request to `/orders` for Product ID 1.
+* **Expected Results:**
+    * The order status is updated to `READY`.
+    * The `planned_start_at` timestamp is synchronized with the current time or the next available machine opening.
+    * All associated `stock_reservation` records are flagged as `is_fulfilled = true`.
+
+### Scenario 2: Lead Time Calculation (Inventory Shortage)
+**Objective:** To ensure the scheduling engine accurately accounts for vendor delays when primary components are out of stock.
+* **Preconditions:** Product ID 2 requires a specific component currently at zero stock. The component metadata defines a 7-day **Vendor Lead Time**.
+* **Execution:** Submit an order request for Product ID 2.
+* **Expected Results:**
+    * The order status is set to `WAITING`.
+    * The `planned_start_at` is calculated as $T + 7$ days (where $T$ represents the current date).
+    * The `EstimationService` identifies the specific component causing the scheduling bottleneck in the system logs.
+
+### Scenario 3: FIFO Allocation Logic (Stock Inbound)
+**Objective:** To validate that the system prioritizes older orders (First-In, First-Out) when new stock is received in the warehouse.
+* **Execution:**
+    1. Create **Order A** (Qty: 10) followed by **Order B** (Qty: 5). Both orders enter `WAITING` status due to stock deficiency.
+    2. Submit a stock update to `/inventory/receive` for 12 units of the required component.
+* **Expected Results:**
+    * **Order A** transitions to `READY` status (utilizing 10 units of the new stock).
+    * **Order B** remains in `WAITING` status (utilizing the remaining 2 units, but maintaining a deficiency of 3 units).
+    * The physical inventory level is adjusted to zero to reflect the allocation to the reservation pool.
+
+### Scenario 4: Production Gap Optimization (Jumper Logic)
+**Objective:** To test the `OptimizationService`'s ability to maximize machine utilization by reordering the queue when a primary order is blocked.
+* **Context:** A high-priority "Blocker Order" is scheduled five days in the future, leaving a significant idle window in the current machine timeline.
+* **Execution:** Place an order for a "Small/Fast" product that has all components available and is currently `READY` for production.
+* **Expected Results:**
+    * The `OptimizationService` identifies the idle window preceding the "Blocker Order."
+    * The `NotificationService` triggers an alert to the Production Manager suggesting a schedule override.
+    * The system validates that the "Small/Fast" order can be completed within the gap without impacting the "Blocker Order's" original completion estimate.
