@@ -16,6 +16,7 @@ public class Product {
     }
 
 
+    //TODO: add minutesToProduce and update across different functions
     public Product(String name, String description) {
         this.name = name;
         this.description = description;
