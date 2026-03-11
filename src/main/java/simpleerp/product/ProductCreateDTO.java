@@ -1,4 +1,11 @@
 package simpleerp.product;
 
-public record ProductCreateDTO(String name, String description) {
-}
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
+public record ProductCreateDTO(
+        @NotNull
+        @Size(min = 2, message = "product name needs to have 2 or more characters")
+        String name,
+        String description
+) { }
