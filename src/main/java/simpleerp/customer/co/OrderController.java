@@ -27,7 +27,7 @@ public class OrderController {
                 .body(order);
     }
 
-    @PostMapping("/suggestions/{id}/accept")
+    @PostMapping("/suggestions/{id}")
     public ResponseEntity<Void> acceptSuggestion(@PathVariable Long orderId){
         orderService.acceptOptimizationSuggestion(orderId);
         return ResponseEntity
