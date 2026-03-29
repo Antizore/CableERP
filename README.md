@@ -273,14 +273,15 @@ This project is under active development. I am currently focusing on refactoring
 
 <li>[ ] Multi-Machine Support: Logic to handle multiple production lines simultaneously.</li> 
 
-<li>[ ] Dockerization: Containerizing the application for easier deployment.</li>
+<li>[X] Dockerization: Containerizing the application for easier deployment.</li>
 
 </ul>
 
 ## How to Run
 
 ### Prerequisites
-* **Java 25** installed
+* **Java 25** installed (if running locally)
+* Docker & Docker Desktop (recommended)
 * **Git**
 
 ### 1. Clone the repository
@@ -288,19 +289,26 @@ This project is under active development. I am currently focusing on refactoring
 git clone https://github.com/Antizore/SimpleERP.git
 cd SimpleERP
 ```
-### 2. Build the application
-Using the Maven Wrapper (recommended):
+### 2. Build
+#### Option (A): Run with Docker (Recommended)
+
+```Bash
+docker compose up --build
+```
+
+#### Option (B): Run locally
+Using the Maven Wrapper:
 ```bash
 ./mvnw clean install
 ```
 (On Windows PowerShell use: .\mvnw clean install)
 
-### 3. Run the application
+Run the application
 
 ```bash
 ./mvnw spring-boot:run
 ```
-### 4. Access the Application
+### 3. Access the Application
 
 Once the application is running, you can access the following endpoints:
 <ul>
@@ -308,7 +316,7 @@ Once the application is running, you can access the following endpoints:
     API Documentation (Swagger UI):
     <ul>
         <li>http://localhost:8080/swagger-ui/index.html</li>
-        <li>Use this to test endpoints like POST /orders without external tools.</li>
+        <li>Use this to test endpoints like POST /orders directly from your browser.</li>
     </ul>
 </li>
     
@@ -324,7 +332,7 @@ Once the application is running, you can access the following endpoints:
 </li>
 </ul>
    
-### 5. Run Tests
+### 4. Run Tests
 
 To verify the logic (Unit & Integration tests):
 ```bash
