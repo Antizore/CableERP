@@ -69,6 +69,9 @@ public class OrderService {
         );
     }
 
+    public void acceptOptimizationSuggestion(Long orderId){
+        Order order = orderRepository.findById(orderId).orElseThrow();
+    }
 
     @Transactional
     public Order placeOrder(Long customerId, List<CreateItemsInOrderDTO> itemsDto) {
