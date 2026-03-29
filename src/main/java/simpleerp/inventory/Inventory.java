@@ -29,7 +29,7 @@ public class Inventory {
     @Column(name = "qty_available", nullable = false, precision = 10)
     private double qtyAvailable;
 
-    @Column(name = "qty_reserved", nullable = false, precision = 10, scale = 2)
+    @Column(name = "qty_reserved", nullable = false, precision = 10)
     private double qtyReserved;
 
     @Column(name = "updated_at")
