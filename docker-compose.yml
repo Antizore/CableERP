@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+
+  app:
+    build: .
+    container_name: simple-erp
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - db
+    networks:
+      - erp-network
+
+  db:
+    image: postgres:15-alpine
+    container_name: simple-erp-db
+    environment:
+      - POSTGRES_DB=erp_db
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - erp-network
+
+
+networks:
+  erp-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
