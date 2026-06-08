@@ -1,6 +1,7 @@
 package simpleerp.bom;
 
 
+import jakarta.transaction.Transactional;
 import simpleerp.common.exception.DuplicateException;
 import simpleerp.common.exception.MissingEntityException;
 import simpleerp.common.exception.WrongValueException;
@@ -51,6 +52,7 @@ public class BillOfMaterialsService {
 
 
 
+    @Transactional
     public void addBill(List<BomCreatingDTO> billOfMaterialsList, Long id){
         Product product = productRepository.findById(id).orElseThrow();
 
@@ -82,6 +84,7 @@ public class BillOfMaterialsService {
         billOfMaterialsRepository.saveAllAndFlush(bomToSend.values().stream().toList());
     }
 
+    @Transactional
     public void updateBill(List<BomCreatingDTO> bomCreatingDTOList, Long id){
         Product product = productRepository.findById(id).orElseThrow();
         List<BillOfMaterials> productBOM = product.getBillOfMaterialsList();
@@ -104,6 +107,7 @@ public class BillOfMaterialsService {
         billOfMaterialsRepository.saveAllAndFlush(map1);
     }
 
+    @Transactional
     public void deleteBill(Long id) {
         Product product = productRepository.findById(id).orElseThrow();
         List<BillOfMaterials> productBOM = product.getBillOfMaterialsList();
