@@ -32,7 +32,7 @@ public class ComponentService {
 
 
     public List<ComponentResponseDTO> getComponents() {
-        return componentRepository.findAll().stream().map(this::mapToDTO).toList();
+        return componentRepository.findAllWithVendors().stream().map(this::mapToDTO).toList();
     }
 
     public ComponentResponseDTO getComponent(Long id) {
