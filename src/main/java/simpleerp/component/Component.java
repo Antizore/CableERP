@@ -43,7 +43,7 @@ public class Component {
     private Inventory inventory;
 
     @OneToMany(mappedBy = "component")
-    private List<Reservation> reservationList;
+    private List<Reservation> reservationList = new ArrayList<>();
 
     @OneToMany(mappedBy = "component", cascade = CascadeType.ALL)
     private List<ComponentVendor> componentVendors = new ArrayList<>();
