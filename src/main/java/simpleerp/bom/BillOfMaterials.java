@@ -4,6 +4,7 @@ import simpleerp.component.Component;
 import simpleerp.product.Product;
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 
 
 @Entity
@@ -12,7 +13,7 @@ public class BillOfMaterials {
 
     protected BillOfMaterials(){}
 
-    public BillOfMaterials(Product product, Component component, double qty) {
+    public BillOfMaterials(Product product, Component component, BigDecimal qty) {
         this.product = product;
         this.component = component;
         this.qty = qty;
@@ -31,7 +32,7 @@ public class BillOfMaterials {
     private Component component;
 
     @Column(nullable = false, precision = 10)
-    private double qty;
+    private BigDecimal qty;
 
 
     public Long getId() {
@@ -54,11 +55,11 @@ public class BillOfMaterials {
         this.component = component;
     }
 
-    public double getQty() {
+    public BigDecimal getQty() {
         return qty;
     }
 
-    public void setQty(double qty) {
+    public void setQty(BigDecimal qty) {
         this.qty = qty;
     }
 }
