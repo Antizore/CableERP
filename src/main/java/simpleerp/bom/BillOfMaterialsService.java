@@ -61,7 +61,7 @@ public class BillOfMaterialsService {
 
         HashMap<Long,BillOfMaterials> bomToSend = new HashMap<>();
         for(BomCreatingDTO bill : billOfMaterialsList){
-            Component component = componentRepository.findById(id).orElseThrow();
+            Component component = componentRepository.findById(bill.componentId()).orElseThrow();
 
             BillOfMaterials billToPut = new BillOfMaterials(
                     product,
