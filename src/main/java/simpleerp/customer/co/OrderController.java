@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@Transactional
 @RequestMapping("/api/v1/customers/orders")
 public class OrderController {
 
@@ -36,7 +35,6 @@ public class OrderController {
     }
 
     @GetMapping
-    @Transactional(readOnly = true)
     public ResponseEntity<List<ResponseDTO>> getAllOrders() {
         return ResponseEntity
                 .ok()
