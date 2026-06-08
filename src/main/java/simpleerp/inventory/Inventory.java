@@ -2,6 +2,8 @@ package simpleerp.inventory;
 
 import simpleerp.component.Component;
 import jakarta.persistence.*;
+
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.Instant;
 
@@ -11,7 +13,7 @@ public class Inventory {
 
     protected Inventory() {}
 
-    public Inventory(Component component, double qtyAvailable, double qtyReserved) {
+    public Inventory(Component component, BigDecimal qtyAvailable, BigDecimal qtyReserved) {
         this.component = component;
         this.qtyAvailable = qtyAvailable;
         this.qtyReserved = qtyReserved;
@@ -27,10 +29,10 @@ public class Inventory {
     private Component component;
 
     @Column(name = "qty_available", nullable = false, precision = 10)
-    private double qtyAvailable;
+    private BigDecimal qtyAvailable;
 
     @Column(name = "qty_reserved", nullable = false, precision = 10)
-    private double qtyReserved;
+    private BigDecimal qtyReserved;
 
     @Column(name = "updated_at")
     private Timestamp updatedAt;
@@ -38,11 +40,11 @@ public class Inventory {
 
     public Long getId() { return id; }
     public Component getComponent() { return component; }
-    public double getQtyAvailable() { return qtyAvailable; }
-    public double getQtyReserved() { return qtyReserved; }
+    public BigDecimal getQtyAvailable() { return qtyAvailable; }
+    public BigDecimal getQtyReserved() { return qtyReserved; }
     public Timestamp getUpdatedAt() {return updatedAt;}
 
-    public void setQtyAvailable(double qtyAvailable) { this.qtyAvailable = qtyAvailable; }
-    public void setQtyReserved(double qtyReserved) { this.qtyReserved = qtyReserved; }
+    public void setQtyAvailable(BigDecimal qtyAvailable) { this.qtyAvailable = qtyAvailable; }
+    public void setQtyReserved(BigDecimal qtyReserved) { this.qtyReserved = qtyReserved; }
     public void setUpdatedAt(Timestamp updatedAt) {this.updatedAt = updatedAt;}
 }

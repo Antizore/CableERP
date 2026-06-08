@@ -4,6 +4,8 @@ import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
+import java.math.BigDecimal;
+
 public record BomCreatingDTO(
         @Positive(message = "ID must be greater than 0")
         @NotNull(message = "ID cannot be null")
@@ -12,4 +14,4 @@ public record BomCreatingDTO(
         @Positive(message = "qty must be greater than 0")
         @NotNull(message = "qty cannot be null")
         @Digits(integer = 10, fraction = 4, message = "Currently supported (10,4)")
-        double qty){}
+        BigDecimal qty){}

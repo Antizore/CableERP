@@ -12,6 +12,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,7 +39,7 @@ public class ReservationService {
 
     @Transactional
     public void makeReservation(ReservationRequestDTO request) {
-        if (request.qty() <= 0) {
+        if (request.qty().compareTo(BigDecimal.ZERO) <= 0) {
             throw new WrongValueException("Quantity must be greater than 0");
         }
         Order order = orderRepository.findById(request.orderId())
@@ -47,12 +48,12 @@ public class ReservationService {
                 .orElseThrow(() -> new RuntimeException("component not found: " + request.componentId()));
         Inventory inventory = component.getInventory();
         if (inventory == null) {
-            inventory = new Inventory(component, 0, 0);
+            inventory = new Inventory(component, BigDecimal.ZERO, BigDecimal.ZERO);
             component.setInventory(inventory);
         }
-        inventory.setQtyReserved(inventory.getQtyReserved() + request.qty());
+        inventory.setQtyReserved(inventory.getQtyReserved().add(request.qty()));
         Reservation reservation = new Reservation(order, component, request.qty());
-        boolean hasCoverage = inventory.getQtyAvailable() >= inventory.getQtyReserved();
+        boolean hasCoverage = inventory.getQtyAvailable().compareTo(inventory.getQtyReserved()) >= 0;
         reservation.setFulfilled(hasCoverage);
         inventoryRepository.saveAndFlush(inventory);
         reservationRepository.saveAndFlush(reservation);
@@ -73,8 +74,8 @@ public class ReservationService {
         Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(() -> new RuntimeException("Reservation not found"));
         Inventory inventory = reservation.getComponent().getInventory();
-        double newReservedQty = inventory.getQtyReserved() - reservation.getQty();
-        inventory.setQtyReserved(Math.max(newReservedQty, 0));
+        BigDecimal newReservedQty = inventory.getQtyReserved().subtract(reservation.getQty());
+        inventory.setQtyReserved(newReservedQty.max(BigDecimal.ZERO));
         inventoryRepository.save(inventory);
         reservationRepository.delete(reservation);
     }
@@ -84,20 +85,20 @@ public class ReservationService {
         Inventory inventory = inventoryRepository.findByComponentId(componentId)
                 .orElseThrow(() -> new RuntimeException("Inventory not found"));
 
-        double availableToGive = inventory.getQtyAvailable();
+        BigDecimal availableToGive = inventory.getQtyAvailable();
         List<Reservation> allReservations = reservationRepository
                 .findAllByComponentIdOrderByCustomerOrderCreatedAtAsc(componentId);
 
         for (Reservation reservation : allReservations) {
-            double needed = reservation.getQty();
+            BigDecimal needed = reservation.getQty();
 
-            if (availableToGive >= needed) {
+            if (availableToGive.compareTo(needed) >= 0) {
                 if (!reservation.isFulfilled()) {
                     reservation.setFulfilled(true);
                     reservationRepository.saveAndFlush(reservation);
                     orderService.tryPromoteOrderToReady(reservation.getCustomerOrder().getId());
                 }
-                availableToGive -= needed;
+                availableToGive = availableToGive.subtract(needed);
             } else {
                 if (reservation.isFulfilled()) {
                     reservation.setFulfilled(false);

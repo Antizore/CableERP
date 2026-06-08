@@ -1,4 +1,6 @@
 package simpleerp.customer.co;
 
-public record CreateItemsInOrderDTO(Long productId, Double qty) {
+import java.math.BigDecimal;
+
+public record CreateItemsInOrderDTO(Long productId, BigDecimal qty) {
 }

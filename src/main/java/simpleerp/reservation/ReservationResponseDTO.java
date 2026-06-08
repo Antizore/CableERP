@@ -1,8 +1,10 @@
 package simpleerp.reservation;
 
+import java.math.BigDecimal;
+
 public record ReservationResponseDTO(
         Long id,
-        double qty,
+        BigDecimal qty,
         boolean isFulfilled
 ) {
 }

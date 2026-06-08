@@ -13,6 +13,8 @@ import simpleerp.reservation.ReservationRequestDTO;
 import simpleerp.reservation.ReservationService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -95,13 +97,13 @@ public class OrderService {
         orderItemRepository.saveAllAndFlush(orderItems);
 
 
-        Map<Long,Double> mapOfComponentIdAndQtyNeeded = new HashMap<>();
+        Map<Long,BigDecimal> mapOfComponentIdAndQtyNeeded = new HashMap<>();
         for (OrderItem item : orderItems) {
             Product product = item.getProduct();
-            double productQty = item.getQty();
+            BigDecimal productQty = item.getQty();
 
             for (BillOfMaterials bom : product.getBillOfMaterialsList()) {
-                double componentQtyNeeded = bom.getQty() * productQty;
+                BigDecimal componentQtyNeeded = bom.getQty().multiply(productQty);
 
                 /*
                 mapOfComponentIdAndQtyNeeded.computeIfPresent(
@@ -112,7 +114,7 @@ public class OrderService {
 
                  */
 
-                mapOfComponentIdAndQtyNeeded.merge(bom.getComponent().getId(),componentQtyNeeded,Double::sum);
+                mapOfComponentIdAndQtyNeeded.merge(bom.getComponent().getId(),componentQtyNeeded,BigDecimal::add);
 
             }
         }

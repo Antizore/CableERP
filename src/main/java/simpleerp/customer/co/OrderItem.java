@@ -4,13 +4,15 @@ package simpleerp.customer.co;
 import simpleerp.product.Product;
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
+
 @Entity
 @Table(name = "customer_order_item")
 public class OrderItem {
 
     protected OrderItem(){}
 
-    public OrderItem(Order order, Product product, Double qty){
+    public OrderItem(Order order, Product product, BigDecimal qty){
         this.order = order;
         this.qty = qty;
         this.product = product;
@@ -30,7 +32,7 @@ public class OrderItem {
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     private Product product;
 
-    private double qty;
+    private BigDecimal qty;
 
 
     public Long getId() {
@@ -54,11 +56,11 @@ public class OrderItem {
         this.product = product;
     }
 
-    public double getQty() {
+    public BigDecimal getQty() {
         return qty;
     }
 
-    public void setQty(double qty) {
+    public void setQty(BigDecimal qty) {
         this.qty = qty;
     }
 

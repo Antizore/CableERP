@@ -2,10 +2,12 @@ package simpleerp.inventory;
 
 import simpleerp.component.ComponentResponseDTO;
 
+import java.math.BigDecimal;
+
 public record ShowInventoryDTO(
         Long id,
-        double qtyAvailable,
-        double qtyReserved,
+        BigDecimal qtyAvailable,
+        BigDecimal qtyReserved,
         ComponentResponseDTO component
 ) {
 }

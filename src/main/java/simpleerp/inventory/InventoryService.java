@@ -9,6 +9,8 @@ import simpleerp.vendor.ShowComponentVendorDTO;
 import jakarta.transaction.Transactional;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -46,25 +48,25 @@ public class InventoryService {
 
 
     @Transactional
-    public void receiveGoods(Long componentId, double quantity) {
-        if (quantity <= 0) throw new WrongValueException("Received quantity must be > 0");
+    public void receiveGoods(Long componentId, BigDecimal quantity) {
+        if (quantity.compareTo(BigDecimal.ZERO) <= 0) throw new WrongValueException("Received quantity must be > 0");
 
         Inventory inventory = getInventoryEntityByComponentId(componentId);
-        inventory.setQtyAvailable(inventory.getQtyAvailable() + quantity);
+        inventory.setQtyAvailable(inventory.getQtyAvailable().add(quantity));
         inventoryRepository.saveAndFlush(inventory);
         reservationService.reallocateStockForComponent(componentId);
     }
 
     @Transactional
-    public void issueGoods(Long componentId, double quantity) {
+    public void issueGoods(Long componentId, BigDecimal quantity) {
         Inventory inventory = getInventoryEntityByComponentId(componentId);
 
-        if (inventory.getQtyAvailable() < quantity) {
+        if (inventory.getQtyAvailable().compareTo(quantity) < 0) {
             throw new WrongValueException("Not enough physical items to issue for production!");
         }
 
-        inventory.setQtyAvailable(inventory.getQtyAvailable() - quantity);
-        double newReserved = Math.max(0, inventory.getQtyReserved() - quantity);
+        inventory.setQtyAvailable(inventory.getQtyAvailable().subtract(quantity));
+        BigDecimal newReserved = BigDecimal.ZERO.max(inventory.getQtyReserved().subtract(quantity));
         inventory.setQtyReserved(newReserved);
         inventoryRepository.saveAndFlush(inventory);
     }
@@ -72,7 +74,9 @@ public class InventoryService {
     @Transactional
     public Inventory initializeOrUpdateInventory(CreateInventoryDTO dto) {
         if (dto.componentId() == null) throw new WrongValueException("component ID cannot be null");
-        if (dto.qtyAvailable() < 0 || dto.qtyReserved() < 0) throw new WrongValueException("Quantity cannot be negative");
+
+        if (dto.qtyAvailable().compareTo(BigDecimal.ZERO) < 0 || dto.qtyReserved().compareTo(BigDecimal.ZERO) < 0)
+            throw new WrongValueException("Quantity cannot be negative");
 
         return inventoryRepository.findByComponentId(dto.componentId())
                 .map(existing -> {
