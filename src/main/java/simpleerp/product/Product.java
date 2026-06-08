@@ -1,6 +1,7 @@
 package simpleerp.product;
 
 
+import org.hibernate.annotations.BatchSize;
 import simpleerp.bom.BillOfMaterials;
 import simpleerp.customer.co.OrderItem;
 import jakarta.persistence.*;
@@ -38,6 +39,7 @@ public class Product {
     private BigDecimal minutesToProduceOnePiece;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    @BatchSize(size = 50)
     private List<BillOfMaterials> billOfMaterialsList = new ArrayList<>();
 
     @OneToMany(mappedBy = "product")
