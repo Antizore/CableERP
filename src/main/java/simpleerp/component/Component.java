@@ -7,6 +7,8 @@ import simpleerp.reservation.Reservation;
 import simpleerp.common.Unit;
 import simpleerp.vendor.ComponentVendor;
 import jakarta.persistence.*;
+
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +18,7 @@ import java.util.List;
 public class Component {
 
     protected Component(){}
-    public Component(String name, Unit unit, Double costPerUnit) {
+    public Component(String name, Unit unit, BigDecimal costPerUnit) {
         this.name = name;
         this.unit = unit;
         this.costPerUnit = costPerUnit;
@@ -34,7 +36,7 @@ public class Component {
     private Unit unit;
 
     @Column(name = "cost_per_unit", nullable = false, precision = 2)
-    private Double costPerUnit;
+    private BigDecimal costPerUnit;
 
     @OneToMany(mappedBy = "component")
     private List<BillOfMaterials> billOfMaterialsList = new ArrayList<>();
@@ -53,12 +55,12 @@ public class Component {
     public Long getId() { return id; }
     public String getName() { return name; }
     public Unit getUnit() { return unit; }
-    public Double getCostPerUnit() { return costPerUnit; }
+    public BigDecimal getCostPerUnit() { return costPerUnit; }
     public List<ComponentVendor> getComponentVendors() { return componentVendors; }
     public Inventory getInventory() { return inventory; }
 
     public void setName(String name) { this.name = name; }
     public void setUnit(Unit unit) { this.unit = unit; }
-    public void setCostPerUnit(Double costPerUnit) { this.costPerUnit = costPerUnit; }
+    public void setCostPerUnit(BigDecimal costPerUnit) { this.costPerUnit = costPerUnit; }
     public void setInventory(Inventory inventory) { this.inventory = inventory; }
 }
