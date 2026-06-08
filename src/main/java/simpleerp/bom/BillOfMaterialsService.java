@@ -68,7 +68,6 @@ public class BillOfMaterialsService {
                     component,
                     bill.qty());
 
-            bomToSend.put(component.getId(),billToPut);
 
             bomToSend.computeIfAbsent(
                     component.getId(), (v) -> billToPut);
