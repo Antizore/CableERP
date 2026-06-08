@@ -9,6 +9,7 @@ import simpleerp.customer.co.OrderRepository;
 import simpleerp.inventory.Inventory;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -38,25 +39,25 @@ public class EstimationService {
 
     private Double calculateMaxMaterialDelay(List<OrderItem> orderItemList) {
 
-        Map<Component, Double> totalNeeds = new HashMap<>();
+        Map<Component, BigDecimal> totalNeeds = new HashMap<>();
         for (OrderItem item : orderItemList) {
-            double productQty = item.getQty();
+            BigDecimal productQty = item.getQty();
             for (BillOfMaterials bom : item.getProduct().getBillOfMaterialsList()) {
-                totalNeeds.merge(bom.getComponent(), bom.getQty() * productQty, Double::sum);
+                totalNeeds.merge(bom.getComponent(), productQty.multiply(bom.getQty()), BigDecimal::add);
             }
         }
 
         double maxDelayDays = 0.0;
 
-        for (Map.Entry<Component, Double> entry : totalNeeds.entrySet()) {
+        for (Map.Entry<Component, BigDecimal> entry : totalNeeds.entrySet()) {
             Component component = entry.getKey();
-            Double neededQty = entry.getValue();
+            BigDecimal neededQty = entry.getValue();
             Inventory inventory = component.getInventory();
-            double available = (inventory != null) ? inventory.getQtyAvailable() : 0.0;
-            double reserved = (inventory != null) ? inventory.getQtyReserved() : 0.0;
-            double freeToUse = available - reserved;
+            BigDecimal available = (inventory != null) ? inventory.getQtyAvailable() : BigDecimal.ZERO;
+            BigDecimal reserved = (inventory != null) ? inventory.getQtyReserved() : BigDecimal.ZERO;
+            BigDecimal freeToUse = available.subtract(reserved);
 
-            if (neededQty > freeToUse) {
+            if (neededQty.compareTo(freeToUse) > 0) {
                 int leadTime = getLeadTimeForComponent(component);
                 if (leadTime > maxDelayDays) {
                     maxDelayDays = leadTime;
@@ -104,15 +105,18 @@ public class EstimationService {
     }
 
     private Timestamp calculateEndDate(Timestamp startDate, List<OrderItem> orderItemList) {
-        double totalMinutesToProduce = 0;
+        BigDecimal totalMinutesToProduce = BigDecimal.ZERO;
 
         for (OrderItem item : orderItemList) {
-            Double timePerUnit = item.getProduct().getMinutesToProduceOnePiece();
-            if (timePerUnit == null) timePerUnit = 0.0;
-            totalMinutesToProduce += timePerUnit * item.getQty();
+            BigDecimal timePerUnit = item.getProduct().getMinutesToProduceOnePiece();
+            if (timePerUnit == null) timePerUnit = BigDecimal.ZERO;
+
+            totalMinutesToProduce = totalMinutesToProduce.add(
+                    item.getQty().multiply(timePerUnit)
+            );
         }
         Instant start = startDate.toInstant();
-        Instant end = start.plus((long) totalMinutesToProduce, ChronoUnit.MINUTES);
+        Instant end = start.plus(totalMinutesToProduce.longValue(), ChronoUnit.MINUTES);
         return Timestamp.from(end);
     }
 }
