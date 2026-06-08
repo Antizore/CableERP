@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -40,7 +41,7 @@ public class OrderFlowIntegrationTest {
         assertEquals(0.0, initialInventory.getQtyAvailable());
         assertEquals(10.0, initialInventory.getQtyReserved());
 
-        inventoryService.receiveGoods(componentForProductId, 50.0);
+        inventoryService.receiveGoods(componentForProductId, BigDecimal.valueOf(50));
 
         Order updatedOrder = orderRepository.findById(order.getId()).orElseThrow();
         Inventory updatedInventory = inventoryRepository.findByComponentId(componentForProductId).orElseThrow();
