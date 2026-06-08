@@ -5,6 +5,7 @@ import simpleerp.bom.BillOfMaterials;
 import simpleerp.customer.co.OrderItem;
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,7 +35,7 @@ public class Product {
     private String description;
 
     @Column(name = "minutes_to_produce", nullable = false)
-    private Double minutesToProduceOnePiece;
+    private BigDecimal minutesToProduceOnePiece;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<BillOfMaterials> billOfMaterialsList = new ArrayList<>();
@@ -52,7 +53,7 @@ public class Product {
     public String getDescription() {
         return description;
     }
-    public Double getMinutesToProduceOnePiece() {
+    public BigDecimal getMinutesToProduceOnePiece() {
         return minutesToProduceOnePiece;
     }
     public List<BillOfMaterials> getBillOfMaterialsList() {
@@ -68,7 +69,7 @@ public class Product {
     public void setDescription(String description) {
         this.description = description;
     }
-    public void setMinutesToProduceOnePiece(Double minutesToProduceOnePiece) {
+    public void setMinutesToProduceOnePiece(BigDecimal minutesToProduceOnePiece) {
         this.minutesToProduceOnePiece = minutesToProduceOnePiece;}
     public void setBillOfMaterialsList(List<BillOfMaterials> billOfMaterialsList) {
         this.billOfMaterialsList = billOfMaterialsList;
