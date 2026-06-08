@@ -1,6 +1,7 @@
 package simpleerp.component;
 
 
+import org.hibernate.annotations.BatchSize;
 import simpleerp.bom.BillOfMaterials;
 import simpleerp.inventory.Inventory;
 import simpleerp.reservation.Reservation;
@@ -15,6 +16,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "component")
+@BatchSize(size = 50)
 public class Component {
 
     protected Component(){}
@@ -48,6 +50,7 @@ public class Component {
     private List<Reservation> reservationList = new ArrayList<>();
 
     @OneToMany(mappedBy = "component", cascade = CascadeType.ALL)
+    @BatchSize(size = 50)
     private List<ComponentVendor> componentVendors = new ArrayList<>();
 
 
