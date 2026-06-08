@@ -44,8 +44,8 @@ public class BillOfMaterialsService {
                 billOfMaterials -> new BillOfMaterialsDTO(
                         billOfMaterials.getQty(),
                         new ComponentDTO(
-                                billOfMaterials.getComponent().getName(),
-                                billOfMaterials.getComponent().getUnit().toString()
+                                component.getName(),
+                                component.getUnit().toString()
                         ))).collect(Collectors.toList());
     }
 
