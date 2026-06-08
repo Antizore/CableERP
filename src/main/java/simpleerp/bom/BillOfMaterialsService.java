@@ -12,6 +12,7 @@ import simpleerp.product.Product;
 import simpleerp.product.ProductRepository;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -76,7 +77,7 @@ public class BillOfMaterialsService {
                     component.getId(), (k,v) -> new BillOfMaterials(
                             product,
                             component,
-                            bill.qty() + v.getQty()
+                            bill.qty().add(v.getQty())
                     )
             );
         }
@@ -91,7 +92,7 @@ public class BillOfMaterialsService {
 
         for(BomCreatingDTO item : bomCreatingDTOList){
             Component component = componentRepository.findById(item.componentId()).orElseThrow(() -> new MissingEntityException("component not found"));
-            if (item.qty() <= 0 ) throw new WrongValueException("Qty cannot be less or equal 0");
+            if (item.qty().compareTo(BigDecimal.ZERO) <= 0 ) throw new WrongValueException("Qty cannot be less or equal 0");
             map1.add(
                     new BillOfMaterials(
                             product,
