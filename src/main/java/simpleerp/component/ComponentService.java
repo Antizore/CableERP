@@ -7,6 +7,8 @@ import simpleerp.common.exception.CannotDeleteException;
 import simpleerp.common.exception.DuplicateException;
 import simpleerp.vendor.ShowComponentVendorDTO;
 import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -66,7 +68,8 @@ public class ComponentService {
                 .ifPresent(component::setUnit);
 
         Optional.ofNullable(dto.costPerUnit())
-                .filter(costPerUnit -> !Double.isNaN(costPerUnit) && !Double.isInfinite(costPerUnit))
+                // compareTo return -1 when less, 0 when equal, 1 when bigger
+                .filter(costPerUnit -> costPerUnit.compareTo(BigDecimal.ZERO) > 0)
                 .ifPresent(component::setCostPerUnit);
 
         componentRepository.saveAndFlush(component);

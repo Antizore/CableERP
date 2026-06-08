@@ -2,5 +2,7 @@ package simpleerp.component;
 
 import simpleerp.common.Unit;
 
-public record ComponentUpdateDTO(String name, Unit unit, Double costPerUnit) {
+import java.math.BigDecimal;
+
+public record ComponentUpdateDTO(String name, Unit unit, BigDecimal costPerUnit) {
 }
