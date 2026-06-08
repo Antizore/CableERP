@@ -3,6 +3,8 @@ package simpleerp.reservation;
 import simpleerp.component.Component;
 import simpleerp.customer.co.Order;
 import jakarta.persistence.*;
+
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 @Entity
@@ -11,7 +13,7 @@ public class Reservation {
 
     protected Reservation() {}
 
-    public Reservation(Order order, Component component, double qty) {
+    public Reservation(Order order, Component component, BigDecimal qty) {
         this.customerOrder = order;
         this.component = component;
         this.qty = qty;
@@ -31,7 +33,7 @@ public class Reservation {
     @JoinColumn(name = "component_id", nullable = false)
     private Component component;
 
-    private double qty;
+    private BigDecimal qty;
 
     @Column(name = "is_fulfilled")
     private boolean isFulfilled = false;
@@ -43,8 +45,8 @@ public class Reservation {
     public Long getId() { return id; }
     public boolean isFulfilled() { return isFulfilled; }
     public void setFulfilled(boolean fulfilled) { isFulfilled = fulfilled; }
-    public double getQty() { return qty; }
-    public void setQty(double qty) { this.qty = qty; }
+    public BigDecimal getQty() { return qty; }
+    public void setQty(BigDecimal qty) { this.qty = qty; }
     public Component getComponent() { return component; }
     public Order getCustomerOrder() {return customerOrder;}
 }
