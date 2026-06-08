@@ -3,4 +3,6 @@ package simpleerp.bom;
 
 import simpleerp.component.ComponentDTO;
 
-public record BillOfMaterialsDTO(double qty, ComponentDTO component) {}
+import java.math.BigDecimal;
+
+public record BillOfMaterialsDTO(BigDecimal qty, ComponentDTO component) {}
