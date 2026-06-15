@@ -37,10 +37,13 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(WrongValueException.class)
-    public ResponseEntity<String> handleWrongValueException(WrongValueException ex){
-        return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(ex.getMessage());
+    public ProblemDetail handleWrongValueException(WrongValueException ex){
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(
+                HttpStatus.BAD_REQUEST,
+                ex.getMessage()
+        );
+        problem.setTitle("Invalid Input Value");
+        return problem;
     }
 
 
