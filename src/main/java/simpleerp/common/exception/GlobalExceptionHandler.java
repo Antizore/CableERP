@@ -51,7 +51,6 @@ public class GlobalExceptionHandler {
                 ex.getMessage()
         );
         problemDetail.setTitle("Entity Not Found");
-        problemDetail.setType(URI.create("https://api.simpleerp.com/errors/not-found"));
         return problemDetail;
         }
 
