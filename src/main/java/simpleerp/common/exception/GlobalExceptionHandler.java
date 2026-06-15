@@ -11,12 +11,7 @@ import java.net.URI;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(NoNameException.class)
-    public ResponseEntity<String> handleNoNameException(NoNameException ex){
-        return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-                .body(ex.getMessage());
-    }
+
 
 
     @ExceptionHandler(NoEmailException.class)
