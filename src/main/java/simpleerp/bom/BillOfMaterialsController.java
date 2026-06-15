@@ -52,10 +52,10 @@ public class BillOfMaterialsController {
     }
 
     @DeleteMapping
-    public ResponseEntity deleteBill(@PathVariable Long id){
+    public ResponseEntity<Void> deleteBill(@PathVariable Long id){
         billOfMaterialsService.deleteBill(id);
         return ResponseEntity
-                .ok()
+                .noContent()
                 .build();
     }
 
