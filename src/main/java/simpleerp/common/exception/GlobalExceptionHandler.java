@@ -48,10 +48,13 @@ public class GlobalExceptionHandler {
 
 
     @ExceptionHandler(CannotDeleteException.class)
-    public ResponseEntity<String> handleCannotDeleteComponentActiveInBOM(CannotDeleteException ex){
-        return ResponseEntity
-                .status(HttpStatus.CONFLICT)
-                .body(ex.getMessage());
+    public ProblemDetail handleCannotDelete(CannotDeleteException ex){
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(
+                HttpStatus.CONFLICT,
+                ex.getMessage()
+        );
+        problem.setTitle("Deletion conflict");
+        return problem;
     }
 
     @ExceptionHandler(MissingEntityException.class)
