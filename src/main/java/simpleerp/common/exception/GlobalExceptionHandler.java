@@ -1,5 +1,6 @@
 package simpleerp.common.exception;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
@@ -50,7 +51,6 @@ public class GlobalExceptionHandler {
                 ex.getMessage()
         );
         problemDetail.setTitle("Entity Not Found");
-        problemDetail.setType(URI.create("https://api.simpleerp.com/errors/not-found"));
         return problemDetail;
         }
 
@@ -61,6 +61,16 @@ public class GlobalExceptionHandler {
                 ex.getMessage()
         );
         problem.setTitle("Illegal Operation");
+        return problem;
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ProblemDetail handleDataIntegrityViolationException(DataIntegrityViolationException ex){
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(
+                HttpStatus.CONFLICT,
+                "Database constraint violation."
+        );
+        problem.setTitle("Data Integrity Violation");
         return problem;
     }
 
