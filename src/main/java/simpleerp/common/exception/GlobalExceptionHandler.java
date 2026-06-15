@@ -66,10 +66,13 @@ public class GlobalExceptionHandler {
         }
 
     @ExceptionHandler(IllegalOperationException.class)
-    public ResponseEntity<String> handleIllegalOperation(IllegalOperationException ex){
-        return ResponseEntity
-                .status(HttpStatus.CONFLICT)
-                .body(ex.getMessage());
+    public ProblemDetail handleIllegalOperation(IllegalOperationException ex){
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(
+                HttpStatus.CONFLICT,
+                ex.getMessage()
+        );
+        problem.setTitle("Illegal Operation");
+        return problem;
     }
 
 
