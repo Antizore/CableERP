@@ -69,11 +69,9 @@ public class GlobalExceptionHandler {
     public ProblemDetail handleDataIntegrityViolationException(DataIntegrityViolationException ex){
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(
                 HttpStatus.CONFLICT,
-                "Database constraint violation. This action cannot be completed because it conflicts with " +
-                        "existing data."
+                "Database constraint violation."
         );
         problem.setTitle("Data Integrity Violation");
-        problem.setType(URI.create("https://api.simpleerp.com/errors/data-integrity-violation"));
         return problem;
     }
 
