@@ -12,15 +12,6 @@ import java.net.URI;
 public class GlobalExceptionHandler {
 
 
-
-
-    @ExceptionHandler(NoEmailException.class)
-    public ResponseEntity<String> handleNoEmailException(NoEmailException ex){
-        return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-                .body(ex.getMessage());
-    }
-
     @ExceptionHandler(DuplicateException.class)
     public ProblemDetail handleDuplicateException(DuplicateException ex){
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(
