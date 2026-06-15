@@ -5,8 +5,8 @@ import jakarta.transaction.Transactional;
 import simpleerp.bom.BillOfMaterialsDTO;
 import simpleerp.bom.BillOfMaterialsRepository;
 import simpleerp.common.exception.CannotDeleteException;
+import simpleerp.common.exception.WrongValueException;
 import simpleerp.component.ComponentDTO;
-import simpleerp.common.exception.NoNameException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -76,7 +76,7 @@ public class ProductService {
 
     @Transactional
     public Product addProduct(ProductCreateDTO product) {
-        if(product.name() == null || product.name().isBlank()) throw new NoNameException("Cannot add product without name");
+        if(product.name() == null || product.name().isBlank()) throw new WrongValueException("Cannot add product without name");
         else {
             return productRepository.saveAndFlush(new Product(product.name(), product.description()));
         }
