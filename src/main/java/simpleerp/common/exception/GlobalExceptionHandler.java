@@ -1,9 +1,12 @@
 package simpleerp.common.exception;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.net.URI;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -46,11 +49,15 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MissingEntityException.class)
-    public ResponseEntity<String> handleCannotFindEntity(MissingEntityException ex){
-        return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-                .body(ex.getMessage());
-    }
+    public ProblemDetail handleMissingEntityException(MissingEntityException ex){
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
+                HttpStatus.NOT_FOUND,
+                ex.getMessage()
+        );
+        problemDetail.setTitle("Entity Not Found");
+        problemDetail.setType(URI.create("https://api.simpleerp.com/errors/not-found"));
+        return problemDetail;
+        }
 
     @ExceptionHandler(IllegalOperationException.class)
     public ResponseEntity<String> handleIllegalOperation(IllegalOperationException ex){
