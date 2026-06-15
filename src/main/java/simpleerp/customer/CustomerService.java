@@ -1,8 +1,6 @@
 package simpleerp.customer;
 
 import simpleerp.common.exception.DuplicateException;
-import simpleerp.common.exception.NoEmailException;
-import simpleerp.common.exception.NoNameException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 

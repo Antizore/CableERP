@@ -1,62 +1,67 @@
 package simpleerp.common.exception;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-@ControllerAdvice
+import java.net.URI;
+
+@RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(NoNameException.class)
-    public ResponseEntity<String> handleNoNameException(NoNameException ex){
-        return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-                .body(ex.getMessage());
-    }
-
-
-    @ExceptionHandler(NoEmailException.class)
-    public ResponseEntity<String> handleNoEmailException(NoEmailException ex){
-        return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-                .body(ex.getMessage());
-    }
 
     @ExceptionHandler(DuplicateException.class)
-    public ResponseEntity<String> handleDuplicateException(DuplicateException ex){
-        return ResponseEntity
-                .status(HttpStatus.CONFLICT)
-                .body(ex.getMessage());
+    public ProblemDetail handleDuplicateException(DuplicateException ex){
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(
+                HttpStatus.CONFLICT,
+                ex.getMessage()
+        );
+        problem.setTitle("Duplicate Entity");
+        return problem;
     }
 
     @ExceptionHandler(WrongValueException.class)
-    public ResponseEntity<String> handleWrongValueException(WrongValueException ex){
-        return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(ex.getMessage());
+    public ProblemDetail handleWrongValueException(WrongValueException ex){
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(
+                HttpStatus.BAD_REQUEST,
+                ex.getMessage()
+        );
+        problem.setTitle("Invalid Input Value");
+        return problem;
     }
 
 
     @ExceptionHandler(CannotDeleteException.class)
-    public ResponseEntity<String> handleCannotDeleteComponentActiveInBOM(CannotDeleteException ex){
-        return ResponseEntity
-                .status(HttpStatus.CONFLICT)
-                .body(ex.getMessage());
+    public ProblemDetail handleCannotDelete(CannotDeleteException ex){
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(
+                HttpStatus.CONFLICT,
+                ex.getMessage()
+        );
+        problem.setTitle("Deletion conflict");
+        return problem;
     }
 
     @ExceptionHandler(MissingEntityException.class)
-    public ResponseEntity<String> handleCannotFindEntity(MissingEntityException ex){
-        return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-                .body(ex.getMessage());
-    }
+    public ProblemDetail handleMissingEntityException(MissingEntityException ex){
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
+                HttpStatus.NOT_FOUND,
+                ex.getMessage()
+        );
+        problemDetail.setTitle("Entity Not Found");
+        problemDetail.setType(URI.create("https://api.simpleerp.com/errors/not-found"));
+        return problemDetail;
+        }
 
     @ExceptionHandler(IllegalOperationException.class)
-    public ResponseEntity<String> handleIllegalOperation(IllegalOperationException ex){
-        return ResponseEntity
-                .status(HttpStatus.CONFLICT)
-                .body(ex.getMessage());
+    public ProblemDetail handleIllegalOperation(IllegalOperationException ex){
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(
+                HttpStatus.CONFLICT,
+                ex.getMessage()
+        );
+        problem.setTitle("Illegal Operation");
+        return problem;
     }
 
 
