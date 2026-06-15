@@ -27,10 +27,13 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(DuplicateException.class)
-    public ResponseEntity<String> handleDuplicateException(DuplicateException ex){
-        return ResponseEntity
-                .status(HttpStatus.CONFLICT)
-                .body(ex.getMessage());
+    public ProblemDetail handleDuplicateException(DuplicateException ex){
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(
+                HttpStatus.CONFLICT,
+                ex.getMessage()
+        );
+        problem.setTitle("Duplicate Entity");
+        return problem;
     }
 
     @ExceptionHandler(WrongValueException.class)
